@@ -1,0 +1,52 @@
+// utils.js 跳轉、錯誤處理、提示等方法在這裡
+import {Message} from 'element-ui'
+// import router from '../router/index.js'
+
+/** 
+ * 錯誤msg消息提示的函數
+*/
+export const tip = msg =>{  
+    Message.error(msg);
+}
+
+/** 
+ * 跳轉回首頁
+ * 攜帶當前的頁面路由，登入完成後跳轉回原本頁面，
+*/
+export const toLogin = () =>{
+    router.replace({
+        name:'Login',
+        query:{
+            redirect:router.currentRoute.fullPath
+        }
+    })
+} 
+
+/** 
+ * 跳轉到 403 error page
+ * 攜帶當前的頁面路由，登入完成後跳轉回原本頁面，
+*/
+export const to403Page = () =>{
+    router.replace({
+        name:'403'
+    })
+} 
+
+// export default {
+//     tip:msg =>{  
+//             Message.error(msg);
+//     },
+//     toLogin: () =>{
+//             router.replace({
+//                 name:'Login',
+//                 query:{
+//                     redirect:router.currentRoute.fullPath
+//                 }
+//             })
+//     } ,
+//     to403Page: () =>{
+//             router.replace({
+//                 name:'403'
+//             })
+//     } 
+// }
