@@ -10,7 +10,8 @@ import {js} from "./assets/lib/lt-common";
 import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.prototype.$moment = moment;
 import {Checkbox,CheckboxGroup,Cascader} from 'element-ui';
-Vue.config.productionTip = false;
+// Vue.config.productionTip = true;
+Vue.config.devtools = true;
 Vue.use(VueSweetalert2);
 
 Vue.use(Checkbox);
@@ -20,6 +21,7 @@ Vue.use(Cascader);
 // Vue.use(VueAxios, axios);
 Vue.prototype.$axios=axios;
 Vue.prototype.$js=js;
+
 new Vue({
   router,
   store,

@@ -156,7 +156,7 @@ export default {
                 this.rows_copy=  JSON.parse(JSON.stringify(this.rows));
 
               
-                console.log(response);
+                // console.log(response);
             })
         },
    

@@ -8,12 +8,13 @@ export default {
         tokenInfo:{
             str: "",
             userid: "",
-            auth: "",
+            auth: "",//系統權限
             roles:"",
             expiration: 0,
             created:0
         },
-        time:0
+        time:0,
+        web_auth:[]
     },
     mutations:{
         SET_AUTH(state,options){
@@ -22,7 +23,7 @@ export default {
 
         },
         SET_TOKEN(state,options){
-           
+           console.log(options)
             state.token = options.token;
             state.isLogin = options.isLogin;
             var arr = options.token.split("\.");
@@ -43,29 +44,22 @@ export default {
         IS_TOKEN_EXPIRED(state,options){
             var ret = true;
             if (state.tokenInfo.expiration > 0) {
-              var now = Math.round(new Date().getTime() / 1000);
-              ret = (state.tokenInfo.expiration < now) ? true : false;
-              //true代表過期  false代表還沒過期
-
-              state.time=state.tokenInfo.expiration-now;
-
-              if(state.time<28780){
-                    // console.log("BB")
-                    ret=true;
-                }
-              state.isLogin=!ret;
-              
-  
-              if(!state.isLogin){
-                //   console.log()
-                js.eraseCookie('token');
-                state.time=0;
-              }
+                var now = Math.round(new Date().getTime() / 1000);
+                ret = (state.tokenInfo.expiration < now) ? true : false;
+                //true代表過期  false代表還沒過期
+                // 計算倒數時間
+                state.time=state.tokenInfo.expiration-now;
+                // 改變isLogin狀態
+                state.isLogin=!ret;
 
             }
 
+        },
+        SET_WEB_AUTH(state,options){
+            console.log(options);
+            state.web_auth=options;
 
-            // return (ret);
+
         }
     },
     actions:{

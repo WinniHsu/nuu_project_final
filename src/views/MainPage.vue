@@ -93,7 +93,7 @@ export default {
         }
   },
   mounted: function () { 
-    document.redirect.submit(); //byJ
+    document.redirect.submit(); 
   
   },
   computed: {

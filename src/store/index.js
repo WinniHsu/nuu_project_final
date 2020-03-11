@@ -9,12 +9,12 @@ export default new Vuex.Store({
     auth
   },
   plugins:[createPersistedState({
-    storage:window.localStorage,
-      reducer(val){
-        return{
-          auth:val.auth
-        }
-      }
+    // storage:window.localStorage,
+    //   reducer(val){
+    //     return{
+    //       auth:val.auth
+    //     }
+    //   }
   })],
   state: {
   },

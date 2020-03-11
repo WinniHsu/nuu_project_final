@@ -9,15 +9,16 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <span>剩餘時間:{{time}}</span>
+     
       <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
+        <!-- <ul class="navbar-nav mr-auto">
 
-        </ul>
+        </ul> -->
 
-        <form class="form-inline">
-          <button class="btn btn-outline-info my-2 my-sm-0" type="submit" @click="signOut()"><i class="fas fa-sign-out-alt"></i>登出</button>
-        </form>
+        <span class="form-inline my-2 my-lg-0">
+            <span class="mr-3">剩餘時間:{{time}}</span>
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit" @click="signOut()"><i class="fas fa-sign-out-alt"></i>登出</button>
+        </span>
       </div>
     </nav>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
@@ -27,7 +28,7 @@
         </button> -->
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
-                <li :class="['nav-item',type==='RawDataPlatformList'?'active':'']" @click="changeRouter('RawDataPlatformList')">
+                <li  :class="['nav-item',type==='RawDataPlatformList'?'active':'']" @click="changeRouter('RawDataPlatformList')">
                     <a class="nav-link" href="#">原始資料管理 <span class="sr-only">(current)</span></a>
                 </li>
                 <li :class="['nav-item',type==='synWebList'?'active':'']" @click="changeRouter('synWebList')">
@@ -89,7 +90,8 @@
 </template>
 
 <script>
-
+import auth from '@/apis/auth.js';
+import {apiRoleAuth} from '@/apis/adminGroup.js';
 export default {
     name: "sidebar",
     components: {
@@ -118,33 +120,60 @@ export default {
     },
     created:function(){
         this.timeID=setInterval(()=>{
-
             this.$store.dispatch('auth/testLogin');
         },1000)
     },
     mounted: function () { 
-
+        this.getApiRoleAuth();
     },
     computed: {
         time(){
-
             return this.$store.state.auth.time
         }
     },
     methods:{
         // 回到登入頁面
         goMainPage(){
-            // const arr = this.$route.fullPath.split("/");
-            // let url="";
-            // for(var i=0;i<arr.length-3;i++){
-            //     url=url+arr[i]+"/";
-            // };
-        
-            // url = url +'/';
-            // this.$router.push(url);
             this.$router.push({name:'MainPage'});
         },
+        getApiRoleAuth(){
+            apiRoleAuth({}).then((response)=>{
+                let authList=this.$store.state.auth.tokenInfo.auth.split(',')
+                // console.log(authList)
+                let mainList=[];
+                let arrayList=[];
 
+                
+                for(let item of authList){
+                    // console.log('item---->',item)
+                    for(let item2 in response.data){
+                        // console.log('item2---->',response.data[item2])
+                        if(response.data[item2].roleid==item && mainList.indexOf(response.data[item2].mainmanage)<0){
+                            // console.log(response.data[item2].roleid)
+                            let obj={
+                                mainid:'',
+                                main:'',
+                                sub:[]
+                            };
+                            mainList.push(response.data[item2].mainmanage);
+                            obj.main=response.data[item2].mainmanage;
+                            obj.mainid=response.data[item2].roleid;
+                            arrayList.push(obj);
+                        }
+                        else if(response.data[item2].roleid==item&& mainList.indexOf(response.data[item2].mainmanage)>=0){
+                            // console.log(response.data[item2])
+                            for(let item3 in arrayList){
+                                    if(arrayList[item3].main===response.data[item2].mainmanage){
+                                        arrayList[item3].sub.push(response.data[item2].submanage)
+                                    }
+                            }
+                        }
+                    }                
+                   
+                }
+                this.$store.commit('auth/SET_WEB_AUTH',arrayList)
+            })
+        },
         // 切換主選單
         changeRouter(page){
             if(page==='RawDataPlatformList'){
@@ -166,13 +195,45 @@ export default {
             }
         },
         signOut(){
-             this.$router.push({name:'MainPage'})
+            this.getLogOutApi();
+        },
+        getLogOutApi(){
+            console.log('getLogOutApi');
+            // debugger;
+            auth.logout({
+                account:this.$store.state.auth.tokenInfo.userid
+            })
+            .then((response)=>{
+                console.log('eraseCookie----->',response)
+                this.$js.eraseCookie('token');
+                this.$store.state.auth.time=0;
+                // debugger;
+            })
+            .then((response)=>{
+                console.log('router----->',response)
+                // this.$router.push({name:'MainPage'});
+                // debugger;
+            })
+            .catch((error)=>{
+                console.log('error----->',error);
+                //   debugger;
+            })
         }
 
 
     },
     watch: {
-
+        '$store.state.auth.isLogin':function(value){
+            if(!value){
+                console.log(this.$store.state.auth.isLogin)
+                // this.$js.eraseCookie('token');
+                // this.$store.state.auth.time=0;
+                setTimeout(()=>{
+                    this.getLogOutApi();                  
+                },500)
+                
+            }
+        }
     }
 };
 </script>
@@ -281,6 +342,10 @@ export default {
     transform: translate(-225px, 0);
     
 }
-
+.form-inline{
+    flex-flow: row nowrap;
+    position: absolute;
+    right: 30px;
+}
 
 </style>
