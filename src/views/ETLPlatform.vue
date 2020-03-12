@@ -25,8 +25,8 @@
                             </div>
 
                         </template>
-                        <template slot="clear" slot-scope="props">
-                            <button
+                        <template v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props">
+                            <button 
                                 style="white-space:nowrap"
                                 type="button"
                                 class="btn btn-info"
@@ -46,7 +46,7 @@
                                 @click="traceExport(props.row)"
                             >匯出資料</button>
                         </template>
-                        <template slot="export-auth" slot-scope="props">
+                        <template v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props">
                             <button
                                 style="white-space:nowrap"
                                 type="button"
@@ -54,9 +54,9 @@
                                 data-toggle="modal"
                                 data-target="#exportAuth"
                                 @click="traceExportAuth(props.row)"
-                            >匯出權限</button>
+                            >匯出權限編輯</button>
                         </template>
-                        <template slot="schedule" slot-scope="props" >
+                        <template v-if="$store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open" slot="schedule" slot-scope="props" >
                             <button
                                 style="white-space:nowrap"
                                 type="button"

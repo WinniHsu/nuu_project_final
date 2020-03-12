@@ -28,23 +28,23 @@
         </button> -->
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
-                <li  :class="['nav-item',type==='RawDataPlatformList'?'active':'']" @click="changeRouter('RawDataPlatformList')">
+                <li  v-if="$store.state.auth.web_auth['原始資料管理'].open!==undefined && $store.state.auth.web_auth['原始資料管理'].open" :class="['nav-item',type==='RawDataPlatformList'?'active':'']" @click="changeRouter('RawDataPlatformList')">
                     <a class="nav-link" href="#">原始資料管理 <span class="sr-only">(current)</span></a>
                 </li>
-                <li :class="['nav-item',type==='synWebList'?'active':'']" @click="changeRouter('synWebList')">
+                <li v-if="$store.state.auth.web_auth['同義詞管理']!==undefined&&$store.state.auth.web_auth['同義詞管理'].open " :class="['nav-item',type==='synWebList'?'active':'']" @click="changeRouter('synWebList')">
                     <a class="nav-link" href="#">同義詞管理</a>
                 </li>
-                <li :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
+                <li v-if="$store.state.auth.web_auth['倉儲資料管理']!==undefined &&$store.state.auth.web_auth['倉儲資料管理'].open" :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
                     <a class="nav-link" href="#">倉儲資料管理</a>
                 </li>
-                <li :class="['nav-item','dropdown',type==='SystemAdminPlatform'?'active':'']">
+                <li v-if="$store.state.auth.web_auth['系統管理']!==undefined&&$store.state.auth.web_auth['系統管理'].open " :class="['nav-item','dropdown',type==='SystemAdminPlatform'?'active':'']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     系統管理
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform1')">帳號管理</a>
-                        <a class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform2')">單位管理</a>
-                        <a class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform3')">系統日誌</a>
+                        <a v-if="$store.state.auth.web_auth['系統管理']['帳號管理']!==undefined&&$store.state.auth.web_auth['系統管理']['帳號管理'].open " class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform1')">帳號管理</a>
+                        <a v-if="$store.state.auth.web_auth['系統管理']['單位管理']!==undefined&&$store.state.auth.web_auth['系統管理']['單位管理'].open " class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform2')">單位管理</a>
+                        <a  class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform3')">系統日誌</a>
                     </div>
                 </li>
                 <li class="nav-item active" >
@@ -138,40 +138,42 @@ export default {
         },
         getApiRoleAuth(){
             apiRoleAuth({}).then((response)=>{
-                let authList=this.$store.state.auth.tokenInfo.auth.split(',')
-                // console.log(authList)
-                let mainList=[];
-                let arrayList=[];
-
-                
-                for(let item of authList){
-                    // console.log('item---->',item)
-                    for(let item2 in response.data){
-                        // console.log('item2---->',response.data[item2])
-                        if(response.data[item2].roleid==item && mainList.indexOf(response.data[item2].mainmanage)<0){
-                            // console.log(response.data[item2].roleid)
+                    // console.log(response.data)
+                    
+                    let objList={};
+                    for(let item in response.data){
                             let obj={
-                                mainid:'',
+                                open:false,
                                 main:'',
-                                sub:[]
                             };
+                            if(response.data[item].submanage===null){
+                                obj.main=response.data[item].mainmanage;
+                                this.$set(objList,response.data[item].mainmanage,obj)
+                            }else if(response.data[item].submanage!==null){
+                                this.$set(objList[response.data[item].mainmanage],response.data[item].submanage,obj)
+                                objList[response.data[item].mainmanage][response.data[item].submanage].main=response.data[item].submanage;
+                            }
+                    }
+                    // console.log('objList---->',objList);
+
+
+                let authList=this.$store.state.auth.tokenInfo.auth.split(',')
+                let mainList=[];
+
+                for(let item of authList){
+                    for(let item2 in response.data){
+                        
+                        if(response.data[item2].roleid==item && mainList.indexOf(response.data[item2].mainmanage)<0){
                             mainList.push(response.data[item2].mainmanage);
-                            obj.main=response.data[item2].mainmanage;
-                            obj.mainid=response.data[item2].roleid;
-                            arrayList.push(obj);
+                            objList[response.data[item2].mainmanage].open=true;
                         }
                         else if(response.data[item2].roleid==item&& mainList.indexOf(response.data[item2].mainmanage)>=0){
-                            // console.log(response.data[item2])
-                            for(let item3 in arrayList){
-                                    if(arrayList[item3].main===response.data[item2].mainmanage){
-                                        arrayList[item3].sub.push(response.data[item2].submanage)
-                                    }
-                            }
+                            objList[response.data[item2].mainmanage][response.data[item2].submanage].open=true;
                         }
                     }                
                    
                 }
-                this.$store.commit('auth/SET_WEB_AUTH',arrayList)
+                this.$store.commit('auth/SET_WEB_AUTH',objList)
             })
         },
         // 切換主選單
@@ -211,7 +213,7 @@ export default {
             })
             .then((response)=>{
                 console.log('router----->',response)
-                // this.$router.push({name:'MainPage'});
+                this.$router.push({name:'MainPage'});
                 // debugger;
             })
             .catch((error)=>{

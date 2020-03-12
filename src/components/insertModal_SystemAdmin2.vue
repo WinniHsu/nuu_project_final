@@ -37,7 +37,7 @@
 		                <div class="modal-footer">
 		                    <button type="button" class="btn btn-success" v-if="modeltype==='insert'" @click="insertData()">新增資料</button>
                             <button type="button" class="btn btn-success" v-if="modeltype==='update'"  @click="updateData()">儲存資料</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal()">關閉</button>
 		                </div>
 		            </div>
 		        </div>
@@ -81,7 +81,10 @@ export default {
         
     },
     methods:{
-        
+        closeModal(){
+            this.groupName='';
+            this.resetMainmanage();
+        },
         insertData(){
             this.renderData()
             .then((res)=>{
@@ -89,6 +92,7 @@ export default {
             })
             .then(()=>{
                this.groupName='';
+               this.resetMainmanage();
             })   
         },
         updateData(){
@@ -96,25 +100,40 @@ export default {
             .then((res)=>{
                 // console.log(this.getCheckOption.code,this.groupName,this.auths,this.getCheckOption.version)
                  this.getUpdateRole();
-            })    
+            })
+            .then(()=>{
+               this.groupName='';
+               this.resetMainmanage();
+            })       
         },
         // 文字-->代碼
         renderData(){
             return new Promise((resolve, reject)=>{
                 for(let item of this.mainmanage){
-                    for(let item2 in this.setting[item] ){
-                        if(item2==='checkedOptions'){
-                            // this.renderData(item,this.setting[item][item2]);
-                            let mainmanage=item;
-                            let submanage=this.setting[item][item2];
-                                        
-                            let filterMain=this.allAuths.filter((item)=>{
-                                return item.mainmanage===mainmanage;
+                    if(item==='同義詞管理'){
+                        if(this.setting[item].checkAll===true){
+                            let filterMain=this.allAuths.filter((value)=>{
+                                return value.mainmanage===item;
                             });
-                            for(let item in filterMain){
-                                for(let item2 of submanage){
-                                    if(filterMain[item].submanage===item2){
-                                        this.auths.push (String(filterMain[item].roleid))
+                            console.log('filterMain---->',filterMain)
+                            this.auths.push(String(filterMain[0].roleid))
+                        }
+                    }else{
+
+                        for(let item2 in this.setting[item] ){
+                            if(item2==='checkedOptions'){
+                                // this.renderData(item,this.setting[item][item2]);
+                                let mainmanage=item;
+                                let submanage=this.setting[item][item2];
+                                            
+                                let filterMain=this.allAuths.filter((item)=>{
+                                    return item.mainmanage===mainmanage;
+                                });
+                                for(let item in filterMain){
+                                    for(let item2 of submanage){
+                                        if(filterMain[item].submanage===item2){
+                                            this.auths.push (String(filterMain[item].roleid))
+                                        }
                                     }
                                 }
                             }
@@ -127,10 +146,19 @@ export default {
         },
         // 取得目前該筆資料權限(數字代碼-->文字)
         renderData2(codeid){
+            console.log(codeid)
             for(let item in this.allAuths){
                 if(this.allAuths[item].roleid==codeid){
-                    this.setting[this.allAuths[item].mainmanage].checkedOptions.push(this.allAuths[item].submanage);
-                     break;
+                    if(this.allAuths[item].mainmanage==='同義詞管理'){
+                        this.setting[this.allAuths[item].mainmanage].checkAll=true;
+                        this.setting[this.allAuths[item].mainmanage].isIndeterminate=false;
+                        console.log('上---->',this.allAuths[item].mainmanage)
+                        break;
+                    }else{
+                        this.setting[this.allAuths[item].mainmanage].checkedOptions.push(this.allAuths[item].submanage);
+                        console.log('下---->',this.allAuths[item].submanage)
+                        break;
+                    }
                 }
             }
         },
@@ -192,11 +220,20 @@ export default {
             for(let item of this.mainmanage){
                 let obj={
                     checkAll:false,
-                    isIndeterminate: false,
+                    isIndeterminate: true,
                     checkedOptions: [],
+                    len:0
                 }
                 this.$set(this.setting,item,obj);
+                
             }
+            setTimeout(()=>{
+                for(let item of this.mainmanage){
+                    // console.log(item)
+                    // console.log(this.submanage[item]);
+                    this.setting[item].len=this.submanage[item].length;
+                }
+            },500)
 
         },
         // 查詢所有權限分類
@@ -210,8 +247,9 @@ export default {
                         this.$set(this.submanage,response.data[item].mainmanage,[]);
                         let obj={
                             checkAll:false,
-                            isIndeterminate: false,
+                            isIndeterminate: true, //isIndeterminate=true 沒有全選 isIndeterminate=false 全選
                             checkedOptions: [],
+                            len:0
                         }
                         this.$set(this.setting,response.data[item].mainmanage,obj);
                        
@@ -225,6 +263,7 @@ export default {
                                 this.submanage[this.mainmanage[item]].push(response.data[item2].submanage)
                         }
                     }
+                    this.setting[this.mainmanage[item]].len=this.submanage[this.mainmanage[item]].length;
                 };
 
 
@@ -255,6 +294,17 @@ export default {
                 for(let item of this.getCheckOption.auth){
                      this.renderData2(item);
                 }
+                
+                setTimeout(()=>{
+                   
+                        for(let item2 in this.setting){
+                            if(this.setting[item2].checkedOptions.length!==0){
+                                this.setting[item2].isIndeterminate=this.setting[item2].checkedOptions.length===this.setting[item2].len?false:true;
+                                this.setting[item2].checkAll=this.setting[item2].checkedOptions.length===this.setting[item2].len?true:false;
+                            }
+                        }
+                    
+                },500)
             
             },
             // immediate: true,

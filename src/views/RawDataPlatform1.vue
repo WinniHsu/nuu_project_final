@@ -30,7 +30,7 @@
                         @click="traceDownload(props.row)"
                     >空白格式下載</button>
                 </template>
-                <template slot="edit" slot-scope="props">
+                <template  v-if="$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props">
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -38,7 +38,7 @@
                         @click="traceDetailColumns(props.row)"
                     >編輯</button>
                 </template>
-                <template slot="editUnit" slot-scope="props" >
+                <template v-if="$store.state.auth.web_auth['原始資料管理']['修改管理單位'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['修改管理單位'].open" slot="editUnit" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -48,7 +48,7 @@
                         @click="traceUnit(props.row)"
                     >修改管理單位</button>
                 </template>
-                <template slot="schedule" slot-scope="props" >
+                <template v-if="$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -56,7 +56,7 @@
                         data-toggle="modal"
                         data-target="#ScheduleModal_RawData "
                         @click="traceSchedule(props.row)"
-                    >排程與通知設定</button>
+                    >編輯開放設定</button>
                 </template>
             </vue-bootstrap4-table>
         </div>
@@ -95,7 +95,12 @@ export default {
   },
   data: function() {
         return {
-            rows: [],
+            rows: [
+                // {
+                //     tablecode:'AA',
+                // }
+             
+            ],
             columns:[
                 {
                     label: "表單編號",

@@ -23,7 +23,7 @@ export default {
 
         },
         SET_TOKEN(state,options){
-           console.log(options)
+        //    console.log(options)
             state.token = options.token;
             state.isLogin = options.isLogin;
             var arr = options.token.split("\.");

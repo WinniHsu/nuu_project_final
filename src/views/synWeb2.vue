@@ -18,10 +18,11 @@
                     <button
                         type="button"
                         class="btn btn-info"
-                        data-toggle="modal"
-                        data-target="#myModal"
+               
                         @click="trace(props.row)"
                     >編輯</button>
+                    <!--          data-toggle="modal"
+                        data-target="#myModal" -->
                     </template>
                     <template slot="delete" slot-scope="props">
                     <button
@@ -34,6 +35,7 @@
             </div>
           
             <detail-modal :tempid="tempID" :choosedData="choosedData" :columns="columns"  @sendeditdata='getsendEditData' :params="$route.params.params"></detail-modal>
+             <detail-modal1 :tempid="tempID" :choosedData="choosedData" :columns="columns"  @sendeditdata='getsendEditData' :params="$route.params.params"></detail-modal1>
             <insert-modal  :columns="columns" :optionList="option"  @sendeditdata='getsendEditData'></insert-modal>
         </div>
   </div>
@@ -44,6 +46,7 @@
 import sidebar from '../components/sidebar'
 import VueBootstrap4Table from 'vue-bootstrap4-table';
 import detailModal from '../components/detailModal';
+import detailModal1 from '../components/detailModal1';
 import insertModal from '../components/insertModal';
 import upload from '../components/upload'
 import {apiQueryColumn} from '@/apis/syn.js';
@@ -55,6 +58,7 @@ export default {
      "sidebar":sidebar,
      VueBootstrap4Table,
      "detail-modal":detailModal,
+     "detail-modal1":detailModal1,
      "insert-modal":insertModal,
      "upload":upload
   },
@@ -318,15 +322,28 @@ export default {
     },
     //已選資料
     trace:function(value){
-        // console.log(value)
-        var obj={};
-        for(let item in value){
-            if(item!=='vbt_id'){
-                this.$set(obj,item,value[item])
+        console.log(value)
+        if(this.$route.params.params==="Dropstu"){
+            $('#myModal1').modal('show')
+            var obj={};
+            for(let item in value){
+                if(item!=='vbt_id'){
+                    this.$set(obj,item,value[item])
+                }
             }
+            this.choosedData=obj;
+        }else{
+             $('#myModal').modal('show')
+            var obj={};
+            for(let item in value){
+                if(item!=='vbt_id'){
+                    this.$set(obj,item,value[item])
+                }
+            }
+            this.tempID=value.graduateSchoolCode;
+            this.choosedData=obj;
         }
-        this.tempID=value.graduateSchoolCode;
-        this.choosedData=obj;
+       
     },
     // trace刪除哪一筆
     traceDelete(value){
