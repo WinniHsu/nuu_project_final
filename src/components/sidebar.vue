@@ -138,7 +138,7 @@ export default {
         },
         getApiRoleAuth(){
             apiRoleAuth({}).then((response)=>{
-                    // console.log(response.data)
+                    console.log(response.data)
                     
                     let objList={};
                     for(let item in response.data){
@@ -154,10 +154,18 @@ export default {
                                 objList[response.data[item].mainmanage][response.data[item].submanage].main=response.data[item].submanage;
                             }
                     }
-                    // console.log('objList---->',objList);
+                    console.log('objList---->',objList);
 
 
-                let authList=this.$store.state.auth.tokenInfo.auth.split(',')
+                let temp=this.$store.state.auth.tokenInfo.auth.split(',');
+                let authList=[];
+                for(let value of temp){
+                    authList.push(parseFloat(value))
+                }
+                authList.sort(function (a, b) {
+                    return a - b
+                });
+                // console.log(authList)
                 let mainList=[];
 
                 for(let item of authList){
@@ -166,13 +174,15 @@ export default {
                         if(response.data[item2].roleid==item && mainList.indexOf(response.data[item2].mainmanage)<0){
                             mainList.push(response.data[item2].mainmanage);
                             objList[response.data[item2].mainmanage].open=true;
+                            
                         }
-                        else if(response.data[item2].roleid==item&& mainList.indexOf(response.data[item2].mainmanage)>=0){
+                        else if(response.data[item2].roleid==item&&mainList.indexOf(response.data[item2].mainmanage)>=0){
                             objList[response.data[item2].mainmanage][response.data[item2].submanage].open=true;
                         }
                     }                
                    
                 }
+               
                 this.$store.commit('auth/SET_WEB_AUTH',objList)
             })
         },

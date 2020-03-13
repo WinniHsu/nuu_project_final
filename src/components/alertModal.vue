@@ -49,6 +49,7 @@ export default {
                             this.$emit('updatedata');
                             // 關閉Modal
                             $('#myModal').modal('hide');
+                            $('#myModal1').modal('hide');
                         }else{
                             
                         }
@@ -58,6 +59,7 @@ export default {
                     // console.log('直接關掉')
                     this.$emit('checkadd');
                     $('#myModal').modal('hide');
+                     $('#myModal1').modal('hide');
                 }
               
 
