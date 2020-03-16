@@ -82,7 +82,7 @@ export default {
             // var ret = { status: false, token: "" };
             let token = "";
             //先取得token
-            token = js.getCookie('token');
+            token = js.getCookie('leadtektoken');
             // 如果有token
             if (token != null) {
                 // 就把token存在vuex
