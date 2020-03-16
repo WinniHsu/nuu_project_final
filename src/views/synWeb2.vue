@@ -254,7 +254,7 @@ export default {
     },
     addData(payload) {
         // console.log(this.$route.params.params)
-        if(this.$route.params.params==='Dropstu'){
+        if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'){
               $('#insertModal1').modal('show');     
         }else{
             $('#insertModal').modal('show');     

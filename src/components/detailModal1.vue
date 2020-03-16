@@ -197,32 +197,24 @@ export default {
             //******************************************************************************
             // 2.最後要送到後端
             let send_choosedData_copy={};
-
+            for(let value in this.choosedData_copy){
+                // 新增同意詞不需要給version
+                if(value!=='codename'){
+                    this.$set(send_choosedData_copy,value,this.choosedData_copy[value])
+                }   
+            }
+            this.$set(send_choosedData_copy,'codename',this.synonymList_copy);
+            console.log(send_choosedData_copy);
             // 如果編輯完的這筆資料沒有id，代表【新增】
+            console.log(this.synonymList_copy[index])
             if(this.synonymList_copy[index].id===''){
-                for(let value in this.choosedData_copy){
-                    // 新增同意詞不需要給version
-                    if(value!=='codename'&&value!=='version'){
-                        this.$set(send_choosedData_copy,value,this.choosedData_copy[value])
-                    }   
-                }
-                this.$set(send_choosedData_copy,'codename',this.synonymList_copy);
-                console.log(send_choosedData_copy);
+
                 setTimeout(()=>{
                     this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'新增同義詞')
                 },500)       
 
             }
             else{
-                for(let value in this.choosedData_copy){
-                    // 新增同意詞不需要給version
-                    if(value!=='codename'){
-                        this.$set(send_choosedData_copy,value,this.choosedData_copy[value])
-                    }   
-                };
-                this.$set(send_choosedData_copy,'codename',this.synonymList_copy);
-                console.log(send_choosedData_copy);
-
                 setTimeout(()=>{
                     this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'修改同義詞')
                 },500) 
@@ -247,13 +239,26 @@ export default {
                     // console.log(result);
                     // 如果要刪除的是【已存在資料庫】的資料
                     if(result.value&&itemID!==null){
-                        this.getDeleteDetail(itemID,this.$route.params.params);
+                        // this.getDeleteDetail(itemID,this.$route.params.params);
                         // this.init_deleteSchoolSynoymDetail_params(itemID,this.$route.params.params);
                         for(let item in this.synonymList_copy){
                             if(this.synonymList_copy[item].id===itemID){
                                  this.synonymList_copy.splice(item,1);
                             }
                         }
+                        // 2.最後要送到後端
+                        let send_choosedData_copy={};
+                        for(let value in this.choosedData_copy){
+                            // 新增同意詞不需要給version
+                            if(value!=='codename'){
+                                this.$set(send_choosedData_copy,value,this.choosedData_copy[value])
+                            }   
+                        }
+                        this.$set(send_choosedData_copy,'codename',this.synonymList_copy);
+                        setTimeout(()=>{
+                            this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'刪除同意詞')
+                        },500)  
+
                        
                 
                     }else if(result.value&&itemID==null){
@@ -341,18 +346,40 @@ export default {
                     .then((result)=>{
                         if(result.value){
                             this.flag=true;
+                            this.choosedData_copy.version=response.data.newvalue[0].version;
+
                         }
                     });
-                }else{
+                }else if(type==='刪除同意詞'){
+                     this.$swal({
+                        title: '成功刪除',
+                        text: "",
+                        type: 'success',
+                    })
+                    .then((result)=>{
+                        if(result.value){
+                            this.flag=true;
+                            this.choosedData_copy.version=response.data.newvalue[0].version;
+
+                        }
+                    });
+                }
+                else{
                     
                     this.$swal({
                             title: '修改成功',
                             text: "",
                             type: 'success',
                             confirmButtonText: '確認'
+                     }) .then((result)=>{
+                          if(result.value){
+                                 this.choosedData_copy.version=response.data.newvalue[0].version;
+                                 //2.前面總表重新request資料
+                                this.$emit('sendeditdata');
+                          }
                      });
-                    //2.前面總表重新request資料
-                    this.$emit('sendeditdata');
+                   
+                   
                     //3.version+1
                 //    this.choosedData_copy.version=this.choosedData_copy.version+1;
 
