@@ -15,3 +15,5 @@ export const apiInsertSchoolSynoymMaster =(SynonymType,params) => req('post','/a
 
 //新增/修改同意詞API
 export const apiInsertSchoolSynoymDetail =(SynonymType,params) => req('post','/api/schoolSynony/insertSchoolSynoymDetail/'+SynonymType,params);
+// 新增主表同意詞
+// export const apiInsertSchoolSynoymMaster =(SynonymType,params) => req('post','/api/schoolSynony/insertSchoolSynoymMaster/'+SynonymType,params);

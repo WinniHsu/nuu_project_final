@@ -39,7 +39,8 @@ const errorHandle = (status,msg)=>{
 
 // axios的實例
 var instance = axios.create({
-    baseURL:'http://203.64.173.63:9019',
+    baseURL:'http://ir.nuu.edu.tw:9019',
+    // http://ir.nuu.edu.tw:9019/
     // http://bigdata02.leadtek.com.tw:9019
     // http://172.16.2.109:9019
     // http://203.64.173.63:9019

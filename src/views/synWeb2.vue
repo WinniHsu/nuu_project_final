@@ -37,6 +37,7 @@
             <detail-modal :tempid="tempID" :choosedData="choosedData" :columns="columns"  @sendeditdata='getsendEditData' :params="$route.params.params"></detail-modal>
              <detail-modal1 :tempid="tempID" :choosedData="choosedData" :columns="columns"  @sendeditdata='getsendEditData' :params="$route.params.params"></detail-modal1>
             <insert-modal  :columns="columns" :optionList="option"  @sendeditdata='getsendEditData'></insert-modal>
+            <insert-modal1  :columns="columns" :optionList="option"  @sendeditdata='getsendEditData'></insert-modal1>
         </div>
   </div>
 </template>
@@ -48,6 +49,7 @@ import VueBootstrap4Table from 'vue-bootstrap4-table';
 import detailModal from '../components/detailModal';
 import detailModal1 from '../components/detailModal1';
 import insertModal from '../components/insertModal';
+import insertModal1 from '../components/insertModal1';
 import upload from '../components/upload'
 import {apiQueryColumn} from '@/apis/syn.js';
 import {apiQueryAllData} from '@/apis/syn.js';
@@ -60,6 +62,7 @@ export default {
      "detail-modal":detailModal,
      "detail-modal1":detailModal1,
      "insert-modal":insertModal,
+     "insert-modal1":insertModal1,
      "upload":upload
   },
   props:{
@@ -250,7 +253,13 @@ export default {
         })
     },
     addData(payload) {
-        $('#insertModal').modal('show');     
+        // console.log(this.$route.params.params)
+        if(this.$route.params.params==='Dropstu'){
+              $('#insertModal1').modal('show');     
+        }else{
+            $('#insertModal').modal('show');     
+        }
+      
     },
     downloadPartData(payload){
         this.onExportExcel(payload.selectedItems);
@@ -347,6 +356,7 @@ export default {
     },
     // trace刪除哪一筆
     traceDelete(value){
+        console.log(value)
          this.$swal({
             title: '刪除該筆資料',
             text: "是否確認刪除該筆資料",
@@ -359,7 +369,12 @@ export default {
         })         
         .then((result)=>{ 
             if(result.value===true){
-                this.getDeleteMaster(value.graduateSchoolCode,this.$route.params.params);
+                if(this.$route.params.params==='Dropstu'){
+                      this.getDeleteMaster(value.dropremarkid,this.$route.params.params);
+                }else{
+                      this.getDeleteMaster(value.graduateSchoolCode,this.$route.params.params);
+                }
+              
             }else if(result.dismiss==='cancel'){
 
             }

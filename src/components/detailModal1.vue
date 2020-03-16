@@ -219,7 +219,7 @@ export default {
         },
         // 刪除該筆同義詞
         syn_delete(itemID){
-            
+                console.log(itemID)
                 this.$swal({
                     title: '是否刪除該筆資料?',
                     text: "",

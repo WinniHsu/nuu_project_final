@@ -1,7 +1,7 @@
 <template>
   <div class="mainPage">
   
-    <!-- <nav class="navbar navbar-expand-lg  fixed-top">
+    <nav class="navbar navbar-expand-lg  fixed-top">
       <a class="navbar-brand" href="#">
         <img src="../assets/img/G.jpg" height="60" alt="">
       </a>
@@ -36,12 +36,12 @@
 
         </div>
       </div>
-    </div> -->
- 
-  <form name='redirect' action='https://sso.nuu.edu.tw/preLogin.php' method='POST'>
+    </div>
+  <!-- 暫時關閉 -->
+  <!-- <form name='redirect' action='https://sso.nuu.edu.tw/preLogin.php' method='POST'>
     <input type='hidden' name='system_name' value='LeadtekEndServer'>
     <input type='submit' value='submit'>
-  </form>
+  </form> -->
 <!-- LeadtekEndServer -->
     <router-view ></router-view>
   </div>
@@ -93,7 +93,8 @@ export default {
         }
   },
   mounted: function () { 
-    document.redirect.submit(); 
+    // <!-- 暫時關閉 -->
+    // document.redirect.submit(); 
   
   },
   computed: {
@@ -104,7 +105,7 @@ export default {
         console.log(e);
     },
     signin(){
-      // this.$router.push({name:'synWeb-1'});
+      this.$router.push({name:'synWeb-1'});
       // this.$router.push({path:'/synWeb/Schoolsynonym'});
 
     },
