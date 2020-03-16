@@ -189,30 +189,43 @@ export default {
             // 開始編輯的清單
             this.Toggle.check_syn_disabled.push(index);  
         },
-        // 儲存該筆同義詞
+        // 【儲存】【修改】該筆同義詞
         syn_endEdit(index){
             // 1.關掉編輯的清單
             this.Toggle.check_syn_disabled.splice(this.Toggle.check_syn_disabled.indexOf(index),1);
       
             //******************************************************************************
             // 2.最後要送到後端
-                let send_choosedData_copy={};
+            let send_choosedData_copy={};
+
+            // 如果編輯完的這筆資料沒有id，代表【新增】
+            if(this.synonymList_copy[index].id===''){
                 for(let value in this.choosedData_copy){
-                    if(value!=='codename'){
+                    // 新增同意詞不需要給version
+                    if(value!=='codename'&&value!=='version'){
                         this.$set(send_choosedData_copy,value,this.choosedData_copy[value])
                     }   
                 }
-                this.$set(send_choosedData_copy,'codename',this.synonymList_copy)
-            // 如果編輯完的這筆資料沒有id，代表【新增】
-            if(this.synonymList_copy[index].id===''){
+                this.$set(send_choosedData_copy,'codename',this.synonymList_copy);
+                console.log(send_choosedData_copy);
                 setTimeout(()=>{
-                        this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'新增同義詞')
-                },500)
-              
+                    this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'新增同義詞')
+                },500)       
 
             }
             else{
-                 this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'修改同義詞')
+                for(let value in this.choosedData_copy){
+                    // 新增同意詞不需要給version
+                    if(value!=='codename'){
+                        this.$set(send_choosedData_copy,value,this.choosedData_copy[value])
+                    }   
+                };
+                this.$set(send_choosedData_copy,'codename',this.synonymList_copy);
+                console.log(send_choosedData_copy);
+
+                setTimeout(()=>{
+                    this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params,'修改同義詞')
+                },500) 
             };
 
 
