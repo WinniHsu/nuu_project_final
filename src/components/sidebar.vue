@@ -132,7 +132,7 @@ export default {
             return this.$store.state.auth.time
         },
         userid(){
-            return this.$store.state.auth.userid
+            return this.$store.state.auth.tokenInfo.userid
         }
     },
     methods:{

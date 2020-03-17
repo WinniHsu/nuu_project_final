@@ -38,6 +38,7 @@ export default {
               state.tokenInfo.rolename = js.base64Decode(claim.rolename);
               state.tokenInfo.auth = js.base64Decode(claim.auths);
             //   state.tokenInfo.auth = JSON.parse(claim.auths);
+            console.log(state.tokenInfo)
 
             }
         },
