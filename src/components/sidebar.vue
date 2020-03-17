@@ -16,7 +16,8 @@
         </ul> -->
 
         <span class="form-inline my-2 my-lg-0">
-            <span class="mr-3">剩餘時間:{{time}}</span>
+            <span class="mr-3"><i class="fas fa-user-circle"></i>{{userid}}</span>
+            <span class="mr-3"><i class="fas fa-clock"></i>登出倒數:{{time}}</span>
             <button class="btn btn-outline-info my-2 my-sm-0" type="submit" @click="signOut()"><i class="fas fa-sign-out-alt"></i>登出</button>
         </span>
       </div>
@@ -129,6 +130,9 @@ export default {
     computed: {
         time(){
             return this.$store.state.auth.time
+        },
+        userid(){
+            return this.$store.state.auth.userid
         }
     },
     methods:{
