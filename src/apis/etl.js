@@ -9,3 +9,6 @@ export const apiQueryAuthGroup =(params) => req('post','/api/etlcontroller/Encry
 
 // 資料權限修改
 export const apiUpdateAuthGroup =(params) => req('post','/api/etlcontroller/updateEncryptiongroup',params);
+
+// 排程修改
+export const apiUpdateTime =(params) => req('post','/api/etlcontroller/updateTime',params);

@@ -26,6 +26,7 @@
 
                         </template>
                         <template v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props">
+                            <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" -->
                             <button 
                                 style="white-space:nowrap"
                                 type="button"
@@ -47,6 +48,7 @@
                             >匯出資料</button>
                         </template>
                         <template v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props">
+                            <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" -->
                             <button
                                 style="white-space:nowrap"
                                 type="button"
@@ -57,12 +59,14 @@
                             >匯出權限編輯</button>
                         </template>
                         <template v-if="$store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open" slot="schedule" slot-scope="props" >
+                            <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open" -->
                             <button
                                 style="white-space:nowrap"
                                 type="button"
                                 class="btn btn-danger"
                                  data-toggle="modal"
                                 data-target="#ETLSchedule"
+                                :disabled='props.row.status.status=="清洗程式啟動中"'
                                 @click="traceETLSchedule(props.row)"
                             >排程與通知設定</button>
                         </template>
@@ -70,7 +74,7 @@
                 </div>
                 <export-modal :tableName="tableName"></export-modal>
                 <export-auth :tableName="tableName" :id="id"></export-auth>
-                <etl-schedule></etl-schedule>
+                <etl-schedule :selectedData="selectedData" :selectedData_original="selectedData_original" @getAllData="getAllData"></etl-schedule>
             </div>
         </div>
   </div>
@@ -105,6 +109,8 @@ export default {
             loadingShow:false,
             tableName:'',
             id:0,
+            selectedData:{},
+            selectedData_original:[],
             rows: [
                 // {
                 //     tableName:'課程學期資料',
@@ -127,6 +133,7 @@ export default {
 
                 // }
             ],
+            rows_original:[],
             columns:[
                 {
                     label: "表單名稱",
@@ -210,12 +217,14 @@ export default {
  
   },
   methods: {
-
-
+    getAllData(){
+        this.getQueryAllTabl();
+    },
     getQueryAllTabl(){
         apiQueryAllTable({}).then((response)=>{
-            // console.log(response);
+            console.log(response);
             this.rows.length=0;
+            this.rows_original.length=0;
             var dataList=response.data.map((item)=>{
                 var obj={
                     tableName:'',
@@ -226,16 +235,35 @@ export default {
                     },
                     count:'',
                     id:0,
+                    cleanyn: "",//執行清洗日是否勾選
+                    cleandatefirst: null, //起始日期
+                    redaytype: "", //單位
+                    reday: 0, //頻率
+                    endsend: "" //結束提醒
                 }
+                // cleandatecal: null
+                // cleanyn: "1"
+                // cleandatefirst: null
+                // redaytype: "week"
+                // reday: 3
+                // endsend: "1"
+
                 obj.tableName=item.tablename;
                 obj.tabletype=item.tabletype;
+                obj.count=item.tablecount;
                 obj.id=item.id;
                 obj.status.status="清洗完成";
                 // obj.status.status=item.status;
                 obj.status.lastdate=item.lastdate;
+                obj.cleanyn=item.cleanyn;
+                obj.cleandatefirst=item.cleandatefirst;
+                obj.redaytype=item.redaytype;
+                obj.reday=item.reday;
+                obj.endsend=item.endsend;
                 return obj
             })
             this.rows=dataList;
+            this.rows_original=response.data;
         })
     },
     getchangepage(value){
@@ -252,6 +280,7 @@ export default {
             let _this = this;
             let stompClient = null;
             this.socket = new SockJS("http://bigdata02.leadtek.com.tw:9019/api/etlcontroller");//如果前後端分離專案需要拼接具體地址，前後端分離index.html可放在
+            // http://bigdata02.leadtek.com.tw:9019/api/etlcontroller
             stompClient = Stomp.over(this.socket);
             stompClient.connect({}, function (frame) {
                 console.log('frame-------->',frame);
@@ -336,6 +365,10 @@ export default {
         this.id=value.id;
     },
     traceETLSchedule(value){
+        this.selectedData=value;
+        this.selectedData_original=this.rows_original.filter((item)=>{
+            return item.id===value.id
+        })
 
     }
 
