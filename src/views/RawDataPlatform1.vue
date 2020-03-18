@@ -195,7 +195,9 @@ export default {
                 
             })
             this.rows=[];
-            this.rows=response.data;
+            this.rows=response.data.sort(function(a,b) {
+            return a.tablecode > b.tablecode ? 1 : -1;
+            });
         })
     },
     sortnum() {
