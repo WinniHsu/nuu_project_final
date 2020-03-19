@@ -22,16 +22,16 @@
                     </div>
 
                 </template>
-                <!-- <template slot="example" slot-scope="props">
+                <template slot="example" slot-scope="props">
                     <button
                         style="white-space:nowrap"
                         type="button"
                         class="btn btn-info"
                         @click="traceDownload(props.row)"
                     >空白格式下載</button>
-                </template> -->
-                <!-- <template  v-if="$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props"> -->
-                <template  slot="edit" slot-scope="props">
+                </template>
+                <template  v-if="$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props">
+                <!-- <template  slot="edit" slot-scope="props"> -->
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -39,8 +39,8 @@
                         @click="traceDetailColumns(props.row)"
                     >編輯</button>
                 </template>
-                <!-- <template v-if="$store.state.auth.web_auth['原始資料管理']['修改管理單位'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['修改管理單位'].open" slot="editUnit" slot-scope="props" > -->
-                <template slot="editUnit" slot-scope="props" >
+                <template v-if="$store.state.auth.web_auth['原始資料管理']['修改管理單位'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['修改管理單位'].open" slot="editUnit" slot-scope="props" >
+                <!-- <template slot="editUnit" slot-scope="props" > -->
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -50,8 +50,8 @@
                         @click="traceUnit(props.row)"
                     >修改管理單位</button>
                 </template>
-                <!-- <template v-if="$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" > -->
-                <template  slot="schedule" slot-scope="props" >
+                <template v-if="$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" >
+                <!-- <template  slot="schedule" slot-scope="props" > -->
                     <button
                         style="white-space:nowrap"
                         type="button"

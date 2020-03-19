@@ -7,7 +7,8 @@
                     同義詞管理 - {{$route.params.tableName}}
                 </div>
                 <!-- <button type="button" class="btn btn-primary mb-3"  @click="BackToSynWebList()"><i class="fas fa-arrow-left mr-3"></i>BACK</button> -->
-                <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" :actions="actions" @add-data="addData"  @downloadPart-data='downloadPartData' @downloadAll-data='downloadAllData' @downloadform='downloadForm'>
+                <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" :actions="actions" @add-data="addData"  @downloadPart-data='downloadPartData' @downloadAll-data='downloadAllData'>
+                    <!--  @downloadform='downloadForm' 下載範例檔-->
                     <template slot="global-search-clear-icon" >
                         <i class="fas fa-times-circle"></i>
                     </template>
@@ -127,15 +128,15 @@ export default {
                         msg: "下載全部資料"
                     }
                 },
-                {
-                    btn_text: "下載範例資料表",
-                    event_name: "downloadform",
-                    // event_name: "on-download",
-                    class: "btn btn-secondary my-custom-class",
-                    event_payload: {
-                        msg: "下載範例資料表"
-                    }
-                }
+                // {
+                //     btn_text: "下載範例資料表",
+                //     event_name: "downloadform",
+                //     // event_name: "on-download",
+                //     class: "btn btn-secondary my-custom-class",
+                //     event_payload: {
+                //         msg: "下載範例資料表"
+                //     }
+                // }
             ],
             // 選取的資料
             choosedData:{},
