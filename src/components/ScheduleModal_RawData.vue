@@ -13,8 +13,8 @@
                                 <div class="col-12">
                                     <div class="form-check mb-2" disabled>
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
-                                        <!-- v-model="selectedData_copy.cleanyn" checked="selectedData_copy.cleanyn" -->
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.ischange" checked="selectedData_copy.ischange">
+                                        <!-- v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" -->
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" v-model="radioGroup1" checked> -->
                                         <label class="form-check-label" for="exampleRadios1">
                                             表單異動時發送通知給倉儲管理者
@@ -22,8 +22,8 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
-                                        <!-- v-model="selectedData_copy.cleanyn" checked="selectedData_copy.cleanyn" -->
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload">
+                                        <!-- v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" -->
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" v-model="radioGroup1"> -->
                                         <label class="form-check-label" for="exampleRadios2">
                                         開放管理單位上傳編輯日程
@@ -38,7 +38,7 @@
                                                     :ranges='false'
                                                     :autoApply="true"
                                                     :linkedCalendars="true"
-                                                   
+                                                    :disabled="!selectedData_copy.startupload"
                                                     @update="updateValues"
                                                 >
                                                 <!--  :disabled="selectedData_copy.cleanyn===0" -->
@@ -58,7 +58,7 @@
                                 <div class="col-12">
                                     <div class="form-check mb-2">
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" :disabled='!selectedData_copy.startupload'>
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" :disabled="radioGroup1==='option1'"> -->
                                         <label class="form-check-label" for="exampleRadios3">
                                             開始當日00:00自動提醒倉儲管理者、管理單位
@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="form-check mb-2">
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" :disabled='!selectedData_copy.startupload'>
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4" :disabled="radioGroup1==='option1'"> -->
                                         <label class="form-check-label" for="exampleRadios4">
                                             結束當日00:00自動提醒倉儲管理者、管理單位
@@ -103,7 +103,7 @@ export default {
         selectedColumns:{
             type:Array
         },
-        selectedData:{
+        selectedDetailData:{
             type:Object
         },
     },
@@ -160,14 +160,40 @@ export default {
 
     },
     watch: {
-        selectedData:{
+        selectedDetailData:{
             handler(newValue, oldValue) {
-                this.selectedData_copy=Object.assign({}, this.selectedData);
+                this.selectedData_copy=Object.assign({}, this.selectedDetailData);
+                let auth=this.selectedData_copy.authName.split(',')
+                this.selectedData_copy.authName=[];
+                for(let item of auth){
+                    this.selectedData_copy.authName.push(item);
+                }
+                this.selectedData_copy.ischange=1;
+                this.selectedData_copy.startupload=1;
+                this.dateRange.startDate= this.selectedData_copy.startdate;
+                this.dateRange.endDate= this.selectedData_copy.enddate;
+                
+
                 // this.dateRange.startDate=this.selectedData_copy.cleandatefirst;
                 // this.dateRange.endDate=this.selectedData_copy.cleandatefirst;
-                  
+                // authName:"倉儲資料管理者,院助,測試用群組01,系統管理者"
+                // enddate:null(表單結束日期)
+                // endsend:null(表單結束提醒)
+                // ischange:null(表單異動通知)
+                // startdate:null(表單開始日期)
+                // startsend:null(表單開始提醒)
+                // startupload:null(是否開啟管理單位上傳編輯)
+                // fileextension:null
+                // filepath:null
+                // modifyDate:null
+                // modifyUser:null
+                // tablecode:"RAW001"
+                // tablename:"僑生獨招(名冊+成績)"
+                // tableuuid:"1120BF2D-2FA3-4DD4-9545-C9755DD061A3"
+                // vbt_id:1
+                // version:5
             },
-            immediate: true,
+            // immediate: true,
             deep: true
         }
     }

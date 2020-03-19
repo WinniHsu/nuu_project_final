@@ -18,15 +18,16 @@
                                 <i class="fas fa-times-circle"></i>
                             </template>
                             <!-- 處理姓名 -->
-                            <template slot="nameEyes" slot-scope="props">
+                            <template :slot="[item,'nameEyes'].join('-')" slot-scope="props" v-for="item in secretNameList" >
                                 <div  class="outer-wrapper">
                                     <div  class="outer-wrapper">
                                         <div  class="inner-wrapper mr-3">
-                                            <div v-if="props.row.Encryp" >{{props.row.StuNameC}}</div>
-                                            <div v-if="!props.row.Encryp" >{{props.row.StuNameC_original}}</div>
+                                            <div v-if="props.row[item+'_Encryp_name']" >{{props.row[item]}}</div>
+                                            <div v-if="!props.row[item+'_Encryp_name']" >{{props.row[item+'_original']}}</div>
                                         </div>
-                                        <i class="fas fa-eye" v-if="props.row.Encryp"  @click="ToggleEncryption(props.row.id,'open','name')"></i>
-                                        <i class="fas fa-eye-slash" v-if="!props.row.Encryp" @click="ToggleEncryption(props.row.id,'close','name')"></i>
+                                        <!-- _Encryp_name -->
+                                        <i class="fas fa-eye" v-if="props.row[item+'_Encryp_name']&&props.row[item+'_Encryp_name']!==null&&props.row[item+'_Encryp_name']!==''"  @click="ToggleEncryption(props.row.id,'open',item)"></i>
+                                        <i class="fas fa-eye-slash" v-if="!props.row[item+'_Encryp_name']&&props.row[item+'_Encryp_name']!==null&&props.row[item+'_Encryp_name']!==''" @click="ToggleEncryption(props.row.id,'close',item)"></i>
                                     </div>
                                 </div>
                             </template>
@@ -43,7 +44,19 @@
                                     </div>
                                 </div>
                             </template>
-
+                            <!-- 處理學生id -->
+                            <template slot="stuidEyes" slot-scope="props">
+                                <div  class="outer-wrapper">
+                                    <div  class="outer-wrapper">
+                                        <div  class="inner-wrapper mr-3">
+                                            <div v-if="props.row.Encryp_id" >{{props.row.StuID}}</div>
+                                            <div v-if="!props.row.Encryp_id" >{{props.row.StuID_original}}</div>
+                                        </div>
+                                        <i class="fas fa-eye" v-if="props.row.Encryp_id&&props.row.Encryp_id!==null"  @click="ToggleEncryption(props.row.id,'open','stuid')"></i>
+                                        <i class="fas fa-eye-slash" v-if="!props.row.Encryp_id&&props.row.Encryp_id!==null" @click="ToggleEncryption(props.row.id,'close','stuid')"></i>
+                                    </div>
+                                </div>
+                            </template>
                             <template slot="edit" slot-scope="props">
                                 <button
                                     style="white-space:nowrap"
@@ -102,6 +115,7 @@ export default {
             selectedRows:[],
             selectedColumns:[],
             secretColumns:[],
+            secretNameList:["StuNameC","TeaNameC"],
             config: {
                 checkbox_rows: true,
                 rows_selectable: false,
@@ -235,9 +249,11 @@ export default {
                         obj.name=response.data[item].columnename;
                         obj.datatype=response.data[item].datatype;
                         if(response.data[item].columnename.toLowerCase().indexOf('namec')>0){
-                            this.$set(obj,'slot_name','nameEyes');
+                            this.$set(obj,'slot_name',response.data[item].columnename+'-nameEyes');
                         }else if(response.data[item].columnename.toLowerCase().indexOf('stucode')>=0){
                             this.$set(obj,'slot_name','stucodeEyes');
+                        }else if(response.data[item].columnename.toLowerCase().indexOf('stuid')>=0){
+                            this.$set(obj,'slot_name','stuidEyes');
                         }
                         this.selectedColumns.push(obj);
                     }else if(response.data[item].note==='下拉'||response.data[item].note==='階層代入'){
@@ -337,12 +353,18 @@ export default {
                 this.selectedRows=[];
                 if(this.secretColumns.length>0){
                     for(let value of this.secretColumns){
-                        // value "StuNameC" "StuCode"
+                        // "StuNameC""StuCode""StuID""TeaNameC"
+
                         response.data.forEach((item)=>{
                             this.$set(item,value+'_original',item[value]);
                             if(value.toLowerCase().indexOf('name')>=0){
-                                item[value]=this.replaceData(item[value],1,1,'*');
-                                this.$set(item,'Encryp',true);
+                                 if(item[value]!==""){
+                                    item[value]=this.replaceData(item[value],1,1,'*');
+                                    this.$set(item,value+'_Encryp_name',true);
+                                 }else{
+                                    this.$set(item,value+'_Encryp_name',null);
+                                 }
+
                      
                             }else if(value.toLowerCase().indexOf('stucode')>=0){
                                 if(item[value]!==""){
@@ -354,8 +376,14 @@ export default {
                               
                             }
                             else{
-                                item[value]=this.replaceData(item[value],0,6,'******');
-                                this.$set(item,'Encryp_id',true);
+                               
+                                 if(item[value]!==""){
+                                      item[value]=this.replaceData(item[value],0,6,'******');
+                                    this.$set(item,'Encryp_id',true);
+                                 }else{
+                                    this.$set(item,'Encryp_id',null);
+                                 }
+                              
                             }
                             
                         })
@@ -435,23 +463,34 @@ export default {
         },
         // 控制加密眼睛
         ToggleEncryption(id,type,column){
-
+            console.log(id,type,column)
             this.selectedRows.find((row)=>{
 
                 if(row.id===id){
-                    if(column==='name'){
-                        if(type==='open'){
-                            row.Encryp=false;
-                        }else if(type==='close'){
-                            row.Encryp=true;
+                    for(let value in row){
+                        console.log(value)
+                        if(value===column){
+                            if(type==='open'){
+                                row[column+'_Encryp_name']=false;
+                            }else if(type==='close'){
+                                row[column+'_Encryp_name']=true;
+                            }
+                        }else if(column==='stucode'){
+                            if(type==='open'){
+                                row.Encryp_stucode=false;
+                            }else if(type==='close'){
+                                row.Encryp_stucode=true;
+                            }
                         }
-                    }else if(column==='stucode'){
-                        if(type==='open'){
-                            row.Encryp_stucode=false;
-                        }else if(type==='close'){
-                            row.Encryp_stucode=true;
+                        else if(column==='stuid'){
+                            if(type==='open'){
+                                row.Encryp_id=false;
+                            }else if(type==='close'){
+                                row.Encryp_id=true;
+                            }
                         }
                     }
+                    
 
                 }
 
