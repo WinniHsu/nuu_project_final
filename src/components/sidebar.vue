@@ -221,7 +221,7 @@ export default {
             })
             .then((response)=>{
                 console.log('eraseCookie----->',response)
-                this.$js.eraseCookie('token');
+                this.$js.eraseCookie('leadtektoken');
                 this.$store.state.auth.time=0;
                 // debugger;
             })
