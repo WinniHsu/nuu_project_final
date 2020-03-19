@@ -25,8 +25,8 @@
                             </div>
 
                         </template>
-                        <!-- <template v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props"> -->
-                        <template  slot="clear" slot-scope="props">
+                        <template v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props">
+                        <!-- <template  slot="clear" slot-scope="props"> -->
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" -->
                             <button 
                                 style="white-space:nowrap"
@@ -48,8 +48,8 @@
                                 @click="traceExport(props.row)"
                             >匯出資料</button>
                         </template>
-                        <!-- <template v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props"> -->
-                        <template  slot="export-auth" slot-scope="props">
+                        <template v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props">
+                        <!-- <template  slot="export-auth" slot-scope="props"> -->
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" -->
                             <button
                                 style="white-space:nowrap"
@@ -60,8 +60,8 @@
                                 @click="traceExportAuth(props.row)"
                             >匯出權限編輯</button>
                         </template>
-                        <!-- <template v-if="$store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open" slot="schedule" slot-scope="props" > -->
-                        <template  slot="schedule" slot-scope="props" >
+                        <template v-if="$store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open" slot="schedule" slot-scope="props" >
+                        <!-- <template  slot="schedule" slot-scope="props" > -->
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['排程與通知設定'].open" -->
                             <button
                                 style="white-space:nowrap"

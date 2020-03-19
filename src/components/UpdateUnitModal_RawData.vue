@@ -10,15 +10,20 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label class="mb-2" for="exampleFormControlSelect1">請選擇管理單位</label>
+                                <!-- 20200318修改為複選 -->
+                                <!-- <label class="mb-2" for="exampleFormControlSelect1">請選擇管理單位</label>
                                 <select class="form-control" id="exampleFormControlSelect1" @change="changeUnit($event)">
                                     <option>{{currentUnit}}</option>
                                     <option v-for="unit in this.options.role" :key="unit.code">{{unit.authName}}</option>
-                                    <!-- <option>系統管理</option>
-                                    <option>倉儲管理</option>
-                                    <option>教務處註冊組</option>
-                                    <option>教務處招生組</option> -->
-                                </select>
+                                </select> -->
+                                <el-select v-model="currentUnit" multiple placeholder="請選擇管理單位" value="AA">
+                                    <el-option
+                                    v-for="unit in this.options.role"
+                                    :key="unit.code"
+                                    :label="unit.authName"
+                                    :value="unit.authName">
+                                    </el-option>
+                                </el-select>
                             </div>
                         </div>
                     </div>
@@ -57,7 +62,8 @@ export default {
                 {unit:'教務處招生組',id:4},
             ],
             unitList:['系統管理','倉儲管理','教務處註冊組','教務處招生組'],
-            currentUnit:'',
+            // currentUnit:'',//2020/3/18本來為單選
+            currentUnit:[],//2020/3/18改為複選
             config: {
                 checkbox_rows: true,
                 rows_selectable: false,
@@ -74,6 +80,7 @@ export default {
         this.getFindUnit();
     },
     computed: {
+
     },
     methods:{
         getUpdateTable(){
@@ -142,8 +149,11 @@ export default {
     watch: {
         selectedDetailData:function(){
             this.selectedDetailData_copy=Object.assign({}, this.selectedDetailData);
-            this.currentUnit=this.selectedDetailData.unit;
-
+            this.currentUnit=this.selectedDetailData.authName.split(',');
+            // for(let item of this.selectedDetailData.unit){
+            //     this.currentUnit.push(item)
+            // }
+            // this.currentUnit.push(this.selectedDetailData.unit)
         },
     }
 };

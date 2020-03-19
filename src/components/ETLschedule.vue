@@ -227,10 +227,8 @@ export default {
         selectedData:{
             handler(newValue, oldValue) {
                 this.selectedData_copy=Object.assign({}, this.selectedData);
-                this.$set(this.dateRange,'startDate',this.selectedData_copy.cleandatefirst);
-                // this.dateRange.startDate=this.selectedData_copy.cleandatefirst;
-                //  this.dateRange.startDate=123;
-                // this.$forceUpdate()
+                this.dateRange.startDate=this.selectedData_copy.cleandatefirst;
+                this.dateRange.endDate=this.selectedData_copy.cleandatefirst;
                   
             },
             immediate: true,

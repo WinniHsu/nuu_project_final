@@ -145,19 +145,24 @@ export default {
                         this.inputValue[item].check=1;
                         this.inputValue[item].message="資料型態錯誤";
                         errorList.push(item);
-                    }  
+                    } 
+
                 }
             };
-
+            console.log(errorList);
             if(!errorList.length){
                 let sendData={}
                 for(let item in this.inputValue){
                     this.$set(sendData,item,this.inputValue[item].value);
                 }
                 this.getInsertTableColumns(sendData);
-                $('#InsertModal_RawData').modal('hide'); 
-                this.$emit('requestdata');
-                this.copyColumns();
+
+            }else{
+                    this.$swal({
+                            title: '輸入資料錯誤',
+                            text: "",
+                            type: 'warning',
+                     }); 
             }
 
         },
@@ -167,6 +172,18 @@ export default {
                 tableuuid: this.$route.params.uuid,
             }).then((response)=>{
                 console.log(response);
+                 this.$swal({
+                    title: '成功新增',
+                    text: "",
+                    icon: 'success',
+                })
+                .then((result)=>{
+                    if(result.value){
+                        $('#InsertModal_RawData').modal('hide'); 
+                        this.$emit('requestdata');
+                        this.copyColumns();
+                    }
+                });
             })
         },
         copyColumns(){

@@ -65,7 +65,7 @@ const routes = [
     children:[
       {
         path:'/',
-        redirect:'SystemAdminPlatform-1'
+        redirect:'RawDataPlatform-1'
       },
       {
           path: "/RawDataPlatform-1",

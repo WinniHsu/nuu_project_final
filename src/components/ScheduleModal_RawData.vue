@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title" id="exampleModalLongTitle">排成與通知設定</h1>
+                <h1 class="modal-title" id="exampleModalLongTitle">排程與通知設定</h1>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -12,13 +12,19 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-check mb-2" disabled>
-                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" v-model="radioGroup1" checked>
+                                        <!-- 20200318改為複選 -->
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
+                                        <!-- v-model="selectedData_copy.cleanyn" checked="selectedData_copy.cleanyn" -->
+                                        <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" v-model="radioGroup1" checked> -->
                                         <label class="form-check-label" for="exampleRadios1">
                                             表單異動時發送通知給倉儲管理者
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" v-model="radioGroup1">
+                                        <!-- 20200318改為複選 -->
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
+                                        <!-- v-model="selectedData_copy.cleanyn" checked="selectedData_copy.cleanyn" -->
+                                        <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" v-model="radioGroup1"> -->
                                         <label class="form-check-label" for="exampleRadios2">
                                         開放管理單位上傳編輯日程
                                         </label>
@@ -32,10 +38,10 @@
                                                     :ranges='false'
                                                     :autoApply="true"
                                                     :linkedCalendars="true"
-                                                    :disabled="radioGroup1==='option1'"
+                                                   
                                                     @update="updateValues"
                                                 >
-
+                                                <!--  :disabled="selectedData_copy.cleanyn===0" -->
                                                 <template v-slot:input="picker" style="min-width: 600px;">
                                                     <span v-if="picker.startDate">{{ $moment(picker.startDate).format('MM-DD-YYYY')  }}-</span>  <span v-if="picker.endDate">{{ $moment(picker.endDate).format('MM-DD-YYYY') }}</span>
                                                     <span v-if="!picker.startDate">請選擇起始/結束</span> 
@@ -51,13 +57,17 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" :disabled="radioGroup1==='option1'">
+                                        <!-- 20200318改為複選 -->
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
+                                        <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" :disabled="radioGroup1==='option1'"> -->
                                         <label class="form-check-label" for="exampleRadios3">
                                             開始當日00:00自動提醒倉儲管理者、管理單位
                                         </label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4" :disabled="radioGroup1==='option1'">
+                                        <!-- 20200318改為複選 -->
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" >
+                                        <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4" :disabled="radioGroup1==='option1'"> -->
                                         <label class="form-check-label" for="exampleRadios4">
                                             結束當日00:00自動提醒倉儲管理者、管理單位
                                         </label>
@@ -92,7 +102,10 @@ export default {
     props: {
         selectedColumns:{
             type:Array
-        }
+        },
+        selectedData:{
+            type:Object
+        },
     },
     data() {
         return{
@@ -115,6 +128,7 @@ export default {
                 startDate: null,
                 endDate: null
             },
+            selectedData_copy:{}
 
         }
     },
@@ -146,7 +160,16 @@ export default {
 
     },
     watch: {
-
+        selectedData:{
+            handler(newValue, oldValue) {
+                this.selectedData_copy=Object.assign({}, this.selectedData);
+                // this.dateRange.startDate=this.selectedData_copy.cleandatefirst;
+                // this.dateRange.endDate=this.selectedData_copy.cleandatefirst;
+                  
+            },
+            immediate: true,
+            deep: true
+        }
     }
 };
 </script>
