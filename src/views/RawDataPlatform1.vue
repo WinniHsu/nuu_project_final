@@ -66,7 +66,7 @@
         <!-- <edit-modal></edit-modal> -->
         <insert-modal></insert-modal>
         <updateunit-modal :selectedDetailData="selectedDetailData" @changeUnit="getchangeUnit"></updateunit-modal>
-        <schedule-modal :selectedDetailData="selectedDetailData"></schedule-modal> 
+        <schedule-modal :selectedDetailData="selectedDetailData" @changeUnit="getchangeUnit"></schedule-modal> 
     </div>
   </div>
 </template>

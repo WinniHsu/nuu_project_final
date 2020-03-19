@@ -29,6 +29,7 @@
 import sidebar from '../components/sidebar'
 import VueBootstrap4Table from 'vue-bootstrap4-table'
 import loading from '../components/loading'
+import {apiQueryAllSyn} from '@/apis/syn.js'
 export default {
   name: "synListTemplate",
   components: {
@@ -43,33 +44,33 @@ export default {
             loadingShow:false,
             rows: [
                     {
-                        "tableName":'大專校院同義詞表',
-                        "updateDate":'2020/02/03' ,
+                        "tablename":'大專校院同義詞表',
+                        "updatedate":'2020/02/03' ,
                         "id":'Schoolsynonym'
                     },
                     {
-                        "tableName":'畢業生流向',
-                        "updateDate":'2020/02/03' ,
+                        "tablename":'畢業生流向',
+                        "updatedate":'2020/02/03' ,
                         "id":'GraSurveysynonym'
                     },
                     {
-                        "tableName":'海外名單',
-                        "updateDate":'2020/02/03',
+                        "tablename":'海外名單',
+                        "updatedate":'2020/02/03',
                         "id":'Oversea'
                     },
                     {
-                        "tableName":'休學代碼',
-                        "updateDate":'2020/02/03',
+                        "tablename":'休學代碼',
+                        "updatedate":'2020/02/03',
                         "id":'Suspend'
                     },
                     {
-                        "tableName":'交換校系',
+                        "tablename":'交換校系',
                         "updateDate":'2020/02/03',
                         "id":'Transschool'
                     },
                     {
-                        "tableName":'入學管道',
-                        "updateDate":'2020/02/03',
+                        "tablename":'入學管道',
+                        "updatedate":'2020/02/03',
                         "id":'Enrolltype'
                     },
                     {
@@ -86,7 +87,7 @@ export default {
             columns:[
                 {
                     label: "表單名稱",
-                    name: "tableName",
+                    name: "tablename",
                     filter: {
                         type: "simple",
                         placeholder: ""
@@ -95,7 +96,7 @@ export default {
                 },
                 {
                     label: "更新日期",
-                    name: "updateDate",
+                    name: "updatedate",
                     filter: {
                         type: "simple",
                         placeholder: ""
@@ -126,7 +127,7 @@ export default {
         }
   },
   mounted: function () { 
-
+      this.getQueryAllSyn();
     
   },
   computed: {
@@ -137,6 +138,13 @@ export default {
  
   },
   methods: {
+      getQueryAllSyn(){
+        apiQueryAllSyn({}).then((response)=>{
+            console.log(response.data)
+            this.rows=[];
+            this.rows=response.data;
+        })
+      },
       traceEdit(row){
         console.log(row);
         this.$router.push({name:'synWeb-2',params:{params:row.id,tableName:row.tableName}});

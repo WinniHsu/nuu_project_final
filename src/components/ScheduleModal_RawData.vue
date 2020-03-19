@@ -13,20 +13,22 @@
                                 <div class="col-12">
                                     <div class="form-check mb-2" disabled>
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.ischange" checked="selectedData_copy.ischange">
-                                        <!-- v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" -->
+ 
+
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1"   v-model="selectedData_copy.ischange" true-value="1" false-value="0">
+                                        <!-- v-model="selectedData_copy.ischange" -->
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" v-model="radioGroup1" checked> -->
-                                        <label class="form-check-label" for="exampleRadios1">
-                                            表單異動時發送通知給倉儲管理者
+                                        <label class="form-check-label" for="inlineCheckbox1">
+                                            表單異動時發送通知給倉儲管理者{{selectedData_copy.ischange}}
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2"  v-model="selectedData_copy.startupload" true-value="1" false-value="0">
                                         <!-- v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" -->
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" v-model="radioGroup1"> -->
-                                        <label class="form-check-label" for="exampleRadios2">
-                                        開放管理單位上傳編輯日程
+                                        <label class="form-check-label" for="inlineCheckbox2">
+                                        開放管理單位上傳編輯日程{{selectedData_copy.startupload}}
                                         </label>
                                         <date-range-picker
                                                     ref="picker"
@@ -43,7 +45,7 @@
                                                 >
                                                 <!--  :disabled="selectedData_copy.cleanyn===0" -->
                                                 <template v-slot:input="picker" style="min-width: 600px;">
-                                                    <span v-if="picker.startDate">{{ $moment(picker.startDate).format('MM-DD-YYYY')  }}-</span>  <span v-if="picker.endDate">{{ $moment(picker.endDate).format('MM-DD-YYYY') }}</span>
+                                                    <span v-if="picker.startDate">{{ $moment(picker.startDate).format('YYYY-MM-DD')  }}-</span>  <span v-if="picker.endDate">{{ $moment(picker.endDate).format('YYYY-MM-DD') }}</span>
                                                     <span v-if="!picker.startDate">請選擇起始/結束</span> 
                                                 </template>
                                         </date-range-picker>
@@ -58,7 +60,7 @@
                                 <div class="col-12">
                                     <div class="form-check mb-2">
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" :disabled='!selectedData_copy.startupload'>
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1"  v-model="selectedData_copy.startsend" true-value="1" false-value="0">
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" :disabled="radioGroup1==='option1'"> -->
                                         <label class="form-check-label" for="exampleRadios3">
                                             開始當日00:00自動提醒倉儲管理者、管理單位
@@ -66,7 +68,7 @@
                                     </div>
                                     <div class="form-check mb-2">
                                         <!-- 20200318改為複選 -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" :disabled='!selectedData_copy.startupload'>
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1"  v-model="selectedData_copy.endsend" true-value="1" false-value="0">
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4" :disabled="radioGroup1==='option1'"> -->
                                         <label class="form-check-label" for="exampleRadios4">
                                             結束當日00:00自動提醒倉儲管理者、管理單位
@@ -93,6 +95,7 @@
 // import Datepicker from 'vuejs-datepicker';
 import DateRangePicker from 'vue2-daterange-picker'
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+import {apiUpdateTable} from '@/apis/rawData.js';
 export default {
     name: "ScheduleModal_RawData",
     components: {
@@ -109,6 +112,7 @@ export default {
     },
     data() {
         return{
+            aa:null,
             radioGroup1:'option1',
             localeData:{
                 direction: 'ltr',
@@ -143,7 +147,46 @@ export default {
             // this.$emit("closeSecondModel");
         },
         saveEditedData:function(){
-             $('#ScheduleModal_RawData').modal('hide');
+            apiUpdateTable({
+                authName: this.selectedData_copy.authName,
+                fileextension:this.selectedData_copy.fileextension,
+                filepath:this.selectedData_copy.filepath,
+                ischange:this.selectedData_copy.ischange,
+                modifyUser:this.selectedData_copy.modifyUser,
+                startdate: this.dateRange.startDate===null?null:this.$moment(this.dateRange.startDate).format('x'),
+                enddate: this.dateRange.endDate===null?null:this.$moment(this.dateRange.endDate).format('x'),
+                endsend: this.selectedData_copy.endsend,
+                startsend:this.selectedData_copy.startsend, 
+                startupload: this.selectedData_copy.startupload,
+                tablecode:this.selectedData_copy.tablecode,
+                tablename: this.selectedData_copy.tablename,
+                tableuuid: this.selectedData_copy.tableuuid,
+                version:this.selectedData_copy.version,
+            }).then((response)=>{
+                console.log(response)
+                if(response.status===200){
+                     this.$swal({
+                            title: '成功修改編輯開放設定',
+                            text: "",
+                            type: 'success',
+                     })
+                     .then((result)=>{
+                          if(result.value){
+                            this.$emit('changeUnit');
+                            $('#ScheduleModal_RawData').modal('hide');
+                            this.dateRange.startDate=null;
+                            this.dateRange.endDate=null;
+
+                         }
+                     });
+                   
+                }
+               
+            })
+            
+
+
+
             // 1.儲存修改資料
             // 2.重新request欄位資料
         },
@@ -160,18 +203,27 @@ export default {
 
     },
     watch: {
+        'selectedDetailData.enddate':function(){
+
+        },
         selectedDetailData:{
             handler(newValue, oldValue) {
+                console.log("AA")
                 this.selectedData_copy=Object.assign({}, this.selectedDetailData);
                 let auth=this.selectedData_copy.authName.split(',')
                 this.selectedData_copy.authName=[];
                 for(let item of auth){
                     this.selectedData_copy.authName.push(item);
                 }
-                this.selectedData_copy.ischange=1;
-                this.selectedData_copy.startupload=1;
-                this.dateRange.startDate= this.selectedData_copy.startdate;
-                this.dateRange.endDate= this.selectedData_copy.enddate;
+                // this.selectedData_copy.ischange=1;
+                // this.selectedData_copy.startupload=1;
+
+                this.$set(this.dateRange,'startDate',this.selectedData_copy.startdate);
+                this.$set(this.dateRange,'endDate',this.selectedData_copy.enddate);
+
+
+                // this.dateRange.startDate= this.selectedData_copy.startdate;
+                // this.dateRange.endDate= this.selectedData_copy.enddate;
                 
 
                 // this.dateRange.startDate=this.selectedData_copy.cleandatefirst;

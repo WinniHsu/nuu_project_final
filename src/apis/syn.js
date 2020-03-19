@@ -1,5 +1,7 @@
 // syn.js
 import req from './https'
+// 請求同意詞列表資料
+export const apiQueryAllSyn =(params) => req('post','/api/schoolSynony/queryAllSyn',params);
 
 export const apiQueryColumn =(params) => req('post','/api/schoolSynony/queryColumn',params);
 export const apiQueryAllData =(params) => req('post','/api/schoolSynony/queryAllSchool',params);

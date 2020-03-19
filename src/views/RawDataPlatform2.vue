@@ -349,7 +349,8 @@ export default {
             apiQueryTableValue({
                 tableuuid:this.$route.params.uuid
             }).then((response)=>{
-                // console.log(response);
+                console.log('TableValue------>',response);
+                // debugger;
                 this.selectedRows=[];
                 if(this.secretColumns.length>0){
                     for(let value of this.secretColumns){
@@ -357,7 +358,7 @@ export default {
 
                         response.data.forEach((item)=>{
                             this.$set(item,value+'_original',item[value]);
-                            if(value.toLowerCase().indexOf('name')>=0){
+                            if(value.toLowerCase().indexOf('namec')>=0){
                                  if(item[value]!==""){
                                     item[value]=this.replaceData(item[value],1,1,'*');
                                     this.$set(item,value+'_Encryp_name',true);
@@ -433,7 +434,7 @@ export default {
         traceEditedData:function(value){
             let value_cpoy=Object.assign({}, value);
             for(let item in value_cpoy){
-                    if(item.toLowerCase().indexOf('name')>0){
+                    if(item.toLowerCase().indexOf('namec')>0){
                         let name=item+'_original'
                         value_cpoy[item]=value_cpoy[name];
                     }else if(item.toLowerCase().indexOf('stucode')>=0){
