@@ -14,7 +14,7 @@ export default {
             created:0
         },
         time:0,
-        web_auth:[]
+        web_auth:null
     },
     mutations:{
         SET_AUTH(state,options){

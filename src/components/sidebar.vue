@@ -35,7 +35,11 @@
                 <li v-if="$store.state.auth.web_auth['同義詞管理']!==undefined&&$store.state.auth.web_auth['同義詞管理'].open " :class="['nav-item',type==='synWebList'?'active':'']" @click="changeRouter('synWebList')">
                     <a class="nav-link" href="#">同義詞管理</a>
                 </li>
-                <li v-if="$store.state.auth.web_auth['倉儲資料管理']!==undefined &&$store.state.auth.web_auth['倉儲資料管理'].open" :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
+                <!-- <li v-if="$store.state.auth.web_auth['倉儲資料管理']!==undefined &&$store.state.auth.web_auth['倉儲資料管理'].open" :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
+                    <a class="nav-link" href="#">倉儲資料管理</a>
+                </li> -->
+                <!-- 20200320該系統權限預設打開 -->
+                <li :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
                     <a class="nav-link" href="#">倉儲資料管理</a>
                 </li>
                 <li v-if="$store.state.auth.web_auth['系統管理']!==undefined&&$store.state.auth.web_auth['系統管理'].open " :class="['nav-item','dropdown',type==='SystemAdminPlatform'?'active':'']">
@@ -43,8 +47,8 @@
                     系統管理
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a v-if="$store.state.auth.web_auth['系統管理']['帳號管理']!==undefined&&$store.state.auth.web_auth['系統管理']['帳號管理'].open " class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform1')">帳號管理</a>
-                        <a v-if="$store.state.auth.web_auth['系統管理']['單位管理']!==undefined&&$store.state.auth.web_auth['系統管理']['單位管理'].open " class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform2')">單位管理</a>
+                        <a v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['系統管理']['帳號管理']!==undefined&&$store.state.auth.web_auth['系統管理']['帳號管理'].open " class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform1')">帳號管理</a>
+                        <a v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['系統管理']['單位管理']!==undefined&&$store.state.auth.web_auth['系統管理']['單位管理'].open " class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform2')">單位管理</a>
                         <a  class="dropdown-item" href="#" @click="changeRouter('SystemAdminPlatform3')">系統日誌</a>
                     </div>
                 </li>
@@ -140,22 +144,26 @@ export default {
         goMainPage(){
             this.$router.push({name:'MainPage'});
         },
+        // 抓所有資料全限
         getApiRoleAuth(){
             apiRoleAuth({}).then((response)=>{
-                    console.log(response.data)
-                    
+                    // console.log(response.data)
+                    // 組格式
                     let objList={};
                     for(let item in response.data){
+                        //   console.log(response.data[item])
                             let obj={
                                 open:false,
                                 main:'',
                             };
-                            if(response.data[item].submanage===null){
+                            if(response.data[item].submanage===response.data[item].mainmanage){
                                 obj.main=response.data[item].mainmanage;
                                 this.$set(objList,response.data[item].mainmanage,obj)
-                            }else if(response.data[item].submanage!==null){
+                                console.log(objList)
+                            }else {
                                 this.$set(objList[response.data[item].mainmanage],response.data[item].submanage,obj)
                                 objList[response.data[item].mainmanage][response.data[item].submanage].main=response.data[item].submanage;
+                                console.log(objList)
                             }
                     }
                     console.log('objList---->',objList);
@@ -175,12 +183,13 @@ export default {
                 for(let item of authList){
                     for(let item2 in response.data){
                         
-                        if(response.data[item2].roleid==item && mainList.indexOf(response.data[item2].mainmanage)<0){
+                        if(response.data[item2].roleid==item &&response.data[item2].mainmanage===response.data[item2].submanage &&mainList.indexOf(response.data[item2].mainmanage)<0){
                             mainList.push(response.data[item2].mainmanage);
                             objList[response.data[item2].mainmanage].open=true;
                             
                         }
-                        else if(response.data[item2].roleid==item&&mainList.indexOf(response.data[item2].mainmanage)>=0){
+                        // else if(response.data[item2].roleid==item&&response.data[item2].mainmanage!==response.data[item2].submanage){
+                        else if(response.data[item2].roleid==item&&response.data[item2].mainmanage!==response.data[item2].submanage &&mainList.indexOf(response.data[item2].mainmanage)>=0){
                             objList[response.data[item2].mainmanage][response.data[item2].submanage].open=true;
                         }
                     }                
@@ -249,6 +258,9 @@ export default {
                 },500)
                 
             }
+        },
+        '$store.state.auth.web_auth':function(){
+            console.log("web_auth change")
         }
     }
 };

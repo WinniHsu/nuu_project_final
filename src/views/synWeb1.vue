@@ -141,13 +141,20 @@ export default {
       getQueryAllSyn(){
         apiQueryAllSyn({}).then((response)=>{
             console.log(response.data)
+            for(let item in response.data){
+                console.log(this.$moment(response.data[item].updatedate).format('YYYY-MM-DD'));
+                response.data[item].updatedate=this.$moment(response.data[item].updatedate).format('YYYY-MM-DD');
+
+                
+            }
             this.rows=[];
+
             this.rows=response.data;
         })
       },
       traceEdit(row){
         console.log(row);
-        this.$router.push({name:'synWeb-2',params:{params:row.id,tableName:row.tableName}});
+        this.$router.push({name:'synWeb-2',params:{params:row.id,tableName:row.tablename}});
 
       },
 

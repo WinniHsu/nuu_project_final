@@ -22,11 +22,14 @@
                         class="btn btn-info"
                         data-toggle="modal"
                         data-target="#insertModal_SystemAdmin2"
+                        v-text="props.row.authName==='倉儲資料管理者'||props.row.authName==='系統管理者'?'瀏覽':'修改'"
                         @click="traceDetailData(props.row)"
-                    >修改</button>
+                    ></button>
                 </template>
+                
                 <template slot="delete" slot-scope="props" >
-                    <button
+                    <button 
+                        v-if="props.row.authName!=='倉儲資料管理者'&&props.row.authName!=='系統管理者'"
                         style="white-space:nowrap"
                         type="button"
                         class="btn btn-info"
@@ -58,28 +61,7 @@ export default {
   },
   data: function() {
         return {
-            rows: [
-                // {
-                //     roleName:'系統管理',
-                //     userAccount:'admin',
-                //     userName:'admin',
-                // },
-                // {
-                //     roleName:'倉儲管理',
-                //     userAccount:'wing',
-                //     userName:'admin',
-                // },
-                // {
-                //     roleName:'註冊組',
-                //     userAccount:'jason',
-                //     userName:'招聯窗口',
-                // },
-                // {
-                //     roleName:'語文中心',
-                //     userAccount:'mark',
-                //     userName:'畢業門檻負責人',
-                // }
-            ],
+            rows: [],
             columns:[
                 {
                     label: "單位名稱",
@@ -143,9 +125,37 @@ export default {
   methods: {
     getFindUnit(){
       apiFindUnit({}).then((response)=>{
-        // console.log(response.data);
+        console.log('getFindUnit---->',response.data);
         this.rows=[];
         this.rows=response.data;
+        this.rows.unshift(
+          {
+                creationDate:null,
+                creationUser: null,
+                modifyDate: null,
+                modifyUser: null,
+                version: 0,
+                code: 10000,
+                authName: "倉儲資料管理者",
+                auth:['1','2','3','4','5','6','7','8','9','10','11','12'],
+  
+          }
+        );
+        
+        this.rows.unshift(
+          {
+                creationDate:null,
+                creationUser: null,
+                modifyDate: null,
+                modifyUser: null,
+                version: 0,
+                code: 10000,
+                authName: "系統管理者",
+                auth:['1','2','3','4','5','6','7','8','9','10','11','12'],
+  
+          }
+        )
+
 
       })
     },
@@ -179,10 +189,11 @@ export default {
       this.getFindUnit();
     },
     getFindOneUnitAuth(code){
+
       apiFindOneUnitAuth({
         code:code
       }).then((response)=>{
-        console.log(response);
+        console.log('getFindOneUnitAuth----->',response);
         this.checkOption.authName=response.data[0].authName;
         this.checkOption.auth=response.data[0].auth;
         this.checkOption.code=response.data[0].code;
@@ -194,8 +205,21 @@ export default {
     },
     // 偵測點選哪一筆
     traceDetailData(vlaue){
-      // console.log(vlaue)
-      this.getFindOneUnitAuth(vlaue.code);
+      console.log(vlaue)
+     
+      if(vlaue.authName==="倉儲資料管理者"){
+        this.checkOption.authName='倉儲資料管理者';
+        this.checkOption.auth=['1','2','3','4','5','6','7','8','9','10','11','12'];
+        this.checkOption.code=0;
+        this.checkOption.version=0;
+      }else if(vlaue.authName==="系統管理者"){
+        this.checkOption.authName='系統管理者';
+        this.checkOption.auth=['1','2','3','4','5','6','7','8','9','10','11','12'];
+        this.checkOption.code=0;
+        this.checkOption.version=0;
+      }else{
+         this.getFindOneUnitAuth(vlaue.code);
+      }
       this.modeltype='update';
       // console.log(vlaue.code)
         // 取得該單位權限

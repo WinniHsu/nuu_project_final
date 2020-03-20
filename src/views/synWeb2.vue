@@ -145,6 +145,7 @@ export default {
         }
   },
   mounted: function () { 
+
     //先取得欄位
     this.getQueryColumn(this.$route.params.params);
   },

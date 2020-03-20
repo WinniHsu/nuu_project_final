@@ -15,18 +15,19 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">單位名稱</span>
                                             </div>
-                                             <input type="text"  v-model="groupName" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" >
+                                             <input type="text"  v-model="groupName" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" :disabled="groupName==='倉儲資料管理者'||groupName==='系統管理者'">
                                          </div>
                                     </div>
                                 </div>
-                                <div class="row outer-wrapper" v-for="group in mainmanage" :key="group">
+                                <div class="row outer-wrapper" v-for="group in mainmanage" :key="group" >
                                     <!-- <div class="col-md-12" > -->
-                                        <el-checkbox :indeterminate="setting[group].isIndeterminate" v-model="setting[group].checkAll" @change="handleCheckAllChange=>handleCheckAll(handleCheckAllChange,group)"></el-checkbox>
-                                        {{group}}
+                                        <el-checkbox :disabled="groupName==='倉儲資料管理者'||groupName==='系統管理者'" :indeterminate="setting[group].isIndeterminate" v-model="setting[group].checkAll" @change="handleCheckAllChange=>handleCheckAll(handleCheckAllChange,group)"></el-checkbox>
+                                       {{group}}(全選)
+                                        <!-- {{group}} -->
                                         <div style="margin: 20px 10px;"></div>
                                     
                                         <el-checkbox-group  v-model="setting[group].checkedOptions" @change="handleCheckedCitiesChange=>handleCheckedCities(handleCheckedCitiesChange,group)">
-                                            <el-checkbox  v-if =" city !== null" v-for="city in submanage[group]" :label="city" :key="city">{{city}}</el-checkbox>
+                                            <el-checkbox :disabled="groupName==='倉儲資料管理者'||groupName==='系統管理者'" v-if =" city !== null&& city !=='倉儲資料管理'" v-for="city in submanage[group]" :label="city" :key="city">{{city}}</el-checkbox>
                                         </el-checkbox-group>
                                     <!-- </div> -->
                                 </div>
@@ -36,7 +37,7 @@
 		                </div>
 		                <div class="modal-footer">
 		                    <button type="button" class="btn btn-success" v-if="modeltype==='insert'" @click="insertData()">新增資料</button>
-                            <button type="button" class="btn btn-success" v-if="modeltype==='update'"  @click="updateData()">儲存資料</button>
+                            <button type="button" class="btn btn-success" v-if="modeltype==='update'" :disabled="groupName==='倉儲資料管理者'||groupName==='系統管理者'" @click="updateData()">儲存資料</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal()">關閉</button>
 		                </div>
 		            </div>
@@ -75,7 +76,8 @@ export default {
         }
     },
     mounted: function () { 
-        this.getRoleAuth();
+        this.getRoleAuth(this.checkOption);
+        console.log(this.checkOption)
     },
     computed: {
         
@@ -109,66 +111,102 @@ export default {
         // 文字-->代碼
         renderData(){
             return new Promise((resolve, reject)=>{
-                for(let item of this.mainmanage){
-                    if(item==='同義詞管理'){
-                        if(this.setting[item].checkAll===true){
-                            let filterMain=this.allAuths.filter((value)=>{
-                                return value.mainmanage===item;
-                            });
-                            console.log('filterMain---->',filterMain)
-                            this.auths.push(String(filterMain[0].roleid))
-                        }
-                    }else{
-
-                        for(let item2 in this.setting[item] ){
+                for(let item of this.mainmanage){ //主系統選項
+                        for(let item2 in this.setting[item] ){   //checkedOptions、checkAll.....
                             if(item2==='checkedOptions'){
                                 // this.renderData(item,this.setting[item][item2]);
                                 let mainmanage=item;
                                 let submanage=this.setting[item][item2];
-                                            
-                                let filterMain=this.allAuths.filter((item)=>{
-                                    return item.mainmanage===mainmanage;
-                                });
+                                let filterMain=[];
+                                for(let value of submanage){      
+                                         this.allAuths.forEach((item)=>{
+                                             if(item.submanage===value){
+                                                 filterMain.push(item)
+                                             }
+                                         })
+                                    // let filterMain=this.allAuths.filter((item)=>{
+                                    //         return item.submanage===value;
+                                    // });
+                                } 
+                                console.log('filterMain---->',filterMain)
                                 for(let item in filterMain){
-                                    for(let item2 of submanage){
-                                        if(filterMain[item].submanage===item2){
-                                            this.auths.push (String(filterMain[item].roleid))
-                                        }
-                                    }
+                                      this.auths.push (String(filterMain[item].roleid))
                                 }
                             }
                         }
-                    }
+                    // if(item==='同義詞管理'){
+                    //     if(this.setting[item].checkAll===true){
+                    //         let filterMain=this.allAuths.filter((value)=>{
+                    //             return value.mainmanage===item;
+                    //         });
+                    //         console.log('filterMain---->',filterMain)
+                    //         this.auths.push(String(filterMain[0].roleid))
+                    //     }
+                    // }else{
+
+                    //     for(let item2 in this.setting[item] ){
+                    //         if(item2==='checkedOptions'){
+                    //             // this.renderData(item,this.setting[item][item2]);
+                    //             let mainmanage=item;
+                    //             let submanage=this.setting[item][item2];
+                                            
+                    //             let filterMain=this.allAuths.filter((item)=>{
+                    //                 return item.mainmanage===mainmanage;
+                    //             });
+                    //             for(let item in filterMain){
+                    //                 for(let item2 of submanage){
+                    //                     if(filterMain[item].submanage===item2){
+                    //                         this.auths.push (String(filterMain[item].roleid))
+   
+                                           
+                    //                     }
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 
                 };
                  resolve("connect over");
             })
+        },
+        onlyUnique(value, index, self){
+            return self.indexOf(value) === index;
         },
         // 取得目前該筆資料權限(數字代碼-->文字)
         renderData2(codeid){
             console.log(codeid)
             for(let item in this.allAuths){
                 if(this.allAuths[item].roleid==codeid){
-                    if(this.allAuths[item].mainmanage==='同義詞管理'){
-                        this.setting[this.allAuths[item].mainmanage].checkAll=true;
-                        this.setting[this.allAuths[item].mainmanage].isIndeterminate=false;
-                        console.log('上---->',this.allAuths[item].mainmanage)
-                        break;
-                    }else{
-                        this.setting[this.allAuths[item].mainmanage].checkedOptions.push(this.allAuths[item].submanage);
-                        console.log('下---->',this.allAuths[item].submanage)
-                        break;
-                    }
+                    this.setting[this.allAuths[item].mainmanage].checkedOptions.push(this.allAuths[item].submanage);
+                    // console.log('下---->',this.allAuths[item].submanage)
+                    break;
+
+
+                    // if(this.allAuths[item].mainmanage==='同義詞管理'){
+                    //     this.setting[this.allAuths[item].mainmanage].checkAll=true;
+                    //     this.setting[this.allAuths[item].mainmanage].isIndeterminate=false;
+                    //     console.log('上---->',this.allAuths[item].mainmanage)
+                    //     break;
+                    // }else if(this.allAuths[item].submanage!==null){
+                    //      this.setting[this.allAuths[item].mainmanage].checkedOptions.push(this.allAuths[item].submanage);
+                    //     console.log('下---->',this.allAuths[item].submanage)
+                    //     break;
+                    // }
+                    // else{
+                    //     this.setting[this.allAuths[item].mainmanage].checkedOptions.push(this.allAuths[item].submanage);
+                    //     console.log('下---->',this.allAuths[item].submanage)
+                    //     break;
+                    // }
                 }
             }
         },
         // 修改group
         getUpdateRole(){
-            
             apiSaveRole({
                 code:this.getCheckOption.code,
                 authName:this.groupName,
-                auth:this.auths,
+                auth:this.auths.filter(this.onlyUnique),
                 version:this.getCheckOption.version
             }).then((response)=>{
                 if(response.status===200){
