@@ -147,6 +147,7 @@ export default {
         // 抓所有資料全限
         getApiRoleAuth(){
             apiRoleAuth({}).then((response)=>{
+                    this.$store.state.auth.web_auth=null;
                     // console.log(response.data)
                     // 組格式
                     let objList={};
@@ -261,6 +262,7 @@ export default {
         },
         '$store.state.auth.web_auth':function(){
             console.log("web_auth change")
+            this.$forceUpdate();
         }
     }
 };
