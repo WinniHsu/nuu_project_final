@@ -29,10 +29,10 @@
         </button> -->
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
-                <li  v-if="$store.state.auth.web_auth['原始資料管理'].open!==undefined && $store.state.auth.web_auth['原始資料管理'].open" :class="['nav-item',type==='RawDataPlatformList'?'active':'']" @click="changeRouter('RawDataPlatformList')">
+                <li  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理'].open!==undefined && $store.state.auth.web_auth['原始資料管理'].open" :class="['nav-item',type==='RawDataPlatformList'?'active':'']" @click="changeRouter('RawDataPlatformList')">
                     <a class="nav-link" href="#">原始資料管理 <span class="sr-only">(current)</span></a>
                 </li>
-                <li v-if="$store.state.auth.web_auth['同義詞管理']!==undefined&&$store.state.auth.web_auth['同義詞管理'].open " :class="['nav-item',type==='synWebList'?'active':'']" @click="changeRouter('synWebList')">
+                <li v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['同義詞管理']!==undefined&&$store.state.auth.web_auth['同義詞管理'].open " :class="['nav-item',type==='synWebList'?'active':'']" @click="changeRouter('synWebList')">
                     <a class="nav-link" href="#">同義詞管理</a>
                 </li>
                 <!-- <li v-if="$store.state.auth.web_auth['倉儲資料管理']!==undefined &&$store.state.auth.web_auth['倉儲資料管理'].open" :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
@@ -42,7 +42,7 @@
                 <li :class="['nav-item',type==='ETLPlatform'?'active':'']" @click="changeRouter('ETLPlatform')">
                     <a class="nav-link" href="#">倉儲資料管理</a>
                 </li>
-                <li v-if="$store.state.auth.web_auth['系統管理']!==undefined&&$store.state.auth.web_auth['系統管理'].open " :class="['nav-item','dropdown',type==='SystemAdminPlatform'?'active':'']">
+                <li v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['系統管理']!==undefined&&$store.state.auth.web_auth['系統管理'].open " :class="['nav-item','dropdown',type==='SystemAdminPlatform'?'active':'']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     系統管理
                     </a>

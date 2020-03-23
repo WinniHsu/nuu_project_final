@@ -58,6 +58,17 @@ instance.interceptors.request.use((config)=>{
     return Promise.reject(error);
 });
 
+
+
+function usingCallback(callback) {
+    const data = 'a message';
+    callback(data);
+}
+
+usingCallback((m) => {  });
+
+
+
 // request攔截器
 instance.interceptors.request.use((response)=>{
     return response;
@@ -88,6 +99,12 @@ var instance2 = axios.create({
 export default function(method,url,data=null){
     method = method.toLowerCase();
     if(method == 'post'){
+
+        // return instance.post(url,data).then((response) => {
+        //     // update the token to Vuex from cookie
+        //     return response;
+        // })
+
         return instance.post(url,data)
     }else if(method == 'get'){
         return instance.get(url,{params:data})
