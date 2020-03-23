@@ -259,7 +259,8 @@ export default {
                 
             }
         },
-        '$store.state.auth.web_auth':function(){
+        '$store.state.auth.tokenInfo.auth':function(){
+             this.getApiRoleAuth();
             console.log("web_auth change")
         }
     }

@@ -156,7 +156,7 @@ export default {
       
 
             this.blockPage = false;  //loading畫面停止
-            this.loading=true; //上傳按鈕隱藏 
+            this.loading=false; //上傳按鈕隱藏 
             this.upload_loading=false; //可以瀏覽檔案
         },
         closeModel(){

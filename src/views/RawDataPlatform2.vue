@@ -9,7 +9,7 @@
                 <button type="button" class="btn btn-primary mr-2"  @click="updateData()">匯入Excel</button>
             </div>
            
-            <vue-bootstrap4-table  :rows="selectedRows" :columns="selectedColumns" :config="config" >
+            <vue-bootstrap4-table  :rows="selectedRows" :columns="selectedColumns" :config="config" @on-change-query="onChangeQuery">
                 <!-- :actions="actions" @add-data="addData" @update-data="updateData" -->
                             <template slot="global-search-clear-icon" >
                                 <i class="fas fa-times-circle"></i>
@@ -123,21 +123,30 @@ export default {
                 show_reset_button:false,
                 global_search: {
                      visibility: false,
-                }
+                },
+                server_mode:  true
             },
 
             note:[],
             //紀錄需要修改的單筆資料
-            selectedDetailData:{}
+            selectedDetailData:{},
+            queryParams:null
         }
     },
     mounted: function () { 
         // console.log(this.$route.params.uuid)
         this.getQueryTableColumn();
+        // this.onChangeQuery();
     },
     computed: {
     },
     methods:{
+        onChangeQuery(queryParams) {
+            this.queryParams = queryParams;
+            this.getQueryTableValue();
+            console.log('onChangeQuery>',queryParams)
+            // this.fetchData();
+        },
         // 回到原始資料管理 
         BackToRawDataPlatformList(){
              this.$router.push({name:'RawDataPlatform-1'});
@@ -347,7 +356,9 @@ export default {
         // 取得該table的資料
         getQueryTableValue(){
             apiQueryTableValue({
-                tableuuid:this.$route.params.uuid
+                tableuuid:this.$route.params.uuid,
+                pageno:this.queryParams.page-1,
+                pagesize:this.queryParams.per_page
             }).then((response)=>{
                 console.log('TableValue------>',response);
                 // debugger;
