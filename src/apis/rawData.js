@@ -9,6 +9,10 @@ export const apiQueryTableColumn =(params) => req('post','/api/rawdataUpload/que
 export const apiUpload =(params,string) => req('post','/api/rawdataUpload/upload?json='+encodeURIComponent(string),params);
 // 查詢表單資料
 export const apiQueryTableValue =(params) => req('post','/api/rawdataUpload/querytablevalue',params);
+
+// 查詢單一表單資料
+export const apiQuerysinglemt =(params) => req('post','/api/rawdataUpload/querysinglemt',params);
+
 // 修改欄位
 export const apiUpdateTableColumns =(params) => req('post','/api/rawdataUpload/update',params);
 // 刪除資料

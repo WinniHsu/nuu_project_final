@@ -9,7 +9,7 @@
                 <button type="button" class="btn btn-primary mr-2"  @click="updateData()">匯入Excel</button>
             </div>
            
-            <vue-bootstrap4-table  :rows="selectedRows" :columns="selectedColumns" :config="config" @on-change-query="onChangeQuery">
+            <vue-bootstrap4-table  :rows="selectedRows" :columns="selectedColumns" :config="config" @on-change-query="onChangeQuery" :total-rows="total_rows">
                 <!-- :actions="actions" @add-data="addData" @update-data="updateData" -->
                             <template slot="global-search-clear-icon" >
                                 <i class="fas fa-times-circle"></i>
@@ -93,7 +93,7 @@ import InsertModal_RawData from '../components/InsertModal_RawData';
 import UploadModal_RawData from '../components/uploadModal_RawData';
 import {apiQueryTableColumn} from '@/apis/rawData.js';
 import {apiQueryTableValue} from '@/apis/rawData.js';
-
+import {apiQuerysinglemt} from '@/apis/rawData.js';
 import {apiDeleteTableColumns} from '@/apis/rawData.js';
 export default {
     name: "RawDataPlatform",
@@ -130,12 +130,14 @@ export default {
             note:[],
             //紀錄需要修改的單筆資料
             selectedDetailData:{},
-            queryParams:null
+            queryParams:null,
+            total_rows:0
         }
     },
     mounted: function () { 
         // console.log(this.$route.params.uuid)
         this.getQueryTableColumn();
+        this.getQuerysinglemt();
         // this.onChangeQuery();
     },
     computed: {
@@ -158,6 +160,14 @@ export default {
         },
         getRequestdata(){
             this.getQueryTableValue();
+        },
+        getQuerysinglemt(){
+            apiQuerysinglemt({
+                tableuuid:this.$route.params.uuid
+            }).then((response)=>{
+                console.log(response);
+                this.total_rows=response.data.totalrow;
+            })
         },
         // 取得該table的欄位
         getQueryTableColumn(){
@@ -361,6 +371,7 @@ export default {
                 pagesize:this.queryParams.per_page
             }).then((response)=>{
                 console.log('TableValue------>',response);
+
                 // debugger;
                 this.selectedRows=[];
                 if(this.secretColumns.length>0){

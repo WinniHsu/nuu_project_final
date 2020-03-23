@@ -135,7 +135,7 @@ export default {
                 },
                 {
                     label: "最近更新日期",
-                    name: "creationDate",
+                    name: "lastchange",
                     filter: {
                         type: "simple",
                         placeholder: ""
@@ -211,8 +211,8 @@ export default {
         apiQueryAllTable({}).then((response)=>{
             // console.log('apiQueryAllTable----->',response);
             response.data.forEach((item)=>{
-                if(item.creationDate!==null){
-                    item.creationDate=this.$moment(item.creationDate).format('YYYY-MM-DD');
+                if(item.lastchange!==null){
+                    item.lastchange=this.$moment(item.lastchange).format('YYYY-MM-DD');
 
                 }
                 if(item.authName.length>0){
