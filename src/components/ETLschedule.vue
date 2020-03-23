@@ -12,7 +12,8 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-check form-check-inline mb-2" >
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1" v-model="selectedData_copy.cleanyn" checked="selectedData_copy.cleanyn">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"  v-model="selectedData_copy.cleanyn" true-value="1" false-value="0">
+                                            <!-- v-model="selectedData_copy.ischange" true-value="1" false-value="0" -->
                                             <label class="form-check-label" for="inlineCheckbox1">清洗執行日</label>
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" v-model="radioGroup1" checked> -->
                                         <!-- <label class="form-check-label" for="exampleRadios1">
@@ -74,7 +75,7 @@
                                     </form>
                                     <div class="form-check ">
                                         <!-- value="1" v-model="selectedData_copy.cleanyn" checked="selectedData_copy.cleanyn" -->
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="1" v-model="selectedData_copy.endsend" checked="selectedData_copy.endsend">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="1" v-model="selectedData_copy.endsend" true-value="1" false-value="0">
                                         <label class="form-check-label" for="inlineCheckbox2">資料清洗程式執行結束提醒倉儲管理者</label>
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" v-model="radioGroup1" > -->
                                         <!-- <label class="form-check-label" for="exampleRadios2"> -->
@@ -192,12 +193,22 @@ export default {
                 redaytype:this.selectedData_copy.redaytype,
                 reday:this.selectedData_copy.reday,
                 cleandatecal:this.selectedData_original[0].cleandatecal,
-                endsend:this.selectedData_copy.endsend,
+                endsend:this.selectedData_copy.endsend===true||this.selectedData_copy.endsend==='1'?'1':'0',
                 startcount:this.selectedData_original[0].startcount,
             
             }).then((response)=>{
                 console.log(response.data)
-                  this.$emit('getAllData');
+                this.$swal({
+                            title: '成功修改排程與通知設定',
+                            text: "",
+                            type: 'success',
+                })
+                .then((result)=>{
+                    if(result.value){
+                        this.$emit('getAllData');
+                    }
+                });
+                  
             })
         },
         closeModel:function(){
@@ -233,7 +244,16 @@ export default {
             },
             immediate: true,
             deep: true
+        },
+        'selectedData_copy.cleanyn':function(newValue,oldValue){
+            if(newValue==='0'){
+                this.dateRange.endDate=null;
+                this.dateRange.startDate=null;
+                this.selectedData_copy.reday=null;
+                 this.selectedData_copy.redaytype=null;
+            }
         }
+
     }
 };
 </script>
