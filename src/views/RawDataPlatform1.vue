@@ -52,8 +52,8 @@
                         @click="traceUnit(props.row)"
                     >修改管理單位</button>
                 </template>
-                <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" > -->
-                <template  slot="schedule" slot-scope="props" >
+                <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" >
+                <!-- <template  slot="schedule" slot-scope="props" > -->
                     <button
                         style="white-space:nowrap"
                         type="button"
