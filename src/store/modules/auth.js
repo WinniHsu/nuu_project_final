@@ -11,7 +11,8 @@ export default {
             auth: "",//系統權限
             roles:"",
             expiration: 0,
-            created:0
+            created:0,
+            rolename:''
         },
         time:0,
         web_auth:null

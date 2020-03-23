@@ -30,8 +30,8 @@
                         @click="traceDownload(props.row)"
                     >空白格式下載</button>
                 </template>
-                <template  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props">
-                <!-- <template  slot="edit" slot-scope="props" > -->
+                <!-- <template  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props"> -->
+                <template  slot="edit" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -52,8 +52,8 @@
                         @click="traceUnit(props.row)"
                     >修改管理單位</button>
                 </template>
-                <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" >
-                <!-- <template  slot="schedule" slot-scope="props" > -->
+                <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" > -->
+                <template  slot="schedule" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -198,13 +198,14 @@ export default {
   computed: {
       timeRange(){
         return function (startdate,enddate) {
-            
-            if((startdate<this.now)&&(this.now<enddate)){
+            if(this.$store.state.auth.tokenInfo.rolename==='倉儲資料管理者'||this.$store.state.auth.tokenInfo.rolename==='系統管理者'){
                 // 在區間內
                 // console.log(startdate,enddate,"在區間內",'打開')
                 return false
             }else if(startdate===null&&enddate===null){
                 // console.log(startdate,enddate,"null",'打開')
+                return false
+            }else if((startdate<this.now)&&(this.now<enddate)){
                 return false
             }else{
                  return true
