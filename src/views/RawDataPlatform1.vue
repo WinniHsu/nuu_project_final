@@ -36,7 +36,8 @@
                         style="white-space:nowrap"
                         type="button"
                         class="btn btn-info"
-                        :disabled="!((props.row.startdate<now)&&(now<props.row.enddate))"
+                        :disabled="timeRange(props.row.startdate,props.row.enddate)"
+                       
                         @click="traceDetailColumns(props.row)"
                     >編輯</button>
                 </template>
@@ -51,8 +52,8 @@
                         @click="traceUnit(props.row)"
                     >修改管理單位</button>
                 </template>
-                <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" >
-                <!-- <template  slot="schedule" slot-scope="props" > -->
+                <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" > -->
+                <template  slot="schedule" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -195,7 +196,22 @@ export default {
     },1000);
   },
   computed: {
+      timeRange(){
+        return function (startdate,enddate) {
+            
+            if((startdate<this.now)&&(this.now<enddate)){
+                // 在區間內
+                // console.log(startdate,enddate,"在區間內",'打開')
+                return false
+            }else if(startdate===null&&enddate===null){
+                // console.log(startdate,enddate,"null",'打開')
+                return false
+            }else{
+                 return true
+            }
 
+        }
+      }
   },
   watch:{
         

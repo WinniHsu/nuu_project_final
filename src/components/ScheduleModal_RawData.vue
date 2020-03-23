@@ -221,32 +221,19 @@ export default {
                 this.$set(this.dateRange,'startDate',this.selectedData_copy.startdate);
                 this.$set(this.dateRange,'endDate',this.selectedData_copy.enddate);
 
-
-                // this.dateRange.startDate= this.selectedData_copy.startdate;
-                // this.dateRange.endDate= this.selectedData_copy.enddate;
-                
-
-                // this.dateRange.startDate=this.selectedData_copy.cleandatefirst;
-                // this.dateRange.endDate=this.selectedData_copy.cleandatefirst;
-                // authName:"倉儲資料管理者,院助,測試用群組01,系統管理者"
-                // enddate:null(表單結束日期)
-                // endsend:null(表單結束提醒)
-                // ischange:null(表單異動通知)
-                // startdate:null(表單開始日期)
-                // startsend:null(表單開始提醒)
-                // startupload:null(是否開啟管理單位上傳編輯)
-                // fileextension:null
-                // filepath:null
-                // modifyDate:null
-                // modifyUser:null
-                // tablecode:"RAW001"
-                // tablename:"僑生獨招(名冊+成績)"
-                // tableuuid:"1120BF2D-2FA3-4DD4-9545-C9755DD061A3"
-                // vbt_id:1
-                // version:5
             },
             // immediate: true,
             deep: true
+        },
+        'selectedData_copy.startupload':function(newValue, oldValue){
+            console.log('startupload')
+            if(newValue==='0'){
+                this.dateRange.startDate=null;
+                this.dateRange.endDate=null;
+                this.selectedData_copy.startsend='0';
+                this.selectedData_copy.endsend='0';
+
+            }
         }
     }
 };
