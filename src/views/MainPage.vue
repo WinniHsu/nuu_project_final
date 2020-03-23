@@ -1,6 +1,6 @@
 <template>
   <div class="mainPage">
-  <!-- 20200323 -->
+  <!-- 20200323-1 -->
     <!-- <nav class="navbar navbar-expand-lg  fixed-top">
       <a class="navbar-brand" href="#">
         <img src="../assets/img/G.jpg" height="60" alt="">
@@ -105,7 +105,7 @@ export default {
         console.log(e);
     },
     signin(){
-      this.$router.push({name:'SystemAdminPlatform-2'});
+      this.$router.push({name:'RawDataPlatform-1'});
       // this.$router.push({path:'/synWeb/Schoolsynonym'});
 
     },

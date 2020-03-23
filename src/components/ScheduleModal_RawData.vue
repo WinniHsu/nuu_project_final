@@ -19,7 +19,7 @@
                                         <!-- v-model="selectedData_copy.ischange" -->
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" v-model="radioGroup1" checked> -->
                                         <label class="form-check-label" for="inlineCheckbox1">
-                                            表單異動時發送通知給倉儲管理者{{selectedData_copy.ischange}}
+                                            表單異動時發送通知給倉儲管理者
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline">
@@ -28,7 +28,7 @@
                                         <!-- v-model="selectedData_copy.startupload" checked="selectedData_copy.startupload" -->
                                         <!-- <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" v-model="radioGroup1"> -->
                                         <label class="form-check-label" for="inlineCheckbox2">
-                                        開放管理單位上傳編輯日程{{selectedData_copy.startupload}}
+                                        開放管理單位上傳編輯日程
                                         </label>
                                         <date-range-picker
                                                     ref="picker"

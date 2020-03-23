@@ -128,33 +128,33 @@ export default {
         console.log('getFindUnit---->',response.data);
         this.rows=[];
         this.rows=response.data;
-        this.rows.unshift(
-          {
-                creationDate:null,
-                creationUser: null,
-                modifyDate: null,
-                modifyUser: null,
-                version: 0,
-                code: 10000,
-                authName: "倉儲資料管理者",
-                auth:['1','2','3','4','5','6','7','8','9','10','11','12'],
+        // this.rows.unshift(
+        //   {
+        //         creationDate:null,
+        //         creationUser: null,
+        //         modifyDate: null,
+        //         modifyUser: null,
+        //         version: 0,
+        //         code: 10000,
+        //         authName: "倉儲資料管理者",
+        //         auth:['1','2','3','4','5','6','7','8','9','10','11','12'],
   
-          }
-        );
+        //   }
+        // );
         
-        this.rows.unshift(
-          {
-                creationDate:null,
-                creationUser: null,
-                modifyDate: null,
-                modifyUser: null,
-                version: 0,
-                code: 10000,
-                authName: "系統管理者",
-                auth:['1','2','3','4','5','6','7','8','9','10','11','12'],
+        // this.rows.unshift(
+        //   {
+        //         creationDate:null,
+        //         creationUser: null,
+        //         modifyDate: null,
+        //         modifyUser: null,
+        //         version: 0,
+        //         code: 10000,
+        //         authName: "系統管理者",
+        //         auth:['1','2','3','4','5','6','7','8','9','10','11','12'],
   
-          }
-        )
+        //   }
+        // )
 
 
       })

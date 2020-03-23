@@ -30,17 +30,18 @@
                         @click="traceDownload(props.row)"
                     >空白格式下載</button>
                 </template>
-                <template  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props">
-                <!-- <template  slot="edit" slot-scope="props"> -->
+                <!-- <template  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props"> -->
+                <template  slot="edit" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
                         class="btn btn-info"
+                        :disabled="!((props.row.startdate<now)&&(now<props.row.enddate))"
                         @click="traceDetailColumns(props.row)"
                     >編輯</button>
                 </template>
-                <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['修改管理單位'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['修改管理單位'].open" slot="editUnit" slot-scope="props" >
-                <!-- <template slot="editUnit" slot-scope="props" > -->
+                <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['修改管理單位'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['修改管理單位'].open" slot="editUnit" slot-scope="props" > -->
+                <template slot="editUnit" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -50,8 +51,8 @@
                         @click="traceUnit(props.row)"
                     >修改管理單位</button>
                 </template>
-                <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" >
-                <!-- <template  slot="schedule" slot-scope="props" > -->
+                <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯開放設定'].open" slot="schedule" slot-scope="props" > -->
+                <template  slot="schedule" slot-scope="props" >
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -173,11 +174,24 @@ export default {
             },
             selecteduuid:'',
             //紀錄需要修改的單筆資料
-            selectedDetailData:{}
+            selectedDetailData:{},
+            now:null ,
+             now1:null ,
+              now2:null 
+            
+            
         }
   },
   mounted: function () { 
     this.getQueryAllTable();
+    setInterval(() => {
+        this.now=new Date().getTime() 
+        //  this.now1=new Date().getTime() 
+        //  this.now2=new Date()    
+        //   this.now=new Date().getTime() 
+            // Date.now()                       //  回傳當前的 timestamp（毫秒）
+            // new Date()                       //  回傳目前時間的日期物件
+    },1000);
   },
   computed: {
 
@@ -190,7 +204,7 @@ export default {
 
     getQueryAllTable(){
         apiQueryAllTable({}).then((response)=>{
-            console.log(response);
+            console.log('apiQueryAllTable----->',response);
             response.data.forEach((item)=>{
                 if(item.creationDate!==null){
                     item.creationDate=this.$moment(item.creationDate).format('YYYY-MM-DD');
@@ -213,6 +227,7 @@ export default {
                 }else{
                      item.authName='';
                 }
+                
               
                 
             })
