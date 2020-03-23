@@ -1,6 +1,6 @@
 <template>
   <div class="mainPage">
-  <!-- 20200323-1 -->
+  <!-- 20200323-2 -->
     <!-- <nav class="navbar navbar-expand-lg  fixed-top">
       <a class="navbar-brand" href="#">
         <img src="../assets/img/G.jpg" height="60" alt="">

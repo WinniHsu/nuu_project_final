@@ -2,7 +2,7 @@
   <div class="second-home">
     <div class="row p-5" >
         <div class="col-12">
-            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" >
+            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" @on-change-query="onChangeQuery">
                 <template slot="global-search-clear-icon" >
                     <i class="fas fa-times-circle"></i>
                 </template>
@@ -170,20 +170,21 @@ export default {
                 show_reset_button:false,
                 global_search: {
                      visibility: false,
-                }
+                },
+                server_mode:  true
             },
             selecteduuid:'',
             //紀錄需要修改的單筆資料
             selectedDetailData:{},
             now:null ,
-             now1:null ,
-              now2:null 
+            queryParams:null
             
             
         }
   },
   mounted: function () { 
     this.getQueryAllTable();
+    // this.onChangeQuery();
     setInterval(() => {
         this.now=new Date().getTime() 
         //  this.now1=new Date().getTime() 
@@ -201,17 +202,21 @@ export default {
  
   },
   methods: {
-
+    onChangeQuery(queryParams) {
+        this.queryParams = queryParams;
+        console.log('onChangeQuery>',queryParams)
+        // this.fetchData();
+    },
     getQueryAllTable(){
         apiQueryAllTable({}).then((response)=>{
-            console.log('apiQueryAllTable----->',response);
+            // console.log('apiQueryAllTable----->',response);
             response.data.forEach((item)=>{
                 if(item.creationDate!==null){
                     item.creationDate=this.$moment(item.creationDate).format('YYYY-MM-DD');
 
                 }
                 if(item.authName.length>0){
-                    console.log(item)
+                    // console.log(item)
                     let str=''
                     for(let value of item.authName){
                         // console.log(value)
@@ -288,12 +293,16 @@ export default {
             tableuuid:tableuuid
         }).then((response)=>{
 
-            // console.log(response.data.sort(this.sortnum()));
+            // console.log('getQueryTableColumn----->',response.data.sort(this.sortnum()));
             let arrayList=[];
             for(let item in response.data.sort(this.sortnum())){
-               arrayList.push( response.data.sort(this.sortnum())[item].columncname);
+                if( response.data.sort(this.sortnum())[item].note!=='指定'){
+                     arrayList.push( response.data.sort(this.sortnum())[item].columncname);
+                }
+              
             };
             // console.log(arrayList);
+            
             this.onExportExcel(arrayList,tablename);
             
         })
