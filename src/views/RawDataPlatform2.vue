@@ -130,7 +130,13 @@ export default {
             note:[],
             //紀錄需要修改的單筆資料
             selectedDetailData:{},
-            queryParams:null,
+            queryParams:{
+                sort: [],
+                filters: [],
+                global_search: "",
+                per_page: 10,
+                page: 1
+            },
             total_rows:0
         }
     },
