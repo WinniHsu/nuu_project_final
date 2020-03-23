@@ -124,8 +124,9 @@ export default {
         }
     },
     created:function(){
+        this.$store.dispatch('auth/testLogin');
         this.timeID=setInterval(()=>{
-            this.$store.dispatch('auth/testLogin');
+            this.$store.dispatch('auth/isTokenExpired');
         },1000)
     },
     mounted: function () { 
@@ -261,7 +262,7 @@ export default {
             }
         },
         '$store.state.auth.tokenInfo.auth':function(){
-             this.getApiRoleAuth();
+            this.getApiRoleAuth();
             console.log("web_auth change")
             this.$forceUpdate();
         }
