@@ -25,8 +25,8 @@
                             </div>
 
                         </template>
-                        <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props">
-                        <!-- <template  slot="clear" slot-scope="props"> -->
+                        <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props"> -->
+                        <template  slot="clear" slot-scope="props">
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" -->
                             <button 
                                 style="white-space:nowrap"
@@ -257,7 +257,8 @@ export default {
                 obj.id=item.id;
                 obj.status.status="清洗完成";
                 // obj.status.status=item.status;
-                obj.status.lastdate=item.lastdate;
+                // obj.status.lastdate=item.cleandatefirst;
+                obj.status.lastdate='最後更新日期:YYYY-MM-DD';
                 obj.cleanyn=item.cleanyn;
                 obj.cleandatefirst=item.cleandatefirst;
                 obj.redaytype=item.redaytype;
@@ -282,7 +283,7 @@ export default {
             this.loadingShow=true;
             let _this = this;
             let stompClient = null;
-            this.socket = new SockJS("http://bigdata02.leadtek.com.tw:9019/api/etlcontroller");//如果前後端分離專案需要拼接具體地址，前後端分離index.html可放在
+            this.socket = new SockJS("http://203.64.173.63:9019/api/etlcontroller");//如果前後端分離專案需要拼接具體地址，前後端分離index.html可放在
             // http://bigdata02.leadtek.com.tw:9019/api/etlcontroller
             stompClient = Stomp.over(this.socket);
             stompClient.connect({}, function (frame) {
@@ -352,7 +353,9 @@ export default {
         })
     },
     ajax(tableName) {
-            this.$axios.post(this.$js.baseURL+"/api/etlcontroller/dataclean/"+tableName)
+            this.$axios.post('http://203.64.173.63:9019/api/etlcontroller/dataclean/'+tableName)
+            // http://203.64.173.63:9019/api/etlcontroller
+            // this.$js.baseURL+"/api/etlcontroller/dataclean/"
                         .then((result)=>{
                             console.log('post------->',result);
             });

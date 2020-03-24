@@ -30,8 +30,8 @@
                         @click="traceDownload(props.row)"
                     >空白格式下載</button>
                 </template>
-                <!-- <template  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props"> -->
-                <template  slot="edit" slot-scope="props" >
+                <template  v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['編輯'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['編輯'].open" slot="edit" slot-scope="props">
+                <!-- <template  slot="edit" slot-scope="props" > -->
                     <button
                         style="white-space:nowrap"
                         type="button"
@@ -144,6 +144,24 @@ export default {
                     sort: true,
                 },
                 {
+                    label: "開放時間",
+                    name: "startdate",
+                    filter: {
+                        type: "simple",
+                        placeholder: ""
+                    },
+                    sort: true,
+                },
+                {
+                    label: "結束時間",
+                    name: "enddate",
+                    filter: {
+                        type: "simple",
+                        placeholder: ""
+                    },
+                    sort: true,
+                },
+                {
                     label: "",
                     name: "example",
                     slot_name: "example"
@@ -230,6 +248,14 @@ export default {
             response.data.forEach((item)=>{
                 if(item.lastchange!==null){
                     item.lastchange=this.$moment(item.lastchange).format('YYYY-MM-DD');
+
+                }
+                if(item.startdate!==null){
+                    item.startdate=this.$moment(item.startdate).format('YYYY-MM-DD');
+
+                }
+                if(item.enddate!==null){
+                    item.enddate=this.$moment(item.enddate).format('YYYY-MM-DD');
 
                 }
                 if(item.authName.length>0){

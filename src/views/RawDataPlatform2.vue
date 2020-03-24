@@ -124,7 +124,9 @@ export default {
                 global_search: {
                      visibility: false,
                 },
-                server_mode:  true
+                server_mode:  true,
+                 pagination: true,
+                    pagination_info: true,
             },
 
             note:[],
@@ -311,7 +313,7 @@ export default {
                
             })
             .then((response)=>{
-                this.getQueryTableValue();
+                // this.getQueryTableValue();
             })
         },
         renderData(id,level,data){
@@ -371,10 +373,10 @@ export default {
         },
         // 取得該table的資料
         getQueryTableValue(){
+            console.log('取得該table的資料')
             apiQueryTableValue({
                 tableuuid:this.$route.params.uuid,
-                pageno:this.queryParams.page-1,
-                pagesize:this.queryParams.per_page
+                queryParams: this.queryParams,
             }).then((response)=>{
                 console.log('TableValue------>',response);
 
