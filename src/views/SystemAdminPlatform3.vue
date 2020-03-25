@@ -113,6 +113,9 @@ export default {
       apiQueryLog({}).then((response)=>{
         console.log(response);
         this.rows=[];
+        for(let item in response.data){
+            response.data[item].exeTime= this.$moment(response.data[item].exeTime).format('YYYY-MM-DD')
+        }
         this.rows=response.data;
       })
     }

@@ -1,5 +1,6 @@
 <template>
   <div class="second-home">
+    <loading v-if="loadingShow"></loading>
     <div class="row p-5" >
         <div class="col-12">
             <div class="title  mb-3">
@@ -26,21 +27,24 @@
                                             <div v-if="!props.row[item+'_Encryp_name']" >{{props.row[item+'_original']}}</div>
                                         </div>
                                         <!-- _Encryp_name -->
-                                        <i class="fas fa-eye" v-if="props.row[item+'_Encryp_name']&&props.row[item+'_Encryp_name']!==null&&props.row[item+'_Encryp_name']!==''"  @click="ToggleEncryption(props.row.id,'open',item)"></i>
-                                        <i class="fas fa-eye-slash" v-if="!props.row[item+'_Encryp_name']&&props.row[item+'_Encryp_name']!==null&&props.row[item+'_Encryp_name']!==''" @click="ToggleEncryption(props.row.id,'close',item)"></i>
+                                        <i class="fas fa-eye" v-if="props.row[item+'_Encryp_name']&&props.row[item+'_Encryp_name']!==null&&props.row[item+'_Encryp_name']!==''"  @click="ToggleEncryption(props.row.valueuuid,'open',item)"></i>
+                                        <i class="fas fa-eye-slash" v-if="!props.row[item+'_Encryp_name']&&props.row[item+'_Encryp_name']!==null&&props.row[item+'_Encryp_name']!==''" @click="ToggleEncryption(props.row.valueuuid,'close',item)"></i>
                                     </div>
                                 </div>
                             </template>
                             <!-- 處理學號 -->
-                            <template slot="stucodeEyes" slot-scope="props">
+                            <template :slot="[item,'StuCodeEyes'].join('-')"  slot-scope="props" v-for="item in secretStuCodeList">
+                                <!-- slot="stucodeEyes" -->
                                 <div  class="outer-wrapper">
                                     <div  class="outer-wrapper">
                                         <div  class="inner-wrapper mr-3">
-                                            <div v-if="props.row.Encryp_stucode" >{{props.row.StuCode}}</div>
-                                            <div v-if="!props.row.Encryp_stucode" >{{props.row.StuCode_original}}</div>
+                                            <div v-if="props.row[item+'_Encryp_stucode']" >{{props.row[item]}}</div>
+
+                                            <div v-if="!props.row[item+'_Encryp_stucode']" >{{props.row[item+'_original']}}</div>
                                         </div>
-                                        <i class="fas fa-eye" v-if="props.row.Encryp_stucode&&props.row.Encryp_stucode!==null"  @click="ToggleEncryption(props.row.id,'open','stucode')"></i>
-                                        <i class="fas fa-eye-slash" v-if="!props.row.Encryp_stucode&&props.row.Encryp_stucode!==null" @click="ToggleEncryption(props.row.id,'close','stucode')"></i>
+                                        <!-- _Encryp_stucode -->
+                                        <i class="fas fa-eye" v-if="props.row[item+'_Encryp_stucode']&&props.row[item+'_Encryp_stucode']!==null&&props.row[item+'_Encryp_stucode']!==''"  @click="ToggleEncryption(props.row.valueuuid,'open',item)"></i>
+                                        <i class="fas fa-eye-slash" v-if="!props.row[item+'_Encryp_stucode']&&props.row[item+'_Encryp_stucode']!==null&&props.row[item+'_Encryp_stucode']!==''" @click="ToggleEncryption(props.row.valueuuid,'close',item)"></i>
                                     </div>
                                 </div>
                             </template>
@@ -52,8 +56,8 @@
                                             <div v-if="props.row.Encryp_id" >{{props.row.StuID}}</div>
                                             <div v-if="!props.row.Encryp_id" >{{props.row.StuID_original}}</div>
                                         </div>
-                                        <i class="fas fa-eye" v-if="props.row.Encryp_id&&props.row.Encryp_id!==null"  @click="ToggleEncryption(props.row.id,'open','stuid')"></i>
-                                        <i class="fas fa-eye-slash" v-if="!props.row.Encryp_id&&props.row.Encryp_id!==null" @click="ToggleEncryption(props.row.id,'close','stuid')"></i>
+                                        <i class="fas fa-eye" v-if="props.row.Encryp_id&&props.row.Encryp_id!==null"  @click="ToggleEncryption(props.row.valueuuid,'open','stuid')"></i>
+                                        <i class="fas fa-eye-slash" v-if="!props.row.Encryp_id&&props.row.Encryp_id!==null" @click="ToggleEncryption(props.row.valueuuid,'close','stuid')"></i>
                                     </div>
                                 </div>
                             </template>
@@ -86,6 +90,7 @@
 </template>
 
 <script>
+import loading from '../components/loading';
 import sidebar from '../components/sidebar'
 import VueBootstrap4Table from 'vue-bootstrap4-table';
 import EditModal2_RawData from '../components/EditModal2_RawData';
@@ -98,6 +103,7 @@ import {apiDeleteTableColumns} from '@/apis/rawData.js';
 export default {
     name: "RawDataPlatform",
     components: {
+        "loading":loading,
         VueBootstrap4Table,
         "sidebar":sidebar,
         "editmodal2-rawdata":EditModal2_RawData,
@@ -109,13 +115,17 @@ export default {
     },
     data() {
         return{
+            loadingShow:true,
             Toggle:{
                 eyes:true
             },
             selectedRows:[],
             selectedColumns:[],
-            secretColumns:[],
-            secretNameList:["StuNameC","TeaNameC"],
+            secretColumns:[], //加密欄位清單
+            secretNameList:[],
+            secretIDList:[],
+            dateList:[],
+            secretStuCodeList:[],
             config: {
                 checkbox_rows: true,
                 rows_selectable: false,
@@ -124,12 +134,13 @@ export default {
                 global_search: {
                      visibility: false,
                 },
-                server_mode:  true,
+                // server_mode:  true,
+                server_mode:false,
                  pagination: true,
                     pagination_info: true,
             },
 
-            note:[],
+            note:[],//指定欄位清單
             //紀錄需要修改的單筆資料
             selectedDetailData:{},
             queryParams:{
@@ -203,6 +214,17 @@ export default {
                     // 多一層判斷是否為加密欄位
                     if(response.data[item].encode==='*'){
                         this.secretColumns.push(response.data[item].columnename);
+                        if(response.data[item].columnename.toLowerCase().indexOf('namec')>=0){
+                            this.secretNameList.push(response.data[item].columnename);
+                        }else if(response.data[item].columnename.toLowerCase().indexOf('stucode')>=0){
+                             this.secretStuCodeList.push(response.data[item].columnename);
+                        }else if(response.data[item].columnename.toLowerCase().indexOf('stuid')>=0){
+                             this.secretIDList.push(response.data[item].columnename);
+                        }
+                    }
+                    // 判斷那些為日期欄位
+                    if(response.data[item].datatype==='DATE'){
+                        this.dateList.push(response.data[item].columnename);
                     }
 
                     let obj={             
@@ -222,15 +244,17 @@ export default {
                         columnuuid:'',
                         columnename:'',
                         columncname:'',
-                        datatype:''
+                        datatype:'',
+                        option:null
                     };
                     const count=1;
-
-                    if(response.data[item].note==='指定'){
+                    // 指定欄位清單
+                    if(response.data[item].note==='指定'||response.data[item].note==='指定下拉'){
                         note.columnuuid=response.data[item].columnuuid;
                         note.columnename=response.data[item].columnename;
                         note.columncname=response.data[item].columncname;
                         note.datatype=response.data[item].datatype;
+                        note.option=response.data[item].option;
                         this.note.push(note);
                     };
 
@@ -275,10 +299,13 @@ export default {
                         obj.label=response.data[item].columncname;
                         obj.name=response.data[item].columnename;
                         obj.datatype=response.data[item].datatype;
+                        // 建立欄位中的slot-name
                         if(response.data[item].columnename.toLowerCase().indexOf('namec')>0){
                             this.$set(obj,'slot_name',response.data[item].columnename+'-nameEyes');
                         }else if(response.data[item].columnename.toLowerCase().indexOf('stucode')>=0){
-                            this.$set(obj,'slot_name','stucodeEyes');
+                            // 2020/3/24包含stucode的字都要加密
+                            this.$set(obj,'slot_name',response.data[item].columnename+'-StuCodeEyes');
+                            // this.$set(obj,'slot_name','stucodeEyes');
                         }else if(response.data[item].columnename.toLowerCase().indexOf('stuid')>=0){
                             this.$set(obj,'slot_name','stuidEyes');
                         }
@@ -313,7 +340,7 @@ export default {
                
             })
             .then((response)=>{
-                // this.getQueryTableValue();
+                this.getQueryTableValue();
             })
         },
         renderData(id,level,data){
@@ -379,15 +406,26 @@ export default {
                 queryParams: this.queryParams,
             }).then((response)=>{
                 console.log('TableValue------>',response);
-
+                this.loadingShow=false;
                 // debugger;
+                // 處理日期資料
+                if(this.dateList.length>0){
+                    for(let value of this.secretColumns){
+                         response.data.forEach((item)=>{
+                             item[value]=this.$moment(item[value]).format('YYY-MM-DD');
+                         })
+                    }
+                }
+
+                // 處理加密資料
                 this.selectedRows=[];
                 if(this.secretColumns.length>0){
                     for(let value of this.secretColumns){
                         // "StuNameC""StuCode""StuID""TeaNameC"
-
                         response.data.forEach((item)=>{
+                            // 先把需要加密的欄位複製一份
                             this.$set(item,value+'_original',item[value]);
+                            // 建立加解密開關變數
                             if(value.toLowerCase().indexOf('namec')>=0){
                                  if(item[value]!==""){
                                     item[value]=this.replaceData(item[value],1,1,'*');
@@ -398,15 +436,16 @@ export default {
 
                      
                             }else if(value.toLowerCase().indexOf('stucode')>=0){
+                                console.log(value)
                                 if(item[value]!==""){
                                     item[value]=this.replaceData(item[value],1,4,'****');
-                                    this.$set(item,'Encryp_stucode',true);
-                                }else{
-                                      this.$set(item,'Encryp_stucode',null);
+                                    this.$set(item,value+'_Encryp_stucode',true);
+                                }
+                                else{
+                                    this.$set(item,value+'_Encryp_stucode',null);
                                 }
                               
-                            }
-                            else{
+                            }else{
                                
                                  if(item[value]!==""){
                                       item[value]=this.replaceData(item[value],0,6,'******');
@@ -421,12 +460,7 @@ export default {
 
                     }
                 }
-                for(let item in response.data){
-                    for(let item2 in response.data[item]){
 
-                    }
-                   
-                }
                 this.selectedRows=response.data;
             })
         },
@@ -494,23 +528,26 @@ export default {
         },
         // 控制加密眼睛
         ToggleEncryption(id,type,column){
+            // uuid open stucode
             console.log(id,type,column)
             this.selectedRows.find((row)=>{
 
-                if(row.id===id){
+                if(row.valueuuid===id){
                     for(let value in row){
-                        console.log(value)
-                        if(value===column){
+                        // console.log(value)
+                        if(column.toLowerCase().indexOf('namec')>=0){
                             if(type==='open'){
                                 row[column+'_Encryp_name']=false;
                             }else if(type==='close'){
                                 row[column+'_Encryp_name']=true;
                             }
-                        }else if(column==='stucode'){
+                        }else if(column.toLowerCase().indexOf('stucode')>=0){
                             if(type==='open'){
-                                row.Encryp_stucode=false;
+                                row[column+'_Encryp_stucode']=false;
+                                // row.Encryp_stucode=false;
                             }else if(type==='close'){
-                                row.Encryp_stucode=true;
+                                row[column+'_Encryp_stucode']=true;
+                                // row.Encryp_stucode=true;
                             }
                         }
                         else if(column==='stuid'){
@@ -634,5 +671,8 @@ export default {
     box-shadow: 3px 3px 8px 2px rgb(128, 127, 127,0.7);
     /* border:10px solid #17a2b8 !important; */
 }
-
+.load-wrapp{
+    /* float: left; */
+    position: fixed;
+}
 </style>

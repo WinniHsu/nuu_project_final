@@ -2,7 +2,7 @@
   <div class="second-home">
     <div class="row p-5" >
         <div class="col-12">
-            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" @on-change-query="onChangeQuery">
+            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" @on-change-query="onChangeQuery" :total-rows="total_rows">
                 <template slot="global-search-clear-icon" >
                     <i class="fas fa-times-circle"></i>
                 </template>
@@ -87,7 +87,7 @@ import {apiQueryTableColumn} from '@/apis/rawData.js';
 import {apiTableDownload} from '@/apis/rawData.js';
 
 export default {
-  name: "RawDataPlatform",
+  name: "RawDataPlatform1",
   components: {
      "sidebar":sidebar,
      VueBootstrap4Table,
@@ -196,7 +196,14 @@ export default {
             //紀錄需要修改的單筆資料
             selectedDetailData:{},
             now:null ,
-            queryParams:null
+            queryParams:{
+                sort: [],
+                filters: [],
+                global_search: "",
+                per_page: 10,
+                page: 1
+            },
+            total_rows:0
             
             
         }

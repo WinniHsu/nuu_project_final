@@ -14,7 +14,11 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{column.columncname}}</span>
                                 </div>
-                                <input type="text"  class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-model="column.value">
+                                <input v-if="column.option==null" type="text"  class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-model="column.value">
+                                <div class="hint-des" v-if="column.check===1">***{{column.message}}***</div>
+                                <select  v-if="column.option!==null" class="form-control" id="exampleFormControlSelect1" v-model="column.value">
+                                    <option v-for="opt in column.option">{{opt}}</option>
+                                </select>
                             </div>
                             <div class="input-group mb-3 uploader-wrapper ">
                                 <div class="custom-file">
@@ -46,7 +50,7 @@
 <script>
 import {apiUpload} from '@/apis/rawData.js'
 export default {
-    name: "UpdateUnitModal_RawData",
+    name: "uploadModal_RawData",
     components: {
 
     },
@@ -88,12 +92,14 @@ export default {
                 resolve();
             });
             readfile.then((res)=>{
-                 this.uploadFileAction();
-            });
+                this.uploadFileAction();
+        
+                
+            })
             
         },
         async uploadFileAction(){
-            // console.log("3")
+            console.log('2')
             this.blockPage = true;//loading圖示
             this.loading=true; // 禁止使用者進行其他操作//禁止上傳
             this.upload_loading=true; //禁止瀏覽檔案
@@ -108,10 +114,9 @@ export default {
                     // 如果上傳成功
                     if(response.data==='成功匯入文件'){
                             // console.log("4")
-  
                             this.uploadFile = undefined;//儲存檔案清空
                             this.uploadFileName='';//檔名刪除
-                            this.$emit('requestdata');// 確定上傳後要重新request 資料庫資料
+                           
                             this.$swal({
                                 title: '成功上傳資料',
                                 text: "",
@@ -120,6 +125,7 @@ export default {
                                 confirmButtonText: '確認'
                             }).then((result)=>{
                                 // console.log("5")
+                                this.$emit('requestdata');// 確定上傳後要重新request 資料庫資料
                                 for(let item in this.note){
                                     this.$set(this.note_copy[item],'value','')
                                 };
@@ -159,6 +165,7 @@ export default {
             this.loading=false; //上傳按鈕隱藏 
             this.upload_loading=false; //可以瀏覽檔案
         },
+
         closeModel(){
 
         },
@@ -174,7 +181,10 @@ export default {
             //  this.$set(this.note_copy[item],'value','')
             for(let item in this.note){
                 // this.note_copy.push(this.note[item]);
-                this.$set(this.note_copy[item],'value','')
+                this.$set(this.note_copy[item],'value','');
+                this.$set(this.note_copy[item],'check',0);
+                this.$set(this.note_copy[item],'message','')
+
             }
 
         }

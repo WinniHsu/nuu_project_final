@@ -25,8 +25,8 @@
                             </div>
 
                         </template>
-                        <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props"> -->
-                        <template  slot="clear" slot-scope="props">
+                        <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" slot="clear" slot-scope="props">
+                        <!-- <template  slot="clear" slot-scope="props"> -->
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['執行清洗程式'].open" -->
                             <button 
                                 style="white-space:nowrap"
