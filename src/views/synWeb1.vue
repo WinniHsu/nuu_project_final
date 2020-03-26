@@ -43,46 +43,46 @@ export default {
         return {
             loadingShow:false,
             rows: [
-                    {
-                        "tablename":'大專校院同義詞表',
-                        "updatedate":'2020/02/03' ,
-                        "id":'Schoolsynonym'
-                    },
-                    {
-                        "tablename":'畢業生流向',
-                        "updatedate":'2020/02/03' ,
-                        "id":'GraSurveysynonym'
-                    },
-                    {
-                        "tablename":'海外名單',
-                        "updatedate":'2020/02/03',
-                        "id":'Oversea'
-                    },
-                    {
-                        "tablename":'休學代碼',
-                        "updatedate":'2020/02/03',
-                        "id":'Suspend'
-                    },
-                    {
-                        "tablename":'交換校系',
-                        "updateDate":'2020/02/03',
-                        "id":'Transschool'
-                    },
-                    {
-                        "tablename":'入學管道',
-                        "updatedate":'2020/02/03',
-                        "id":'Enrolltype'
-                    },
-                    {
-                        "tableName":'退學代碼',
-                        "updateDate":'2020/02/03',
-                        "id":'Dropstu'
-                    },
-                    {
-                        "tableName":'證照分級登錄表',
-                        "updateDate":'2020/02/03',
-                        "id":'licensetype'
-                    }
+                    // {
+                    //     "tablename":'大專校院同義詞表',
+                    //     "updatedate":'2020/02/03' ,
+                    //     "id":'Schoolsynonym'
+                    // },
+                    // {
+                    //     "tablename":'畢業生流向',
+                    //     "updatedate":'2020/02/03' ,
+                    //     "id":'GraSurveysynonym'
+                    // },
+                    // {
+                    //     "tablename":'海外名單',
+                    //     "updatedate":'2020/02/03',
+                    //     "id":'Oversea'
+                    // },
+                    // {
+                    //     "tablename":'休學代碼',
+                    //     "updatedate":'2020/02/03',
+                    //     "id":'Suspend'
+                    // },
+                    // {
+                    //     "tablename":'交換校系',
+                    //     "updateDate":'2020/02/03',
+                    //     "id":'Transschool'
+                    // },
+                    // {
+                    //     "tablename":'入學管道',
+                    //     "updatedate":'2020/02/03',
+                    //     "id":'Enrolltype'
+                    // },
+                    // {
+                    //     "tableName":'退學代碼',
+                    //     "updateDate":'2020/02/03',
+                    //     "id":'Dropstu'
+                    // },
+                    // {
+                    //     "tableName":'證照分級登錄表',
+                    //     "updateDate":'2020/02/03',
+                    //     "id":'licensetype'
+                    // }
             ],
             columns:[
                 {
@@ -140,7 +140,7 @@ export default {
   methods: {
       getQueryAllSyn(){
         apiQueryAllSyn({}).then((response)=>{
-            console.log(response.data)
+            console.log('apiQueryAllSyn---->',response.data)
             for(let item in response.data){
                 console.log(this.$moment(response.data[item].updatedate).format('YYYY-MM-DD'));
                 response.data[item].updatedate=this.$moment(response.data[item].updatedate).format('YYYY-MM-DD');

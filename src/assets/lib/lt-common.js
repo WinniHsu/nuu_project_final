@@ -6,7 +6,7 @@
  */
 
 var js = {
-  baseURL:'http://bigdata02.leadtek.com.tw:9019',
+  baseURL:'http://203.64.173.63:9019',
   // http://bigdata02.leadtek.com.tw:9019
   // 172.16.2.109
   // http://bigdata02.leadtek.com.tw:9019

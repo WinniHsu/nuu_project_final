@@ -49,15 +49,15 @@
                                 </div>
                             </template>
                             <!-- 處理學生id -->
-                            <template slot="stuidEyes" slot-scope="props">
+                            <template :slot="[item,'IDEyes'].join('-')" slot-scope="props" v-for="item in secretIDList">
                                 <div  class="outer-wrapper">
                                     <div  class="outer-wrapper">
                                         <div  class="inner-wrapper mr-3">
-                                            <div v-if="props.row.Encryp_id" >{{props.row.StuID}}</div>
-                                            <div v-if="!props.row.Encryp_id" >{{props.row.StuID_original}}</div>
+                                            <div v-if="props.row[item+'_Encryp_id']" >{{props.row[item]}}</div>
+                                            <div v-if="!props.row[item+'_Encryp_id']" >{{props.row[item+'_original']}}</div>
                                         </div>
-                                        <i class="fas fa-eye" v-if="props.row.Encryp_id&&props.row.Encryp_id!==null"  @click="ToggleEncryption(props.row.valueuuid,'open','stuid')"></i>
-                                        <i class="fas fa-eye-slash" v-if="!props.row.Encryp_id&&props.row.Encryp_id!==null" @click="ToggleEncryption(props.row.valueuuid,'close','stuid')"></i>
+                                        <i class="fas fa-eye" v-if="props.row[item+'_Encryp_id']&&props.row[item+'_Encryp_id']!==null&&props.row[item+'_Encryp_id']!==''"  @click="ToggleEncryption(props.row.valueuuid,'open',item)"></i>
+                                        <i class="fas fa-eye-slash" v-if="!props.row[item+'_Encryp_id']&&props.row[item+'_Encryp_id']!==null&&props.row[item+'_Encryp_id']!==''" @click="ToggleEncryption(props.row.valueuuid,'close',item)"></i>
                                     </div>
                                 </div>
                             </template>
@@ -218,7 +218,7 @@ export default {
                             this.secretNameList.push(response.data[item].columnename);
                         }else if(response.data[item].columnename.toLowerCase().indexOf('stucode')>=0){
                              this.secretStuCodeList.push(response.data[item].columnename);
-                        }else if(response.data[item].columnename.toLowerCase().indexOf('stuid')>=0){
+                        }else if(response.data[item].columnename.toLowerCase().indexOf('id')>=0){
                              this.secretIDList.push(response.data[item].columnename);
                         }
                     }
@@ -258,23 +258,57 @@ export default {
                         this.note.push(note);
                     };
 
-                    if(response.data[item].note==='下拉連動'){
-                       
+                    if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'){
+                        // response.data[item].note!=='下拉連動'||response.data[item].note.indexOf('自動代入')<0
+                        // console.log(response.data[item].note)
+                        obj.label=response.data[item].columncname;
+                        obj.name=response.data[item].columnename;
+                        obj.datatype=response.data[item].datatype;
+                        // 建立欄位中的slot-name
+                        if(response.data[item].columnename.toLowerCase().indexOf('namec')>0){
+                            this.$set(obj,'slot_name',response.data[item].columnename+'-nameEyes');
+                        }else if(response.data[item].columnename.toLowerCase().indexOf('stucode')>=0){
+                            // 2020/3/24包含stucode的字都要加密
+                            this.$set(obj,'slot_name',response.data[item].columnename+'-StuCodeEyes');
+                            // this.$set(obj,'slot_name','stucodeEyes');
+                        }else if(response.data[item].columnename.toLowerCase().indexOf('id')>=0){
+                            // 2020/03/25包含ID的都要加密
+                            this.$set(obj,'slot_name',response.data[item].columnename+'-IDEyes');
+                        }
+                        this.selectedColumns.push(obj);
+                    }else if(response.data[item].note.indexOf('下拉階層代入')){
+    
+                        obj.label=response.data[item].columncname;
+                        obj.name=response.data[item].columnename;
+                        obj.datatype=response.data[item].datatype;
+                        this.selectedColumns.push(obj);
+                    }else if(response.data[item].note.indexOf('下拉')>=0){
+                        // console.log('下拉or自動帶入------>',response.data[item].columncname)
+                        // if(response.data[item].note==='下拉連動'){
+                        // 證照代碼LicenseID----->下拉
+                        // 證照級別LicenseLevel----->自動帶入 6
+                        // 證照名稱LicenseName----->自動帶入8
+                        // 舉辦單位LicenseHost----->自動帶入9
+
+
                         obj.label=response.data[item].columncname;
                         obj.name=response.data[item].columnename;
                         obj.datatype=response.data[item].datatype;
                         obj.option=[];
-                        let secondLevelColumn=this.findOption(response.data,response.data[item].columnename);
-                        // console.log(secondLevelColumn);
 
+                        let secondLevelColumn=this.findOption(response.data,response.data[item].columnename);
+                        console.log('secondLevelColumn----->',secondLevelColumn)
+                            
                         for(let item1 in response.data[item].option){
                             for(let item2 in response.data[item].option[item1]){
                                 obj.option.push(item2);
-                                // console.log(response.data[item].option[item1][item2].split(';'))
+                                // console.log(item2)
+                               
                                 let arrayList=response.data[item].option[item1][item2].split(';');
                                 let column1=arrayList[0];
                                 let column2=arrayList[1];
                                 let column3=arrayList[2];
+
                                for(let item3 in secondLevelColumn){
                                    
                                    if(secondLevelColumn[item3].note.indexOf('1')>=0){
@@ -292,47 +326,6 @@ export default {
                         for(let arrayList in secondLevelColumn){
                             this.selectedColumns.push(secondLevelColumn[arrayList]); 
                         }   
-                    }
-                    else if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'){
-                        // response.data[item].note!=='下拉連動'||response.data[item].note.indexOf('自動代入')<0
-                        // console.log(response.data[item].note)
-                        obj.label=response.data[item].columncname;
-                        obj.name=response.data[item].columnename;
-                        obj.datatype=response.data[item].datatype;
-                        // 建立欄位中的slot-name
-                        if(response.data[item].columnename.toLowerCase().indexOf('namec')>0){
-                            this.$set(obj,'slot_name',response.data[item].columnename+'-nameEyes');
-                        }else if(response.data[item].columnename.toLowerCase().indexOf('stucode')>=0){
-                            // 2020/3/24包含stucode的字都要加密
-                            this.$set(obj,'slot_name',response.data[item].columnename+'-StuCodeEyes');
-                            // this.$set(obj,'slot_name','stucodeEyes');
-                        }else if(response.data[item].columnename.toLowerCase().indexOf('stuid')>=0){
-                            this.$set(obj,'slot_name','stuidEyes');
-                        }
-                        this.selectedColumns.push(obj);
-                    }else if(response.data[item].note==='下拉'||response.data[item].note==='階層代入'){
-                        // console.log(response.data[item].note)
-                        // if(response.data[item].columnename==='ExchangeSchool'){
-                        //     let arrayList=[];
-                        //     let new_option={};
-                        //     for(let item2 in response.data[item].option){
-                        //         for(let item3 in response.data[item].option[item2]){
-                        //             arrayList.push(item3);
-                        //             this.$set(new_option,item3,response.data[item].option[item2][item3])
-                        //         }
-                        //     };
-                        //     console.log(new_option)
-         
-                        //     for(let key in new_option['exchangeSchool']){
-                        //         this.renderData(new_option[item][key].id,'exchangeCollege',new_option)
-                        //     }
-            
-                        
-                        // }
-                        obj.label=response.data[item].columncname;
-                        obj.name=response.data[item].columnename;
-                        obj.datatype=response.data[item].datatype;
-                        this.selectedColumns.push(obj);
                     }
                 };
                                 
@@ -358,17 +351,23 @@ export default {
             }
         },
         findOption(data,columnename){
-           console.log(data,columnename)
-             let ColumneName=columnename.toLowerCase()
-            let filterList=data.filter((item)=>{
-                if(item.note!==null){
-                    //  return item.note.indexOf('自動代入')>=0 ;
-                       
-                      return item.note.toLowerCase().indexOf(ColumneName)>=0
-                }
+                // 證照代碼LicenseID----->下拉
+                // 證照級別LicenseLevel----->自動帶入 6
+                 // 證照名稱LicenseName----->自動帶入8
+                // 舉辦單位LicenseHost----->自動帶入9
+    
+                console.log('findOption>',data,columnename);
+                let ColumneName=columnename.toLowerCase();
+                let filterList=data.filter((item)=>{
+                    if(item.note!==null){
+
+                        return item.note.toLowerCase().indexOf(ColumneName)>=0 && item.note.toLowerCase().indexOf('下拉')<0
+                    }
                
-            });
-            console.log(filterList)
+                });
+
+    
+            console.log('filterList---->',filterList)
             let formatFilterList=[];
             for(let item in filterList){
                 let obj={             
@@ -390,7 +389,7 @@ export default {
                 obj.option={};
                 formatFilterList.push(obj);
             }
-            console.log(formatFilterList)
+            // console.log(formatFilterList)
             return formatFilterList;
 
         },
@@ -400,14 +399,13 @@ export default {
         },
         // 取得該table的資料
         getQueryTableValue(){
-            console.log('取得該table的資料')
             apiQueryTableValue({
                 tableuuid:this.$route.params.uuid,
                 queryParams: this.queryParams,
             }).then((response)=>{
                 console.log('TableValue------>',response);
                 this.loadingShow=false;
-                // debugger;
+              
                 // 處理日期資料
                 if(this.dateList.length>0){
                     for(let value of this.secretColumns){
@@ -436,7 +434,7 @@ export default {
 
                      
                             }else if(value.toLowerCase().indexOf('stucode')>=0){
-                                console.log(value)
+                                // console.log(value)
                                 if(item[value]!==""){
                                     item[value]=this.replaceData(item[value],1,4,'****');
                                     this.$set(item,value+'_Encryp_stucode',true);
@@ -445,13 +443,13 @@ export default {
                                     this.$set(item,value+'_Encryp_stucode',null);
                                 }
                               
-                            }else{
+                            }else if(value.toLowerCase().indexOf('id')>=0){
                                
                                  if(item[value]!==""){
-                                      item[value]=this.replaceData(item[value],0,6,'******');
-                                    this.$set(item,'Encryp_id',true);
+                                    item[value]=this.replaceData(item[value],0,6,'******');
+                                    this.$set(item,value+'_Encryp_id',true);
                                  }else{
-                                    this.$set(item,'Encryp_id',null);
+                                    this.$set(item,value+'_Encryp_id',null);
                                  }
                               
                             }
@@ -550,11 +548,13 @@ export default {
                                 // row.Encryp_stucode=true;
                             }
                         }
-                        else if(column==='stuid'){
+                        else if(column.toLowerCase().indexOf('id')>=0){
                             if(type==='open'){
-                                row.Encryp_id=false;
+                                row[column+'_Encryp_id']=false;
+                                // row.Encryp_id=false;
                             }else if(type==='close'){
-                                row.Encryp_id=true;
+                                row[column+'_Encryp_id']=true;
+                                // row.Encryp_id=true;
                             }
                         }
                     }

@@ -146,7 +146,7 @@ export default {
                this.$set(obj,item,obj2[item]);
             }
 
-            // console.log(obj);
+            console.log(obj);
             this.checkInsert().then(()=>{
                 this.init_insertSchoolSynoymMaster_params(obj,this.$route.params.params).then(data=>{
                         // console.log('success',data)

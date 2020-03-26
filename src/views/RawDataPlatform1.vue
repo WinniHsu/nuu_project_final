@@ -190,7 +190,8 @@ export default {
                 global_search: {
                      visibility: false,
                 },
-                server_mode:  true
+                // server_mode:  true,
+                server_mode:  false
             },
             selecteduuid:'',
             //紀錄需要修改的單筆資料
@@ -213,11 +214,7 @@ export default {
     // this.onChangeQuery();
     setInterval(() => {
         this.now=new Date().getTime() 
-        //  this.now1=new Date().getTime() 
-        //  this.now2=new Date()    
-        //   this.now=new Date().getTime() 
-            // Date.now()                       //  回傳當前的 timestamp（毫秒）
-            // new Date()                       //  回傳目前時間的日期物件
+                    //  回傳目前時間的日期物件
     },1000);
   },
   computed: {
@@ -245,12 +242,17 @@ export default {
   },
   methods: {
     onChangeQuery(queryParams) {
+        console.log('onChangeQuery>1',queryParams);
         this.queryParams = queryParams;
-        console.log('onChangeQuery>',queryParams)
-        // this.fetchData();
+
+        this.getQueryAllTable();
+
     },
     getQueryAllTable(){
-        apiQueryAllTable({}).then((response)=>{
+         console.log('getQueryAllTable>2');
+        apiQueryAllTable({
+            // queryParams:this.queryParams
+        }).then((response)=>{
             // console.log('apiQueryAllTable----->',response);
             response.data.forEach((item)=>{
                 if(item.lastchange!==null){
