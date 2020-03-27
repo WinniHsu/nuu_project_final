@@ -9,37 +9,50 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
+                        
                         <div class="col-12">
-                            <div class="input-group mb-3" v-for="column in note_copy" :key="column.columnuuid">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">{{column.columncname}}</span>
+                            <form name='form2' id='form2'>
+                                <div class="input-group mb-3" v-for="column in note_copy" :key="column.columnuuid">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">{{column.columncname}}</span>
+                                    </div>
+                                    <input v-if="column.option==null" type="text"  class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-model="column.value">
+                                    <div class="hint-des" v-if="column.check===1">***{{column.message}}***</div>
+                                    <select  v-if="column.option!==null" class="form-control" id="exampleFormControlSelect1" v-model="column.value">
+                                        <option v-for="opt in column.option">{{opt}}</option>
+                                    </select>
                                 </div>
-                                <input v-if="column.option==null" type="text"  class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-model="column.value">
-                                <div class="hint-des" v-if="column.check===1">***{{column.message}}***</div>
-                                <select  v-if="column.option!==null" class="form-control" id="exampleFormControlSelect1" v-model="column.value">
-                                    <option v-for="opt in column.option">{{opt}}</option>
-                                </select>
-                            </div>
-                            <div class="input-group mb-3 uploader-wrapper ">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile02" :disabled="upload_loading" @change="sendByAPI($event)">
-                                    <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">{{uploadFileName}}</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" :disabled="loading" id="inputGroupFileAddon04" @click="readFile()">上傳</button>
-                                </div>
+                                <!-- <div class="input-group mb-3 ">
+                                    <div xclass="custom-file">
+                                        <input type="file" name='excelFile' class="custom-file-input" id="inputGroupFile02" :disabled="upload_loading" @change="sendByAPI($event)">
+                                        <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">{{uploadFileName}}</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" :disabled="loading" id="inputGroupFileAddon02" @click="readFile()">上傳</button>
+                                    </div>
 
-                                <div v-if="blockPage" class="spinner-grow text-light ml-2" role="status">
-                                    <span class="sr-only">Loading...</span>
+                                    <div v-if="blockPage" class="spinner-grow text-light ml-2" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div> -->
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name='excelFile' class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" :disabled="upload_loading" @change="sendByAPI($event)">
+                                        <label class="custom-file-label" for="inputGroupFile04">{{uploadFileName}}</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04" @click="readFile()">上傳</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
+                       
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModel('start')">取消</button>
-                    <button type="button" class="btn btn-primary" @click="saveEditedData()">儲存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >取消</button>
+                    <!-- <button type="button" class="btn btn-primary" @click="saveEditedData()">儲存</button> -->
             </div>
         </div>
     </div>
@@ -77,8 +90,10 @@ export default {
     },
     methods:{
         sendByAPI(event){
+            console.log(event)
             this.uploadFile = event.target.files[0];
-            this.uploadFileName=this.uploadFile.name;
+            this.uploadFileName=event.target.files[0].name;
+            // this.uploadFileName=this.uploadFile.name;
         },
         // 上傳
         readFile(){
@@ -133,6 +148,7 @@ export default {
                             
                             });
                     }else if(response.data ==='欄位錯誤'){
+
                         this.uploadFile = undefined;
                         this.uploadFileName='';
                         this.$swal({
@@ -141,13 +157,20 @@ export default {
                             type: 'error',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: '確認'
+                        }).then((result)=>{
+                            for(let item in this.note){
+                                this.$set(this.note_copy[item],'value','')
+                            };
+                            console.log('#UploadModal_RawData為什麼沒關掉')
+                             $('#UploadModal_RawData').modal('hide');
                         });
-                         $('#UploadModal_RawData').modal('hide');
+                        
                     }
             })
             .catch((error)=>{
                     this.uploadFile = undefined;
                     this.uploadFileName='';
+                    document.forms["form2"]["excelFile"].value = "";
                     for(let item in this.note){
                         this.$set(this.note_copy[item],'value','')
                     }
