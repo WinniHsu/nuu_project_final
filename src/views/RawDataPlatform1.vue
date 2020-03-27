@@ -253,7 +253,7 @@ export default {
         apiQueryAllTable({
             // queryParams:this.queryParams
         }).then((response)=>{
-            // console.log('apiQueryAllTable----->',response);
+            console.log('apiQueryAllTable----->',response);
             response.data.forEach((item)=>{
                 if(item.lastchange!==null){
                     item.lastchange=this.$moment(item.lastchange).format('YYYY-MM-DD');
@@ -345,15 +345,15 @@ export default {
             tableuuid:tableuuid
         }).then((response)=>{
 
-            // console.log('getQueryTableColumn----->',response.data.sort(this.sortnum()));
+            console.log('getQueryTableColumn----->',response.data.sort(this.sortnum()));
             let arrayList=[];
             for(let item in response.data.sort(this.sortnum())){
-                if( response.data.sort(this.sortnum())[item].note!=='指定'){
+                if( response.data.sort(this.sortnum())[item].note!=='指定'&&response.data.sort(this.sortnum())[item].note!=='指定下拉'){
                      arrayList.push( response.data.sort(this.sortnum())[item].columncname);
                 }
               
             };
-            // console.log(arrayList);
+            console.log("arrayList>",arrayList);
             
             this.onExportExcel(arrayList,tablename);
             

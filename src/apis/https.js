@@ -52,11 +52,11 @@ var instance = axios.create({
 // request攔截器
 instance.interceptors.request.use((config)=>{
     const token = store.state.token;
-    // token && (config.headers.Authorization = 'Bearer' + token);
-    if(token){
-        config.headers.Authorization = 'Bearer' + token;
-        // config.headers['Authorization'] = `Bearer ${store.state.auth.authToken}`
-    }
+    token && (config.headers.Authorization = 'Bearer' + token);
+    // if(token){
+    //     config.headers.Authorization = 'Bearer' + token;
+    //     // config.headers['Authorization'] = `Bearer ${store.state.auth.authToken}`
+    // }
     return config;
 },(error)=>{
     return Promise.reject(error);

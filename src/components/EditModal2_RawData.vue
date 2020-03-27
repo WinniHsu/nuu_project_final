@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModel()">Close</button>
-                    <button type="button" class="btn btn-primary" @click="saveEditedData()">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModel()">取消</button>
+                    <button type="button" class="btn btn-primary" @click="saveEditedData()">儲存</button>
             </div>
         </div>
     </div>

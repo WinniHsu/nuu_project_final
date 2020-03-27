@@ -54,6 +54,8 @@
 
 <script>
 import alertModal from '../components/alertModal';
+import {apiInsertSchoolSynoymMaster} from '@/apis/syn.js';
+import {apiInsertSchoolSynoymDetail} from '@/apis/syn.js';
 export default {
     name: "insertModal",
     components: {
@@ -216,6 +218,7 @@ export default {
                         if(this.synonymList[item].graduateSchoolSynonymsNames!==''){
                             a=this.init_insertSchoolSynoymDetail_params(this.synonymList[item].graduateSchoolSynonymsNames,this.titleDetail[0].value,this.$route.params.params);
                             promisList.push(a)
+                          
                         }
                     };
                     Promise.all(promisList).then(values => { 
