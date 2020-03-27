@@ -404,16 +404,17 @@ export default {
                 queryParams: this.queryParams,
             }).then((response)=>{
                 console.log('TableValue------>',response);
+                // debugger;
                 this.loadingShow=false;
               
                 // 處理日期資料
-                if(this.dateList.length>0){
-                    for(let value of this.secretColumns){
-                         response.data.forEach((item)=>{
-                             item[value]=this.$moment(item[value]).format('YYY-MM-DD');
-                         })
-                    }
-                }
+                // if(this.dateList.length>0){
+                //     for(let value of this.secretColumns){
+                //          response.data.forEach((item)=>{
+                //              item[value]=this.$moment(item[value]).format('YYY-MM-DD');
+                //          })
+                //     }
+                // }
 
                 // 處理加密資料
                 this.selectedRows=[];

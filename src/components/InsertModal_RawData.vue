@@ -153,8 +153,14 @@ export default {
             if(!errorList.length){
                 let sendData={}
                 for(let item in this.inputValue){
-                    this.$set(sendData,item,this.inputValue[item].value);
+                    if(this.inputValue[item].type==='DATE'){
+                         this.$set(sendData,item,this.inputValue[item].value.startDate!==null?this.$moment(this.inputValue[item].value.startDate).format('YYYY-MM-DD'):null);
+                    }else{
+                         this.$set(sendData,item,this.inputValue[item].value);
+                    }
+                   
                 }
+                console.log('新增資廖---->',sendData)
                 this.getInsertTableColumns(sendData);
 
             }else{
