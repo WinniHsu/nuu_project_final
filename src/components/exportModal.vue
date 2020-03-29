@@ -51,7 +51,7 @@ export default {
             checkedOptions: [],
             checkedOptionsid:[],
             optionsRaw:[],
-            options:['column1', 'column2', 'column3', 'column4'],
+            options:[],
             optionsid:[],
             isIndeterminate: true,
             rows: [
@@ -174,6 +174,7 @@ export default {
             let _this=this;
             var p=this.$js.ajaxPromise200(init_export_params).then(function(data) {
                 console.log(data);
+                // debugger;
                 _this.optionsRaw.length=0;
                 _this.optionsRaw=data;
                 _this.options.length=0;
@@ -191,7 +192,7 @@ export default {
             this. init_downloadColumns_params(this.tableName);
         },
         init_downloadColumns_params:function(tableName){
-            const fileName='資料匯出檔'
+            const fileName='資料匯出檔.xlsx'
             // this.$js.baseURL+ "/api/etlcontroller/export"
             this.$axios.post(this.$js.baseURL+ "/api/etlcontroller/export",
                             {columns:this.checkedOptionsid,tablename:tableName},

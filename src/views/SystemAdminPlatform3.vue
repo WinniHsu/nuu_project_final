@@ -39,7 +39,7 @@ export default {
             ],
             columns:[
                 {
-                    label: "userName",
+                    label: "使用者名稱",
                     name: "userName",
                     filter: {
                         type: "simple",
@@ -48,7 +48,7 @@ export default {
                     sort: true,
                 },
                 {
-                    label: "operation",
+                    label: "執行序",
                     name: "operation",
                     filter: {
                         type: "simple",
@@ -57,7 +57,7 @@ export default {
                     sort: true,
                 },
                 {
-                    label: "objectName",
+                    label: "物件名稱",
                     name: "objectName",
                     filter: {
                         type: "simple",
@@ -66,7 +66,7 @@ export default {
                     sort: true,
                 },
                 {
-                    label: "exeTime",
+                    label: "執行時間",
                     name: "exeTime",
                     filter: {
                         type: "simple",

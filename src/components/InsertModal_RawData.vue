@@ -35,10 +35,15 @@
                                 <select :disabled="item.note!==undefined"  v-if="item.name==='LicenseID'||item.note!==undefined" class="form-control" id="exampleFormControlSelect1" v-model="inputValue[item.name].value" @change='autoOPtion(item.name,inputValue[item.name].value)'>
                                     <option v-for="(op,index) in item.option" :key='index'>{{op}}</option>
                                 </select>
-                                <el-cascader v-if="item.name==='ExchangeSchool'"
+                                 <el-cascader v-if="item.name==='ExchangeSchool'"
+                                    :options="item.option"
+                                    :props="props"
+                                    v-model="inputValue[item.name].value"
+                                    clearable></el-cascader>
+                                <!-- <el-cascader v-if="item.name==='ExchangeSchool'"
                                 :options="options"
                                 :props="{ checkStrictly: true }"
-                                clearable></el-cascader>
+                                clearable></el-cascader> -->
                             </div>
                             <div class="hint-des" v-if="inputValue[item.name].check===1">***{{inputValue[item.name].message}}***</div>
                         </div>
@@ -91,6 +96,8 @@ export default {
                 startDate: null,
                 endDate: null
             },
+            props: { multiple: false },
+            options: []
         }
     },
     mounted: function () { 
@@ -156,12 +163,30 @@ export default {
                     if(this.inputValue[item].type==='DATE'){
                          this.$set(sendData,item,this.inputValue[item].value.startDate!==null?this.$moment(this.inputValue[item].value.startDate).format('YYYY-MM-DD'):null);
                     }else{
-                         this.$set(sendData,item,this.inputValue[item].value);
+                        this.$set(sendData,item,this.inputValue[item].value);
                     }
+
+                    setTimeout(()=>{
+
+                   
+                        if(item==='ExchangeSchool'){
+                    
+                        // ['exchangeSchool','exchangeCollege','exchangeDept'];
+                        let aa=JSON.parse(JSON.stringify(this.inputValue[item].value));
+                        this.$set(sendData,'ExchangeSchool', aa[0]);
+                        this.$set(sendData,'ExchangeCollege', aa[1]);
+                        this.$set(sendData,'ExchangeDept',  aa[2]);
+                        
+                        }
+                },300)
+                   
                    
                 }
-                console.log('新增資廖---->',sendData)
-                this.getInsertTableColumns(sendData);
+                console.log('新增資料---->',sendData)
+                setTimeout(()=>{
+                     this.getInsertTableColumns(sendData);
+                },500)
+               
 
             }else{
                     this.$swal({
@@ -186,9 +211,11 @@ export default {
                 .then((result)=>{
                     if(result.value){
                         $('#InsertModal_RawData').modal('hide'); 
-                        this.$emit('requestdata');
                         this.copyColumns();
                     }
+                })
+                .then(()=>{
+                     this.$emit('requestdata');
                 });
             })
         },

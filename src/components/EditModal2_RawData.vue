@@ -1,5 +1,6 @@
 <template>
 <div class="modal fade" id="EditModal2_RawData" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+     <loading v-if="loadingShow"></loading>
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -46,6 +47,7 @@
 </template>
 
 <script>
+import loading from '../components/loading';
 import VueBootstrap4Table from 'vue-bootstrap4-table';
 import {apiUpdateTableColumns} from '@/apis/rawData.js';
 import DateRangePicker from 'vue2-daterange-picker'
@@ -53,7 +55,8 @@ export default {
     name: "EditModal2_RawData",
     components: {
           VueBootstrap4Table,
-          DateRangePicker
+          DateRangePicker,
+           "loading":loading,
     },
     props: {
         selectedDetailData:{
@@ -66,6 +69,7 @@ export default {
     data() {
         return{
             // 複製一份傳進來的資料
+            loadingShow:false,
             selectedDetailData_copy:null,
             config: {
                 checkbox_rows: true,
@@ -116,10 +120,12 @@ export default {
                 if(item2.label!==''&&item2.datatype!=='DATE'){
                     this.$set(sendParams,item2.name,this.selectedDetailData_copy[item2.name]);
                 }else if(item2.datatype==='DATE'){
-                    this.$set(sendParams,item2.name,this.selectedDetailData_copy[item2.name].startDate!==''?this.$moment(this.selectedDetailData_copy[item2.name].startDate).format('YYYY-MM-DD'):'' );
+                    this.$set(sendParams,item2.name,this.selectedDetailData_copy[item2.name].startDate!==null?this.$moment(this.selectedDetailData_copy[item2.name].startDate).format('YYYY-MM-DD'):null);
+                    console.log(item2.name,this.selectedDetailData_copy[item2.name].startDate!==null?this.$moment(this.selectedDetailData_copy[item2.name].startDate).format('YYYY-MM-DD'):null)
                 }
             }
             console.log('sendParams----->',sendParams)
+            this.loadingShow=true;
             this.getUpdateTableColumns(sendParams);
             $('#EditModal2_RawData').modal('hide');
         },
@@ -137,6 +143,7 @@ export default {
                 valueuuid: this.selectedDetailData_copy.valueuuid,
                 id:this.selectedDetailData_copy.id
             }).then((response)=>{
+                this.loadingShow=false;
                 console.log(response);
                 // 1.儲存修改資料
                 // 2.重新request欄位資料
@@ -232,5 +239,9 @@ export default {
     align-items: center;
     transition: all .2s ease-in-out;
     background: cadetblue;
+}
+.load-wrapp{
+    /* float: left; */
+    position: fixed;
 }
 </style>

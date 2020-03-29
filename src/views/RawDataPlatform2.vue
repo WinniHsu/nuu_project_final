@@ -194,8 +194,8 @@ export default {
                 tableuuid:this.$route.params.uuid
             }).then((response)=>{
                 //  console.log(JSON.stringify(response, null, 2));
-                console.log(response);
-                
+                console.log('取得該table的欄位>',response);
+                // debugger;
                 this.selectedColumns=[];
                 let obj1={label: "",
                     name: "edit",
@@ -258,7 +258,8 @@ export default {
                         this.note.push(note);
                     };
 
-                    if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'){
+                    if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'||response.data[item].note.indexOf('階層代入子項目')>=0){
+                         console.log('指定------>',response.data[item].columncname)
                         // response.data[item].note!=='下拉連動'||response.data[item].note.indexOf('自動代入')<0
                         // console.log(response.data[item].note)
                         obj.label=response.data[item].columncname;
@@ -276,20 +277,75 @@ export default {
                             this.$set(obj,'slot_name',response.data[item].columnename+'-IDEyes');
                         }
                         this.selectedColumns.push(obj);
-                    }else if(response.data[item].note.indexOf('下拉階層代入')){
-    
+                    }else if(response.data[item].note.indexOf('下拉階層代入')>=0){
+                        console.log('下拉階層代入------>',response.data[item].columncname,response.data[item].note);
+                        let columnObj={};
+                        let ArrayList=['exchangeSchool','exchangeCollege','exchangeDept'];
+                        for(let value of response.data[item].option){
+                           
+                   
+                           for(let value2 in value){
+                               this.$set(columnObj,value2,value[value2]);
+                           }
+                        }
+                        console.log(columnObj)
+                        let mainArray=[]    
+                   
+                        for(let item of columnObj[ArrayList[0]]){
+                            // console.log("SS>",item)
+                            let subObj={
+                                value: '',
+                                label: '',
+                                children: []
+                            };
+                            subObj.value=item.name;
+                            subObj.label=item.name;
+                            mainArray.push(subObj);
+                             for(let item2 of columnObj[ArrayList[1]]){
+                                //  item.upLayer===>澎湖科技大學
+                                if(subObj.value===item2.upLayer){
+                                    let subObj2={
+                                        value: '',
+                                        label: '',
+                                        children: []
+                                    };
+                                    subObj2.value=item2.name;
+                                    subObj2.label=item2.name;
+                                    subObj.children.push(subObj2);
+                                    for(let item3 of columnObj[ArrayList[2]]){
+                                        if(subObj2.value===item3.upLayer){
+                                            let subObj3={
+                                                value: '',
+                                                label: '',
+                                               
+                                            };
+                                            subObj3.value=item3.name;
+                                            subObj3.label=item3.name;
+                                            subObj2.children.push(subObj3);
+                                        }
+                                    }
+
+                                }
+
+                             }
+                            
+                        }
+                        
+
+                        // console.log('mainArray>',mainArray)
+                        
                         obj.label=response.data[item].columncname;
                         obj.name=response.data[item].columnename;
                         obj.datatype=response.data[item].datatype;
+                        obj.option=mainArray;
                         this.selectedColumns.push(obj);
-                    }else if(response.data[item].note.indexOf('下拉')>=0){
-                        // console.log('下拉or自動帶入------>',response.data[item].columncname)
+                    }else if(response.data[item].note.indexOf('下拉自動代入')>=0){
+                        console.log('下拉or自動代入------>',response.data[item].columncname)
                         // if(response.data[item].note==='下拉連動'){
                         // 證照代碼LicenseID----->下拉
                         // 證照級別LicenseLevel----->自動帶入 6
                         // 證照名稱LicenseName----->自動帶入8
                         // 舉辦單位LicenseHost----->自動帶入9
-
 
                         obj.label=response.data[item].columncname;
                         obj.name=response.data[item].columnename;
@@ -501,6 +557,9 @@ export default {
                         let name=item+'_original'
                         value_cpoy[item]=value_cpoy[name];
                     }else if(item.toLowerCase().indexOf('stucode')>=0){
+                        let name=item+'_original';
+                        value_cpoy[item]=value_cpoy[name];
+                    }else if(item.toLowerCase().indexOf('id')>=0){
                         let name=item+'_original';
                         value_cpoy[item]=value_cpoy[name];
                     }
