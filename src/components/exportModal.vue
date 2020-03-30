@@ -202,7 +202,11 @@ export default {
                             {columns:this.checkedOptionsid,tablename:tableName},
                             {responseType: 'blob'})
             .then((response) => {
+<<<<<<< HEAD
                  this.loadingShow=false;
+=======
+                console.log('資料匯出檔',response)
+>>>>>>> 1e68765d4ab439fc87bf6690bacd2d45778948a7
                 const url = URL.createObjectURL(new Blob([response.data], {
                         type: 'application/vnd.ms-excel'
                 }));

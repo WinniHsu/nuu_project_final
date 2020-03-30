@@ -3,6 +3,7 @@ import axios from 'axios'
 // import router from '../router/index.js'
 import store from '../store/modules/auth'
 import {tip, toLogin, to403Page} from './utils.js'
+import {js} from "../assets/lib/lt-common"
 
 /**
  * 請求失敗的統一處理
@@ -51,8 +52,15 @@ var instance = axios.create({
 })
 // request攔截器
 instance.interceptors.request.use((config)=>{
-    const token = store.state.token;
+<<<<<<< HEAD
+=======
+    let token = store.state.token;
+    if(token.length==0){
+        token=js.getCookie('leadtektoken');
+    }
     // token && (config.headers.Authorization = 'Bearer' + token);
+    console.log('token---->',token);
+>>>>>>> 1e68765d4ab439fc87bf6690bacd2d45778948a7
     if(token){
         config.headers.Authorization = 'Bearer' + token;
         // config.headers['Authorization'] = `Bearer ${store.state.auth.authToken}`
