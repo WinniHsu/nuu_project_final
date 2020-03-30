@@ -3,6 +3,7 @@ import axios from 'axios'
 // import router from '../router/index.js'
 import store from '../store/modules/auth'
 import {tip, toLogin, to403Page} from './utils.js'
+import {js} from "../assets/lib/lt-common"
 
 /**
  * 請求失敗的統一處理
@@ -51,12 +52,16 @@ var instance = axios.create({
 })
 // request攔截器
 instance.interceptors.request.use((config)=>{
-    const token = store.state.token;
-    token && (config.headers.Authorization = 'Bearer' + token);
-    // if(token){
-    //     config.headers.Authorization = 'Bearer' + token;
-    //     // config.headers['Authorization'] = `Bearer ${store.state.auth.authToken}`
-    // }
+    let token = store.state.token;
+    if(token.length==0){
+        token=js.getCookie('leadtektoken');
+    }
+    // token && (config.headers.Authorization = 'Bearer' + token);
+    console.log('token---->',token);
+    if(token){
+        config.headers.Authorization = 'Bearer' + token;
+        // config.headers['Authorization'] = `Bearer ${store.state.auth.authToken}`
+    }
     return config;
 },(error)=>{
     return Promise.reject(error);
