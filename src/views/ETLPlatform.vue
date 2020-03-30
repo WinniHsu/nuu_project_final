@@ -258,7 +258,7 @@ export default {
                 obj.status.status="清洗完成";
                 // obj.status.status=item.status;
                 // obj.status.lastdate=item.cleandatefirst;
-                obj.status.lastdate='最後更新日期:YYYY-MM-DD';
+                obj.status.lastdate='最後更新日期:2020/3/30';
                 obj.cleanyn=item.cleanyn;
                 obj.cleandatefirst=item.cleandatefirst;
                 obj.redaytype=item.redaytype;

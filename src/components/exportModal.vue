@@ -1,5 +1,6 @@
 <template>
 <div class="modal fade bd-example-modal-xl search_model" id="exportModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <loading v-if="loadingShow"></loading>
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,13 +32,14 @@
 </template>
 
 <script>
-
+import loading from '../components/loading';
 import VueBootstrap4Table from 'vue-bootstrap4-table';
 // import exportModal from '../components/exportModal';
 export default {
     name: "exportModal",
     components: {
          VueBootstrap4Table,
+         "loading":loading,
         // "export-modal":exportModal
     },
     props: {
@@ -47,6 +49,7 @@ export default {
     },
     data() {
         return{
+            loadingShow:false,
             checkAll: false,
             checkedOptions: [],
             checkedOptionsid:[],
@@ -189,6 +192,7 @@ export default {
             });
         },
         downloadColumns(){
+            this.loadingShow=true;
             this. init_downloadColumns_params(this.tableName);
         },
         init_downloadColumns_params:function(tableName){
@@ -198,6 +202,7 @@ export default {
                             {columns:this.checkedOptionsid,tablename:tableName},
                             {responseType: 'blob'})
             .then((response) => {
+                 this.loadingShow=false;
                 const url = URL.createObjectURL(new Blob([response.data], {
                         type: 'application/vnd.ms-excel'
                 }));
@@ -223,5 +228,9 @@ export default {
 .outer-wrapper{
     display: flex;
     flex-direction: column;
+}
+.load-wrapp{
+    /* float: left; */
+    position: fixed;
 }
 </style>

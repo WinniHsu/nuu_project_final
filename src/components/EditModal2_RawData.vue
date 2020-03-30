@@ -159,7 +159,7 @@ export default {
                 for(let item2 of this.selectedColumns){
                    
                     if(item2.datatype!==undefined&&item2.datatype==='DATE'){
-                         console.log(this.selectedDetailData_copy[item2.name])
+                        console.log(this.selectedDetailData_copy[item2.name])
                         let obj={
                             endDate:this.selectedDetailData_copy[item2.name],
                             startDate:this.selectedDetailData_copy[item2.name]
