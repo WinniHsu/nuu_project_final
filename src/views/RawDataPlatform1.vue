@@ -1,5 +1,6 @@
 <template>
   <div class="second-home">
+    <loading v-if="loadingShow"></loading>
     <div class="row p-5" >
         <div class="col-12">
             <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" @on-change-query="onChangeQuery" :total-rows="total_rows">
@@ -76,6 +77,7 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
+import loading from '../components/loading';
 import sidebar from '../components/sidebar'
 import VueBootstrap4Table from 'vue-bootstrap4-table';
 // import EditModal from '../components/EditModal_RawData';
@@ -89,7 +91,8 @@ import {apiTableDownload} from '@/apis/rawData.js';
 export default {
   name: "RawDataPlatform1",
   components: {
-     "sidebar":sidebar,
+    "loading":loading,
+    "sidebar":sidebar,
      VueBootstrap4Table,
     //  "edit-modal":EditModal,
      "insert-modal":InsertModal,
@@ -100,6 +103,7 @@ export default {
   },
   data: function() {
         return {
+            loadingShow:false,
             rows: [
                 // {
                 //     tablecode:'AA',
@@ -183,7 +187,7 @@ export default {
                 }
             ],
             config: {
-                checkbox_rows: true,
+                checkbox_rows: false,
                 rows_selectable: false,
                 show_refresh_button: false,
                 show_reset_button:false,
@@ -249,10 +253,12 @@ export default {
 
     },
     getQueryAllTable(){
+        this.loadingShow=true;
          console.log('getQueryAllTable>2');
         apiQueryAllTable({
             // queryParams:this.queryParams
         }).then((response)=>{
+            this.loadingShow=false;
             console.log('apiQueryAllTable----->',response);
             response.data.forEach((item)=>{
                 if(item.lastchange!==null){

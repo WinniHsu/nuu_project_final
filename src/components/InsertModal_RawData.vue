@@ -36,6 +36,7 @@
                                     <option v-for="(op,index) in item.option" :key='index'>{{op}}</option>
                                 </select>
                                  <el-cascader v-if="item.name==='ExchangeSchool'"
+                                    placeholder="請選擇"
                                     :options="item.option"
                                     :props="props"
                                     v-model="inputValue[item.name].value"

@@ -127,7 +127,7 @@ export default {
             dateList:[],
             secretStuCodeList:[],
             config: {
-                checkbox_rows: true,
+                checkbox_rows: false,
                 rows_selectable: false,
                 show_refresh_button: false,
                 show_reset_button:false,
@@ -357,24 +357,26 @@ export default {
                             
                         for(let item1 in response.data[item].option){
                             for(let item2 in response.data[item].option[item1]){
-                                obj.option.push(item2);
+                                
                                 // console.log(item2)
                                
                                 let arrayList=response.data[item].option[item1][item2].split(';');
                                 let column1=arrayList[0];
                                 let column2=arrayList[1];
                                 let column3=arrayList[2];
-
+                                let mainItem=item2+'('+column2+')';
+                                obj.option.push(mainItem);
                                for(let item3 in secondLevelColumn){
                                    
                                    if(secondLevelColumn[item3].note.indexOf('1')>=0){
-                                       this.$set(secondLevelColumn[item3].option,item2,column1);
+                                       this.$set(secondLevelColumn[item3].option,mainItem,column1);
                                    }else if(secondLevelColumn[item3].note.indexOf('2')>=0){
-                                       this.$set(secondLevelColumn[item3].option,item2,column2);
+                                       this.$set(secondLevelColumn[item3].option,mainItem,column2);
                                    }else if(secondLevelColumn[item3].note.indexOf('3')>=0){
-                                       this.$set(secondLevelColumn[item3].option,item2,column3);
+                                       this.$set(secondLevelColumn[item3].option,mainItem,column3);
                                    }
                                }
+
                             }
                         }
                         // console.log(secondLevelColumn);

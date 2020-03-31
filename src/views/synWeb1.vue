@@ -148,7 +148,14 @@ export default {
                 
             }
             this.rows=[];
-
+            // id: "Dropstu"
+            // tablename: "退學代碼"
+            // updatedate: "2020-03-29"
+            // for(let value of response.data){
+            //     if(value.id==='Dropstu'){
+            //          this.rows.push(value)
+            //     }
+            // }
             this.rows=response.data;
         })
       },

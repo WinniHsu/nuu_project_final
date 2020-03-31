@@ -127,7 +127,15 @@ export default {
       apiFindUnit({}).then((response)=>{
         console.log('getFindUnit---->',response.data);
         this.rows=[];
-        this.rows=response.data;
+        for(let item of response.data){
+          if(item.authName==='系統管理者'||item.authName==='倉儲資料管理者'){
+            this.rows.unshift(item)
+          }else{
+            this.rows.push(item)
+          }
+
+        }
+        // this.rows=response.data;
         // this.rows.unshift(
         //   {
         //         creationDate:null,

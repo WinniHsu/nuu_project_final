@@ -203,6 +203,9 @@ export default {
             this.note_copy=this.note.concat();
             //  this.$set(this.note_copy[item],'value','')
             for(let item in this.note){
+                if(this.note[item].columnename==='Times'){
+                   this.note[item].option=['前測','後測']
+                }
                 // this.note_copy.push(this.note[item]);
                 this.$set(this.note_copy[item],'value','');
                 this.$set(this.note_copy[item],'check',0);

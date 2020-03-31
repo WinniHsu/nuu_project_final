@@ -48,6 +48,7 @@
 import {apiFindUnit} from '@/apis/adminGroup';
 import {apiQueryAuthGroup}  from '@/apis/etl';
 import {apiUpdateAuthGroup} from '@/apis/etl';
+import {apiQueryTableColumn} from '@/apis/etl';
 import VueBootstrap4Table from 'vue-bootstrap4-table';
 // import exportModal from '../components/exportModal';
 export default {
@@ -67,6 +68,7 @@ export default {
     data() {
         return{
             authGroup:[],
+            authList:{},
             currentAuthGroup:'',
             rows_copy:[],
             rows: [
@@ -132,17 +134,87 @@ export default {
         getFindUnit(){
             apiFindUnit({})
             .then((response)=>{
+                console.log('查找所有單位',response.data)
                 this.authGroup=[];
                 for(let item in response.data){
                     this.authGroup.push(response.data[item].authName);
+                    let obj={
+                        authName:'',
+                        auth:[]
+                    }
+                    obj.authName=response.data[item].authName;
+                    this.$set(this.authList,response.data[item].authName,obj)
+                };
+               
+            })
+            .then(()=>{
+                this.getQueryTableColumn();
+                // this.currentAuthGroup=this.authGroup[0];
+            })
+            .then(()=>{
+                 
+                // this.getQueryAuthGroup();
+            })
+        },
+        getQueryTableColumn(){
+            apiQueryTableColumn({},this.tableName).then((response)=>{
+                console.log('查找群組和欄位----->',response.data);
+                for(let item in response.data){
+                    for(let item2 in this.authList){
+                        let obj={
+                            group:'',
+                            columns:[]
+                        }
+                        for(let item3 of response.data[item]){
+                            let obj2={
+                                id: null,
+                                columnengname: "",
+                                columnname: "",
+                                status:0
+                            }
+                            obj2.id=item3.id;
+                            obj2.columnengname=item3.columnengname;
+                            obj2.columnname=item3.columnname;
+                            obj.columns.push(obj2);
+                        }
+                        obj.group=item;
+                        this.authList[item2].auth.push(obj);
+                    }
+                }
+
+                for(let unit of this.authGroup){
+                    // console.log(value)
+                    let columns = this.getAuth(unit,response.data);
+                    // console.log(unit,columns)
+                    for(let groupOp of this.authList[unit].auth){
+                        for(let column of columns){
+                            if(column.group===groupOp.group){
+                                for(let value of groupOp.columns){
+                                    if(value.columnengname===column.columnengname){
+                                           value.status=1;
+                                    }
+                                }
+                              
+                            }
+                        }
+                    }
+                    
                 }
             })
-            .then(()=>{
-                this.currentAuthGroup=this.authGroup[0];
-            })
-            .then(()=>{
-                this.getQueryAuthGroup();
-            })
+        },
+        getAuth(unit,data){
+            let ArrayList=[];
+            for(let item in data){
+                for(let item2 of data[item]){
+                    // console.log(item2.authName)
+                    if(item2.authName.indexOf(unit)>=0){
+                        this.$set(item2,'group',item);
+                        ArrayList.push(item2)
+                    }
+
+                }
+            }
+            return ArrayList;
         },
         // 查找特定單位權限
         getQueryAuthGroup(){
@@ -150,13 +222,14 @@ export default {
                 authName:this.currentAuthGroup,
                 tablename:this.tableName
             }).then((response)=>{
+                  console.log('查找特定單位權限',response);
                 this.rows=[];
                 this.rows=response.data;
                 this.rows_copy=[];
                 this.rows_copy=  JSON.parse(JSON.stringify(this.rows));
 
               
-                // console.log(response);
+              
             })
         },
    

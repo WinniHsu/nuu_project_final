@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="title">同義詞管理 - 上傳編輯 - 修改資料(休退學AAAA)</div>
+                <div class="title">同義詞管理 - 上傳編輯 - 修改資料(休退學)</div>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -321,7 +321,10 @@ export default {
                     this.getInsertSchoolSynoymMaster(send_choosedData_copy,this.$route.params.params)
             },500)
             this.Toggle.check_syn_disabled=[];
-             this.flag=true;
+            this.flag=true;
+            this.Toggle.editBtn=false;
+            this.Toggle.safeBtn=true;
+            this.Toggle.check_disabled=true;
          
             
         },

@@ -97,7 +97,7 @@ export default {
                 }
             ],
             config: {
-                checkbox_rows: true,
+                checkbox_rows: false,
                 rows_selectable: false,
                 show_refresh_button: false,
                 show_reset_button:false,

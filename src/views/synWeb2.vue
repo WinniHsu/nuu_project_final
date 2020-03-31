@@ -91,7 +91,7 @@ export default {
             printColumns:[],
             option:{},
             config: {
-                checkbox_rows: true,
+                checkbox_rows: false,
                 rows_selectable: false,
                 show_refresh_button: false,
                 show_reset_button:false,
@@ -358,7 +358,7 @@ export default {
     },
     // trace刪除哪一筆
     traceDelete(value){
-        console.log(value)
+        console.log('traceDelete---->',value)
          this.$swal({
             title: '刪除該筆資料',
             text: "是否確認刪除該筆資料",
@@ -372,8 +372,11 @@ export default {
         .then((result)=>{ 
             if(result.value===true){
                 if(this.$route.params.params==='Dropstu'){
-                      this.getDeleteMaster(value.dropremarkid,this.$route.params.params);
-                }else{
+                    this.getDeleteMaster(value.dropremarkid,this.$route.params.params);
+                }else if(this.$route.params.params==='Suspend'){
+                    this.getDeleteMaster(value.suspendremarkid,this.$route.params.params);
+                }
+                else{
                       this.getDeleteMaster(value.graduateSchoolCode,this.$route.params.params);
                 }
               
