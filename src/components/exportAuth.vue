@@ -15,18 +15,21 @@
                             </select>
                              <!-- <button style="flex:1" type="button" class="btn btn-success" @click="updateAuthGroup()">更新</button> -->
                         </div>
-                       
-                        <table class="table">
-                            <tbody>
-                                <tr v-for="row in this.rows" :key='row.id'>
-                                    <th scope="row">{{row.columngroup}}</th>
-                                    <td :class="[row.etlauth!=='0'?'style-color':'']"><i class="fas fa-eye" @click="changeAuth(row.id,'0')"></i></td>
-                                    <td :class="[row.etlauth!=='1'?'style-color':'']"><i class="fas fa-eye-slash" @click="changeAuth(row.id,'1')"></i></td>
-                                    <td :class="[row.etlauth!=='2'?'style-color':'']"><i class="fas fa-times" @click="changeAuth(row.id,'2')"></i></td>
-                                </tr>
-                             
-                            </tbody>
-                        </table>
+                       <el-collapse v-model="activeNames" @change="handleChange" v-for="(groups,index) in this.filterUnit" :key="index">
+                            <el-collapse-item :title="groups.group" :name="index">
+                                <table class="table">
+                                    <tbody>
+                                        <tr v-for="column in groups.columns" :key='column.id'>
+                                            <th scope="row">{{column.columnname}}</th>
+                                            <td :class="[column.status!=='0'?'style-color':'']"><i class="fas fa-eye" @click="changeAuth(column.id,'0')"></i></td>
+                                            <td :class="[column.status!=='1'?'style-color':'']"><i class="fas fa-eye-slash" @click="changeAuth(column.id,'1')"></i></td>
+                                            <td :class="[column.status!=='2'?'style-color':'']"><i class="fas fa-times" @click="changeAuth(column.id,'2')"></i></td>
+                                        </tr>
+                                    
+                                    </tbody>
+                                </table>
+                             </el-collapse-item>
+                        </el-collapse>
 
                       
                        
@@ -67,40 +70,78 @@ export default {
     },
     data() {
         return{
+            activeNames: ['1'],
             authGroup:[],
             authList:{},
+            temp:{},
             currentAuthGroup:'',
             rows_copy:[],
             rows: [
-                {
-                    creationDate: null,
-                    creationUser: null,
-                    modifyDate: null,
-                    modifyUser: null,
-                    version: 0,
-                    id: 7,
-                    tablename: "學生學籍維度",
-                    authName: "Test1",
-                    columngroup: "個人資料",
-                    etlauth: "2"
-                }
+                // {
+                //     creationDate: null,
+                //     creationUser: null,
+                //     modifyDate: null,
+                //     modifyUser: null,
+                //     version: 0,
+                //     id: 7,
+                //     tablename: "學生學籍維度",
+                //     authName: "Test1",
+                //     columngroup: "個人資料",
+                //     etlauth: "2"
+                // }
             ],
         }
     },
     mounted: function () { 
         this.getFindUnit();
+        // this.loadJSON('winni.json',(res)=>{
+        //     this.temp=res;
+        //     // console.log('AA',res)
+        // });
     },
     computed: {
-
+        filterUnit(){
+                const raw=this.authList;
+                const allowed = this.currentAuthGroup;
+                let authList=[];
+                const filtered = Object.keys(raw)
+                .filter(key => allowed.includes(key))
+                .reduce((obj, key) => {
+                    obj[key] = raw[key];
+                    return obj;
+                }, {});
+                // console.log('filtered',filtered);
+                if(allowed!==''){
+                     authList=filtered[allowed].auth;
+                }
+                return authList;
+        }
     },
     methods:{
+        handleChange(val) {
+            console.log(val);
+        },
+        loadJSON(jsonName, callback) {
+            var xobj = new XMLHttpRequest();
+            xobj.overrideMimeType("application/json");
+            xobj.open("GET", jsonName, true); // Replace 'my_data' with the path to your file
+            xobj.onreadystatechange = function () {
+                if (xobj.readyState == 4 && xobj.status == "200") {
+                // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                console.log('responseText',xobj.responseText)
+                callback(JSON.parse(xobj.responseText));
+                }
+            };
+            xobj.send(null);  
+        },
         // 單位變動
         changeAuthGroup(e){
             this.currentAuthGroup=e.target.value;
-            this.getQueryAuthGroup();
+            // this.getQueryAuthGroup();
         },
         // 權限變動
         changeAuth(id,type){
+            
             var updateData = new Promise((resolve, reject)=>{
                 for(let item in this.rows){
                     if(this.rows[item].id===id){   
@@ -110,7 +151,7 @@ export default {
                  resolve();
             })
             updateData.then((res)=>{
-                 this.getUpdateAuthGroup();
+                //  this.getUpdateAuthGroup();
             })
            
 
@@ -135,6 +176,7 @@ export default {
             apiFindUnit({})
             .then((response)=>{
                 console.log('查找所有單位',response.data)
+                this.rows=JSON.parse(JSON.stringify(response.data));
                 this.authGroup=[];
                 for(let item in response.data){
                     this.authGroup.push(response.data[item].authName);
@@ -149,68 +191,136 @@ export default {
             })
             .then(()=>{
                 this.getQueryTableColumn();
-                // this.currentAuthGroup=this.authGroup[0];
+                this.currentAuthGroup=this.authGroup[0];
             })
             .then(()=>{
-                 
-                // this.getQueryAuthGroup();
+              
             })
         },
+        // 查找群組和欄位
         getQueryTableColumn(){
-            apiQueryTableColumn({},this.tableName).then((response)=>{
-                console.log('查找群組和欄位----->',response.data);
+            apiQueryTableColumn({},this.tableName)
+            .then((response)=>{
+               
+                // response.data=this.temp;
+                 console.log('查找群組和欄位----->',response.data);
+                //  debugger;
                 for(let item in response.data){
+                    // item=註冊組
                     for(let item2 in this.authList){
                         let obj={
                             group:'',
                             columns:[]
                         }
+                        obj.group=item;
                         for(let item3 of response.data[item]){
                             let obj2={
                                 id: null,
                                 columnengname: "",
                                 columnname: "",
-                                status:0
+                                status:"0"
                             }
                             obj2.id=item3.id;
                             obj2.columnengname=item3.columnengname;
                             obj2.columnname=item3.columnname;
                             obj.columns.push(obj2);
                         }
-                        obj.group=item;
+                       
                         this.authList[item2].auth.push(obj);
                     }
                 }
 
                 for(let unit of this.authGroup){
                     // console.log(value)
-                    let columns = this.getAuth(unit,response.data);
-                    // console.log(unit,columns)
-                    for(let groupOp of this.authList[unit].auth){
-                        for(let column of columns){
-                            if(column.group===groupOp.group){
-                                for(let value of groupOp.columns){
-                                    if(value.columnengname===column.columnengname){
-                                           value.status=1;
+                     var updateData = new Promise((resolve, reject)=>{
+                         let matchColumns = this.getAuth(unit,JSON.parse(JSON.stringify(response.data)));
+                         resolve({unit,matchColumns});
+                     });
+
+                    
+                    // console.log('columns----->',unit,columns)
+
+                    updateData.then(({unit,matchColumns})=>{
+                        // console.log('res',unit,matchColumns)
+                        for(let groupOp of this.authList[unit].auth){
+                            // groupOp=[
+                            //     {
+                            //         columns:Array[22]
+                            //         group:"學籍資訊"
+                            //     }
+                            // ]
+                            // matchColumns回傳匹配
+                            // {
+                            //     id: 2
+                            //     columnengname: "stuStatus"
+                            //     columnname: "身分別"
+                            //     authName: (3) ["綜合業務組:0", "註冊組:2", "系統管理者:1"]
+                            //     group: "學籍資訊"
+                            //     status: "2"
+                            // }
+                            for(let matchColumn of matchColumns){
+                                if(matchColumn.group===groupOp.group){
+                                    for(let column of groupOp.columns){
+                                        // groupOp.columns
+                                        // [
+                                        //     {columnengname:"stuStatus"
+                                        //     columnname:"身分別"
+                                        //     id:2
+                                        //     status:0}
+
+                                        // ]
+                                        if(column.columnengname===matchColumn.columnengname){
+                                            column.status=matchColumn.status
+                                        }
                                     }
+                                
                                 }
-                              
                             }
                         }
-                    }
+                    })
+
                     
                 }
+            })
+            .then((response)=>{
+                // const raw=this.authList;
+                // const allowed = this.currentAuthGroup;
+                //  const filtered = Object.keys(raw)
+                // .filter(key => allowed.includes(key))
+                // .reduce((obj, key) => {
+                //     obj[key] = raw[key];
+                //     return obj;
+                // }, {});
+
+                // console.log(filtered);
+                // this.getQueryAuthGroup();
             })
         },
         getAuth(unit,data){
             let ArrayList=[];
             for(let item in data){
                 for(let item2 of data[item]){
-                    // console.log(item2.authName)
-                    if(item2.authName.indexOf(unit)>=0){
-                        this.$set(item2,'group',item);
-                        ArrayList.push(item2)
-                    }
+                    // console.log(item2.authName,unit,item2.authName.indexOf(unit))
+                        let authname=item2.authName.filter(e=>{
+                            // console.log(e,e.indexOf(unit))
+                            return e.indexOf(unit)>=0
+                        });
+                        // console.log('authname----->',authname)
+
+                        if(authname.length>0){
+                            // console.log(authname)
+                            // console.log(item2.authName,item2.authName[])
+                            this.$set(item2,'group',item);
+                            // console.log(authname[0].substring(authname[0].length-1,authname[0].length))
+                             
+                            this.$set(item2,'status',authname[0].substring(authname[0].length-1,authname[0].length));
+                           
+                            ArrayList.push(item2)    
+                        }
+                    // if(item2.authName.indexOf(unit)>=0){
+                
+                      
+                    // }
 
                 }
             }

@@ -1,0 +1,1742 @@
+{
+  "學籍資訊": [
+    {
+      "id": 2,
+      "columnengname": "stuStatus",
+      "columnname": "身分別",
+      "authName": [
+        "註冊組":1,
+        "綜合業務組":0,
+        "系統管理者":2
+      ]
+    },
+    {
+      "id": 3,
+      "columnengname": "enrollType",
+      "columnname": "入學管道",
+      "authName": [
+		"註冊組":1,
+        "綜合業務組":2,
+        "系統管理者":0
+	  ]
+    },
+    {
+      "id": 4,
+      "columnengname": "enrollSYear",
+      "columnname": "入學學年",
+      "authName": [
+	  	"註冊組":0,
+        "綜合業務組":1,
+        "系統管理者":2
+		]
+    },
+    {
+      "id": 5,
+      "columnengname": "enrollSmt",
+      "columnname": "入學學期",
+      "authName": []
+    },
+    {
+      "id": 6,
+      "columnengname": "inStuGrade",
+      "columnname": "入學年級",
+      "authName": []
+    },
+    {
+      "id": 7,
+      "columnengname": "inStuDegree",
+      "columnname": "入學學制",
+      "authName": []
+    },
+    {
+      "id": 8,
+      "columnengname": "inStuCollege",
+      "columnname": "入學學院",
+      "authName": []
+    },
+    {
+      "id": 9,
+      "columnengname": "inStuCollegeID",
+      "columnname": "入學學院代碼",
+      "authName": []
+    },
+    {
+      "id": 10,
+      "columnengname": "inStuDept",
+      "columnname": "入學學系",
+      "authName": []
+    },
+    {
+      "id": 11,
+      "columnengname": "inStuDeptID",
+      "columnname": "入學學系代碼",
+      "authName": []
+    },
+    {
+      "id": 12,
+      "columnengname": "inStuCls",
+      "columnname": "入學班級",
+      "authName": []
+    },
+    {
+      "id": 13,
+      "columnengname": "inStuClsID",
+      "columnname": "入學班級代碼",
+      "authName": []
+    },
+    {
+      "id": 14,
+      "columnengname": "inStuClsType",
+      "columnname": "入學部別",
+      "authName": []
+    },
+    {
+      "id": 15,
+      "columnengname": "inStuSuper",
+      "columnname": "入學特殊專班",
+      "authName": []
+    },
+    {
+      "id": 16,
+      "columnengname": "trans",
+      "columnname": "是否轉系",
+      "authName": []
+    },
+    {
+      "id": 17,
+      "columnengname": "transSYear",
+      "columnname": "轉系學年",
+      "authName": []
+    },
+    {
+      "id": 18,
+      "columnengname": "transStuCollege",
+      "columnname": "轉入學院",
+      "authName": []
+    },
+    {
+      "id": 19,
+      "columnengname": "transStuCollegeID",
+      "columnname": "轉入學院代碼",
+      "authName": []
+    },
+    {
+      "id": 20,
+      "columnengname": "transStuDept",
+      "columnname": "轉入學系",
+      "authName": []
+    },
+    {
+      "id": 21,
+      "columnengname": "transStuDeptID",
+      "columnname": "轉入學系代碼",
+      "authName": []
+    },
+    {
+      "id": 22,
+      "columnengname": "transStuClsID",
+      "columnname": "轉入班級代碼",
+      "authName": []
+    },
+    {
+      "id": 23,
+      "columnengname": "transStuClsType",
+      "columnname": "轉入部別",
+      "authName": []
+    }
+  ],
+  "教學發展": [
+    {
+      "id": 185,
+      "columnengname": "interNum",
+      "columnname": "累計實習次數",
+      "authName": []
+    },
+    {
+      "id": 186,
+      "columnengname": "tANum",
+      "columnname": "累計擔任勞雇TA次數",
+      "authName": []
+    },
+    {
+      "id": 187,
+      "columnengname": "licenseNum",
+      "columnname": "累計請領證照補助次數",
+      "authName": []
+    },
+    {
+      "id": 188,
+      "columnengname": "remedialNum",
+      "columnname": "累計參與補救教學次數",
+      "authName": []
+    },
+    {
+      "id": 189,
+      "columnengname": "remedialHours",
+      "columnname": "累計參與補救教學總時數",
+      "authName": []
+    },
+    {
+      "id": 190,
+      "columnengname": "warningNum",
+      "columnname": "累計期中預警次數",
+      "authName": []
+    },
+    {
+      "id": 191,
+      "columnengname": "consultNum",
+      "columnname": "累計導師輔導次數",
+      "authName": []
+    }
+  ],
+  "圖書利用": [
+    {
+      "id": 171,
+      "columnengname": "inLibraryNum",
+      "columnname": "累計圖書館進入次數",
+      "authName": []
+    },
+    {
+      "id": 172,
+      "columnengname": "outLibraryNum",
+      "columnname": "累計圖書館出場次數",
+      "authName": []
+    },
+    {
+      "id": 173,
+      "columnengname": "borrowBLibraryNum",
+      "columnname": "累計圖書借閱次數",
+      "authName": []
+    },
+    {
+      "id": 174,
+      "columnengname": "borrowVLibraryNum",
+      "columnname": "累計影音借閱次數",
+      "authName": []
+    },
+    {
+      "id": 175,
+      "columnengname": "borrowRLibraryNum",
+      "columnname": "累計討論室借用次數",
+      "authName": []
+    }
+  ],
+  "入學前資訊": [
+    {
+      "id": 207,
+      "columnengname": "stuHighSchool",
+      "columnname": "入學前畢業學校",
+      "authName": []
+    },
+    {
+      "id": 208,
+      "columnengname": "stuHighSchoolID",
+      "columnname": "入學前畢業學校代碼",
+      "authName": []
+    },
+    {
+      "id": 209,
+      "columnengname": "stuHighDept",
+      "columnname": "入學前科系所",
+      "authName": []
+    },
+    {
+      "id": 210,
+      "columnengname": "stuHighDeptID",
+      "columnname": "入學前科系所代碼",
+      "authName": []
+    },
+    {
+      "id": 211,
+      "columnengname": "stuHighDegree",
+      "columnname": "入學前最高學歷別",
+      "authName": []
+    },
+    {
+      "id": 212,
+      "columnengname": "stuHighDegreeDate",
+      "columnname": "入學前最高學歷畢業年",
+      "authName": []
+    },
+    {
+      "id": 213,
+      "columnengname": "enlistening",
+      "columnname": "英聽成績(含聽障生註記)",
+      "authName": []
+    },
+    {
+      "id": 214,
+      "columnengname": "tCTECh",
+      "columnname": "統測國文",
+      "authName": []
+    },
+    {
+      "id": 215,
+      "columnengname": "tCTEEn",
+      "columnname": "統測英文",
+      "authName": []
+    },
+    {
+      "id": 216,
+      "columnengname": "tCTEMa",
+      "columnname": "統測數學",
+      "authName": []
+    },
+    {
+      "id": 217,
+      "columnengname": "tCTEPro1",
+      "columnname": "統測專一",
+      "authName": []
+    },
+    {
+      "id": 218,
+      "columnengname": "tCTEPro2",
+      "columnname": "統測專二",
+      "authName": []
+    },
+    {
+      "id": 219,
+      "columnengname": "prTCTECh",
+      "columnname": "統測國文原級分",
+      "authName": []
+    },
+    {
+      "id": 220,
+      "columnengname": "prTCTEEn",
+      "columnname": "統測英文原級分",
+      "authName": []
+    },
+    {
+      "id": 221,
+      "columnengname": "prTCTEMa",
+      "columnname": "統測數學原級分",
+      "authName": []
+    },
+    {
+      "id": 222,
+      "columnengname": "prTCTEPro1",
+      "columnname": "統測專一原級分",
+      "authName": []
+    },
+    {
+      "id": 223,
+      "columnengname": "prTCTEPro2",
+      "columnname": "統測專二原級分",
+      "authName": []
+    },
+    {
+      "id": 224,
+      "columnengname": "gSATSi",
+      "columnname": "學測自然級分",
+      "authName": []
+    },
+    {
+      "id": 225,
+      "columnengname": "gSATSo",
+      "columnname": "學測社會級分",
+      "authName": []
+    },
+    {
+      "id": 226,
+      "columnengname": "gSATEn",
+      "columnname": "學測英文級分",
+      "authName": []
+    },
+    {
+      "id": 227,
+      "columnengname": "gSATCh",
+      "columnname": "學測國文級分",
+      "authName": []
+    },
+    {
+      "id": 228,
+      "columnengname": "gSATMa",
+      "columnname": "學測數學級分",
+      "authName": []
+    },
+    {
+      "id": 229,
+      "columnengname": "cEESo",
+      "columnname": "指定考科公民與社會",
+      "authName": []
+    },
+    {
+      "id": 230,
+      "columnengname": "cEEChe",
+      "columnname": "指定考科化學",
+      "authName": []
+    },
+    {
+      "id": 231,
+      "columnengname": "cEEBio",
+      "columnname": "指定考科生物",
+      "authName": []
+    },
+    {
+      "id": 232,
+      "columnengname": "cEEGeo",
+      "columnname": "指定考科地理",
+      "authName": []
+    },
+    {
+      "id": 233,
+      "columnengname": "cEEPhy",
+      "columnname": "指定考科物理",
+      "authName": []
+    },
+    {
+      "id": 234,
+      "columnengname": "cEEEn",
+      "columnname": "指定考科英文",
+      "authName": []
+    },
+    {
+      "id": 235,
+      "columnengname": "cEECh",
+      "columnname": "指定考科國文",
+      "authName": []
+    },
+    {
+      "id": 236,
+      "columnengname": "cEEMa2",
+      "columnname": "指定考科數學乙",
+      "authName": []
+    },
+    {
+      "id": 237,
+      "columnengname": "cEEMa1",
+      "columnname": "指定考科數學甲",
+      "authName": []
+    },
+    {
+      "id": 238,
+      "columnengname": "cEEHis",
+      "columnname": "指定考科歷史",
+      "authName": []
+    },
+    {
+      "id": 239,
+      "columnengname": "admissionRank",
+      "columnname": "錄取名次",
+      "authName": []
+    },
+    {
+      "id": 240,
+      "columnengname": "choiceRank",
+      "columnname": "志願序",
+      "authName": []
+    },
+    {
+      "id": 241,
+      "columnengname": "tCTEPR",
+      "columnname": "統測PR",
+      "authName": []
+    },
+    {
+      "id": 242,
+      "columnengname": "gSATPR",
+      "columnname": "學測PR",
+      "authName": []
+    },
+    {
+      "id": 243,
+      "columnengname": "cEEPR",
+      "columnname": "指考PR",
+      "authName": []
+    },
+    {
+      "id": 244,
+      "columnengname": "deptPR",
+      "columnname": "校系分則PR",
+      "authName": []
+    },
+    {
+      "id": 245,
+      "columnengname": "dataSouce",
+      "columnname": "資料輸入源",
+      "authName": []
+    },
+    {
+      "id": 246,
+      "columnengname": "moeSubject",
+      "columnname": "競賽或獲獎名稱",
+      "authName": []
+    },
+    {
+      "id": 247,
+      "columnengname": "moeType",
+      "columnname": "證照或獲獎種類",
+      "authName": []
+    },
+    {
+      "id": 248,
+      "columnengname": "moeRank",
+      "columnname": "證照或獲獎名次",
+      "authName": []
+    },
+    {
+      "id": 249,
+      "columnengname": "mainlandCh",
+      "columnname": "語文成績",
+      "authName": []
+    },
+    {
+      "id": 250,
+      "columnengname": "mainlandMa",
+      "columnname": "數學成績",
+      "authName": []
+    },
+    {
+      "id": 251,
+      "columnengname": "mainlandEn",
+      "columnname": "外語成績",
+      "authName": []
+    },
+    {
+      "id": 252,
+      "columnengname": "mainlandMix",
+      "columnname": "綜合成績",
+      "authName": []
+    },
+    {
+      "id": 253,
+      "columnengname": "schoolRank",
+      "columnname": "在校學業成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 254,
+      "columnengname": "schoolChRank",
+      "columnname": "國文學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 255,
+      "columnengname": "schoolEnRank",
+      "columnname": "英文學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 256,
+      "columnengname": "schoolMaRank",
+      "columnname": "數學學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 257,
+      "columnengname": "schoolPhyRank",
+      "columnname": "物理學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 258,
+      "columnengname": "schoolCheRank",
+      "columnname": "化學學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 259,
+      "columnengname": "schoolBioRank",
+      "columnname": "生物學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 260,
+      "columnengname": "schoolGeosiRank",
+      "columnname": "地球科學學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 261,
+      "columnengname": "schoolHisRank",
+      "columnname": "歷史學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 262,
+      "columnengname": "schoolGeoRank",
+      "columnname": "地理學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 263,
+      "columnengname": "schoolSoRank",
+      "columnname": "公民與社會學業總平均成績全校排名百分比",
+      "authName": []
+    },
+    {
+      "id": 264,
+      "columnengname": "schoolPERank",
+      "columnname": "體育學業總平均成績全校排名百分比",
+      "authName": []
+    }
+  ],
+  "畢業滿5年流向調查": [
+    {
+      "id": 133,
+      "columnengname": "gra5Q01",
+      "columnname": "一、您目前的工作狀況為何（不包括留職停薪、育嬰假，請依主要薪水來源作答）？（本題選答1、2、3項者，第7題無須填答；另畢業生如同時為「全職工作者與部分工時者」，請以最主要工作狀況填報以下問項）",
+      "authName": []
+    },
+    {
+      "id": 134,
+      "columnengname": "gra5Q02",
+      "columnname": "二、您目前服務的部門別(請畢業生填報最相似的工作服務部門)？",
+      "authName": []
+    },
+    {
+      "id": 135,
+      "columnengname": "gra5Q03",
+      "columnname": "三、您目前是否擔任主管?",
+      "authName": []
+    },
+    {
+      "id": 136,
+      "columnengname": "gra5Q04",
+      "columnname": "四、您目前最主要的工作行業類別為？（例如計程車司機請勾「運輸及倉儲業」，但在醫院開救護車者，請勾選「醫療保護及社會工作服務業」…等）",
+      "authName": []
+    },
+    {
+      "id": 137,
+      "columnengname": "gra5Q05",
+      "columnname": "五、您現在工作平均每月收入為何？(請回答課稅前固定（經常）性收入，係指固定津貼、交通費、膳食費、水電費、按月發放之工作（生產、績效、業績）獎金及全勤獎金等)",
+      "authName": []
+    },
+    {
+      "id": 138,
+      "columnengname": "gra5Q06",
+      "columnname": "六、請問您現在主要的工作所在地點為何？",
+      "authName": []
+    },
+    {
+      "id": 139,
+      "columnengname": "gra5Q07",
+      "columnname": "七、您目前未就業的原因為何?",
+      "authName": []
+    },
+    {
+      "id": 140,
+      "columnengname": "gra5Q08",
+      "columnname": "八、您原先就讀系、所、或學位學程的專業訓練課程，對於您目前工作的幫助程度為何？",
+      "authName": []
+    },
+    {
+      "id": 141,
+      "columnengname": "gra5Q09",
+      "columnname": "九、您在學期間，以下哪種「學習經驗」對於現在工作最有幫助？(可複選，至多三項)",
+      "authName": []
+    },
+    {
+      "id": 142,
+      "columnengname": "gra5Q10",
+      "columnname": "十、根據您畢業到現在的經驗，學校最應該幫學弟妹加強以下哪些能力？(可複選，至多3項)",
+      "authName": []
+    },
+    {
+      "id": 143,
+      "columnengname": "gra5Q11",
+      "columnname": "十一、根據您畢業後到現在的經驗，您認為學校對您那些能力的培養最有幫助？(可複選，至多3項)",
+      "authName": []
+    },
+    {
+      "id": 144,
+      "columnengname": "gra5Q12",
+      "columnname": "十二、如果您現在有進修機會的話，「最」想在學校進修的是哪一個學門?",
+      "authName": []
+    },
+    {
+      "id": 145,
+      "columnengname": "gra5Q13",
+      "columnname": "無法填答原因",
+      "authName": []
+    }
+  ],
+  "校園生活": [
+    {
+      "id": 176,
+      "columnengname": "pTNum",
+      "columnname": "累計擔任人事室列管勞雇工讀生次數",
+      "authName": []
+    },
+    {
+      "id": 177,
+      "columnengname": "pTAmount",
+      "columnname": "累計擔任人事室列管勞雇工讀生請領薪資總額",
+      "authName": []
+    },
+    {
+      "id": 178,
+      "columnengname": "clsLeaderNum",
+      "columnname": "累計擔任班級幹部次數",
+      "authName": []
+    },
+    {
+      "id": 179,
+      "columnengname": "clubsLeaderNum",
+      "columnname": "累計擔任社團幹部次數",
+      "authName": []
+    },
+    {
+      "id": 180,
+      "columnengname": "residentSmtNum",
+      "columnname": "累計住宿學期數",
+      "authName": []
+    },
+    {
+      "id": 181,
+      "columnengname": "parkSmtNum",
+      "columnname": "累計申請停車證學期數",
+      "authName": []
+    },
+    {
+      "id": 182,
+      "columnengname": "accidNumA",
+      "columnname": "累計甲級校安事故發生次數",
+      "authName": []
+    },
+    {
+      "id": 183,
+      "columnengname": "accidNumB",
+      "columnname": "累計乙級校安事故發生次數",
+      "authName": []
+    },
+    {
+      "id": 184,
+      "columnengname": "accidNumC",
+      "columnname": "累計丙級以下校安事故發生次數",
+      "authName": []
+    }
+  ],
+  "缺曠課": [
+    {
+      "id": 197,
+      "columnengname": "absence1",
+      "columnname": "累計事假次數",
+      "authName": []
+    },
+    {
+      "id": 198,
+      "columnengname": "absence2",
+      "columnname": "累計公假次數              ",
+      "authName": []
+    },
+    {
+      "id": 199,
+      "columnengname": "absence3",
+      "columnname": "累計出國次數              ",
+      "authName": []
+    },
+    {
+      "id": 200,
+      "columnengname": "absence4",
+      "columnname": "累計喪假次數    ",
+      "authName": []
+    },
+    {
+      "id": 201,
+      "columnengname": "absence5",
+      "columnname": "累計婚假次數              ",
+      "authName": []
+    },
+    {
+      "id": 202,
+      "columnengname": "absence6",
+      "columnname": "累計曠課次數              ",
+      "authName": []
+    },
+    {
+      "id": 203,
+      "columnengname": "absence7",
+      "columnname": "累計產假次數              ",
+      "authName": []
+    },
+    {
+      "id": 204,
+      "columnengname": "absence8",
+      "columnname": "累計病假次數              ",
+      "authName": []
+    },
+    {
+      "id": 205,
+      "columnengname": "absence9",
+      "columnname": "累計生理假次數           ",
+      "authName": []
+    },
+    {
+      "id": 206,
+      "columnengname": "absence10",
+      "columnname": "累計不可抗力假次數     ",
+      "authName": []
+    }
+  ],
+  "弱勢助學": [
+    {
+      "id": 271,
+      "columnengname": "reduceNum",
+      "columnname": "減免次數",
+      "authName": []
+    },
+    {
+      "id": 272,
+      "columnengname": "reduceDetail",
+      "columnname": "減免次數明細",
+      "authName": []
+    },
+    {
+      "id": 273,
+      "columnengname": "reduceAmount",
+      "columnname": "減免金額",
+      "authName": []
+    },
+    {
+      "id": 274,
+      "columnengname": "allowanceNum",
+      "columnname": "弱勢助學次數",
+      "authName": []
+    },
+    {
+      "id": 275,
+      "columnengname": "allowanceDetail",
+      "columnname": "弱勢助學次數明細",
+      "authName": []
+    },
+    {
+      "id": 276,
+      "columnengname": "allowanceAmount",
+      "columnname": "弱勢助學金額",
+      "authName": []
+    },
+    {
+      "id": 277,
+      "columnengname": "livingNum",
+      "columnname": "生活助學金領取次數",
+      "authName": []
+    },
+    {
+      "id": 278,
+      "columnengname": "livingDetail",
+      "columnname": "生活助學金領取次數明細",
+      "authName": []
+    },
+    {
+      "id": 279,
+      "columnengname": "livingAmount",
+      "columnname": "生活助學金領取金額",
+      "authName": []
+    },
+    {
+      "id": 280,
+      "columnengname": "emergencyNum",
+      "columnname": "急難救助金領取次數",
+      "authName": []
+    },
+    {
+      "id": 281,
+      "columnengname": "emergencyAmount",
+      "columnname": "急難救助金領取金額",
+      "authName": []
+    }
+  ],
+  "固定帶出": [
+    {
+      "id": 1,
+      "columnengname": "stuCode",
+      "columnname": "學號",
+      "authName": []
+    },
+    {
+      "id": 26,
+      "columnengname": "stuID",
+      "columnname": "身分證號",
+      "authName": []
+    },
+    {
+      "id": 28,
+      "columnengname": "stuNameC",
+      "columnname": "姓名",
+      "authName": []
+    },
+    {
+      "id": 146,
+      "columnengname": "enrollSYear",
+      "columnname": "入學學年",
+      "authName": []
+    }
+  ],
+  "畢業滿3年流向調查": [
+    {
+      "id": 118,
+      "columnengname": "gra3Q01",
+      "columnname": "一、您目前的工作狀況為何（不包括留職停薪、育嬰假，請依主要薪水來源作答）？（本題選答1、2、3項者，第6題無須填答；另畢業生如同時為「全職工作者與部分工時者」，請以最主要工作狀況填報以下問項）",
+      "authName": []
+    },
+    {
+      "id": 119,
+      "columnengname": "gra3Q02",
+      "columnname": "二、您現在工作職業類型（工作內容或屬性）為何？",
+      "authName": []
+    },
+    {
+      "id": 120,
+      "columnengname": "gra3Q03",
+      "columnname": "三、您從學校畢業後至今，是否曾經轉換過公司？",
+      "authName": []
+    },
+    {
+      "id": 121,
+      "columnengname": "gra3Q04",
+      "columnname": "四、您現在工作平均每月收入為何？(請回答課稅前固定（經常）性收入，係指固定津貼、交通費、膳食費、水電費、按月發放之工作（生產、績效、業績）獎金及全勤獎金等)",
+      "authName": []
+    },
+    {
+      "id": 122,
+      "columnengname": "gra3Q05",
+      "columnname": "五、請問您現在主要的工作所在地點為何？",
+      "authName": []
+    },
+    {
+      "id": 123,
+      "columnengname": "gra3Q06",
+      "columnname": "六、您目前未就業的原因為何?",
+      "authName": []
+    },
+    {
+      "id": 124,
+      "columnengname": "gra3Q07",
+      "columnname": "七、您目前所具備的專業能力與工作所要求的相符程度為何？",
+      "authName": []
+    },
+    {
+      "id": 125,
+      "columnengname": "gra3Q08",
+      "columnname": "八、您目前的工作內容，是否需要具備專業證照？",
+      "authName": []
+    },
+    {
+      "id": 126,
+      "columnengname": "gra3Q09",
+      "columnname": "九、您對目前工作的整體滿意度為何?",
+      "authName": []
+    },
+    {
+      "id": 127,
+      "columnengname": "gra3Q10",
+      "columnname": "十、您目前的工作內容與原就讀系、所、學位學程之專業訓練課程，其符合程度為何？",
+      "authName": []
+    },
+    {
+      "id": 128,
+      "columnengname": "gra3Q11",
+      "columnname": "十一、您在學期間以下哪些「學習經驗」對於現在工作有所幫助？(可複選，至多3項)",
+      "authName": []
+    },
+    {
+      "id": 129,
+      "columnengname": "gra3Q12",
+      "columnname": "十二、您是否為了工作或自我生涯發展從事進修或考試，提升自我專業能力？（本題選答「沒有」者，則第13題無須填答）",
+      "authName": []
+    },
+    {
+      "id": 130,
+      "columnengname": "gra3Q13",
+      "columnname": "十三、您覺得從事進修或考試後，對您薪資待遇、職務升遷或工作滿意度的幫助幅度為何？",
+      "authName": []
+    },
+    {
+      "id": 131,
+      "columnengname": "gra3Q14",
+      "columnname": "十四、您覺得學校，除了教授專業知識(主修科系的專業)外，應加強學生以下哪些能力才能做好工作？(可複選，至多3項)",
+      "authName": []
+    },
+    {
+      "id": 132,
+      "columnengname": "gra3Q15",
+      "columnname": "無法填答原因",
+      "authName": []
+    }
+  ],
+  "學術/海外交流經驗": [
+    {
+      "id": 162,
+      "columnengname": "inExchange",
+      "columnname": "是否曾國內交換",
+      "authName": []
+    },
+    {
+      "id": 163,
+      "columnengname": "inExchangeSchool",
+      "columnname": "國內交換學校",
+      "authName": []
+    },
+    {
+      "id": 164,
+      "columnengname": "inExchangeCollege",
+      "columnname": "國內交換學院",
+      "authName": []
+    },
+    {
+      "id": 165,
+      "columnengname": "inExchangeDept",
+      "columnname": "國內交換學系",
+      "authName": []
+    },
+    {
+      "id": 166,
+      "columnengname": "outExchange",
+      "columnname": "是否取得國外大學修業學分證明",
+      "authName": []
+    },
+    {
+      "id": 167,
+      "columnengname": "overseasActivityNum",
+      "columnname": "累計參與海外交流次數",
+      "authName": []
+    },
+    {
+      "id": 168,
+      "columnengname": "overseasActivityDetail",
+      "columnname": "海外交流活動性質明細",
+      "authName": []
+    },
+    {
+      "id": 169,
+      "columnengname": "academicNum",
+      "columnname": "累計參與學術競賽/論文發表次數",
+      "authName": []
+    },
+    {
+      "id": 170,
+      "columnengname": "scienceProjectNum",
+      "columnname": "累計參與科技部大專生研究計畫次數",
+      "authName": []
+    }
+  ],
+  "語言中心": [
+    {
+      "id": 160,
+      "columnengname": "stuLang",
+      "columnname": "語言能力畢業門檻是否達標",
+      "authName": []
+    },
+    {
+      "id": 161,
+      "columnengname": "stuLangMemo",
+      "columnname": "語言能力畢業門檻項目",
+      "authName": []
+    }
+  ],
+  "家庭資料": [
+    {
+      "id": 40,
+      "columnengname": "stuMarry",
+      "columnname": "學生婚姻狀況",
+      "authName": []
+    },
+    {
+      "id": 41,
+      "columnengname": "fatherDied",
+      "columnname": "父親存歿",
+      "authName": []
+    },
+    {
+      "id": 42,
+      "columnengname": "fatherBirth",
+      "columnname": "父親出生年次",
+      "authName": []
+    },
+    {
+      "id": 43,
+      "columnengname": "fatherEdu",
+      "columnname": "父親教育程度",
+      "authName": []
+    },
+    {
+      "id": 44,
+      "columnengname": "fatherWork",
+      "columnname": "父親職業類別",
+      "authName": []
+    },
+    {
+      "id": 45,
+      "columnengname": "motherDied",
+      "columnname": "母親存歿",
+      "authName": []
+    },
+    {
+      "id": 46,
+      "columnengname": "motherBirth",
+      "columnname": "母親出生年次",
+      "authName": []
+    },
+    {
+      "id": 47,
+      "columnengname": "motherEdu",
+      "columnname": "母親教育程度",
+      "authName": []
+    },
+    {
+      "id": 48,
+      "columnengname": "motherWork",
+      "columnname": "母親職業類別",
+      "authName": []
+    },
+    {
+      "id": 49,
+      "columnengname": "fatherNation",
+      "columnname": "父親國籍/地區",
+      "authName": []
+    },
+    {
+      "id": 50,
+      "columnengname": "fatherNative",
+      "columnname": "父親原生國籍",
+      "authName": []
+    },
+    {
+      "id": 51,
+      "columnengname": "motherNation",
+      "columnname": "母親國籍/地區",
+      "authName": []
+    },
+    {
+      "id": 52,
+      "columnengname": "motherNative",
+      "columnname": "母親原生國籍",
+      "authName": []
+    },
+    {
+      "id": 53,
+      "columnengname": "guardRelation",
+      "columnname": "監護人關係",
+      "authName": []
+    },
+    {
+      "id": 54,
+      "columnengname": "guardWork",
+      "columnname": "監護人工作狀況",
+      "authName": []
+    },
+    {
+      "id": 55,
+      "columnengname": "guardWorkType",
+      "columnname": "監護人職業類別",
+      "authName": []
+    },
+    {
+      "id": 56,
+      "columnengname": "guardEdu",
+      "columnname": "監護人教育程度",
+      "authName": []
+    }
+  ],
+  "休退資訊": [
+    {
+      "id": 57,
+      "columnengname": "suspend",
+      "columnname": "是否曾經休學",
+      "authName": []
+    },
+    {
+      "id": 58,
+      "columnengname": "suspendN",
+      "columnname": "累計休學學期數",
+      "authName": []
+    },
+    {
+      "id": 59,
+      "columnengname": "dropStu",
+      "columnname": "是否退學",
+      "authName": []
+    },
+    {
+      "id": 60,
+      "columnengname": "dropSYear",
+      "columnname": "退學學年",
+      "authName": []
+    },
+    {
+      "id": 61,
+      "columnengname": "dropSmt",
+      "columnname": "退學學期",
+      "authName": []
+    },
+    {
+      "id": 62,
+      "columnengname": "dropNameID",
+      "columnname": "退學原因代碼",
+      "authName": []
+    },
+    {
+      "id": 63,
+      "columnengname": "dropName",
+      "columnname": "退學原因",
+      "authName": []
+    }
+  ],
+  "台評會新生問卷": [
+    {
+      "id": 147,
+      "columnengname": "stuFamilyEco",
+      "columnname": "家庭經濟狀況",
+      "authName": []
+    },
+    {
+      "id": 148,
+      "columnengname": "stuDeptwell",
+      "columnname": "系瞭解度",
+      "authName": []
+    },
+    {
+      "id": 149,
+      "columnengname": "stuForeignself",
+      "columnname": "外語能力自評",
+      "authName": []
+    },
+    {
+      "id": 150,
+      "columnengname": "stuAttitude",
+      "columnname": "學習態度",
+      "authName": []
+    },
+    {
+      "id": 151,
+      "columnengname": "stuControl",
+      "columnname": "學習掌控",
+      "authName": []
+    },
+    {
+      "id": 152,
+      "columnengname": "stuCourse",
+      "columnname": "課程評價",
+      "authName": []
+    },
+    {
+      "id": 153,
+      "columnengname": "stuComment",
+      "columnname": "整體評價",
+      "authName": []
+    },
+    {
+      "id": 154,
+      "columnengname": "stuExchange",
+      "columnname": "轉換意圖",
+      "authName": []
+    },
+    {
+      "id": 155,
+      "columnengname": "stuTarget",
+      "columnname": "主要目標",
+      "authName": []
+    },
+    {
+      "id": 156,
+      "columnengname": "stuAtmosphere",
+      "columnname": "學習環境落差值",
+      "authName": []
+    },
+    {
+      "id": 157,
+      "columnengname": "stuEnviroment",
+      "columnname": "校園生活落差值",
+      "authName": []
+    },
+    {
+      "id": 158,
+      "columnengname": "stuCoach",
+      "columnname": "輔導機制落差值",
+      "authName": []
+    },
+    {
+      "id": 159,
+      "columnengname": "stuCredit",
+      "columnname": "課程資源落差值",
+      "authName": []
+    }
+  ],
+  "體育相關": [
+    {
+      "id": 192,
+      "columnengname": "swimNum",
+      "columnname": "累計辦理游泳證次數",
+      "authName": []
+    },
+    {
+      "id": 193,
+      "columnengname": "gymNum",
+      "columnname": "累計辦理健身房證次數",
+      "authName": []
+    },
+    {
+      "id": 194,
+      "columnengname": "schoolTeamNum",
+      "columnname": "累計參加校隊學期數",
+      "authName": []
+    },
+    {
+      "id": 195,
+      "columnengname": "inSportsNum",
+      "columnname": "累計參加校外運動競賽獲獎次數",
+      "authName": []
+    },
+    {
+      "id": 196,
+      "columnengname": "outSportsNum",
+      "columnname": "累計參加校內運動競賽獲獎次數",
+      "authName": []
+    }
+  ],
+  "雙輔學程資訊": [
+    {
+      "id": 78,
+      "columnengname": "doubleMajor",
+      "columnname": "雙主修狀態",
+      "authName": []
+    },
+    {
+      "id": 79,
+      "columnengname": "doubleSYear",
+      "columnname": "申請雙主修學年",
+      "authName": []
+    },
+    {
+      "id": 80,
+      "columnengname": "doubleSYearAbort",
+      "columnname": "放棄雙主修學年",
+      "authName": []
+    },
+    {
+      "id": 81,
+      "columnengname": "doubleCollege",
+      "columnname": "雙主修學院",
+      "authName": []
+    },
+    {
+      "id": 82,
+      "columnengname": "doubleCollegeID",
+      "columnname": "雙主修學院代碼",
+      "authName": []
+    },
+    {
+      "id": 83,
+      "columnengname": "doubleDept",
+      "columnname": "雙主修學系",
+      "authName": []
+    },
+    {
+      "id": 84,
+      "columnengname": "doubleDeptID",
+      "columnname": "雙主修學系代碼",
+      "authName": []
+    },
+    {
+      "id": 85,
+      "columnengname": "doubleDeptID2",
+      "columnname": "雙主修學系代碼2",
+      "authName": []
+    },
+    {
+      "id": 86,
+      "columnengname": "minor",
+      "columnname": "輔系狀態",
+      "authName": []
+    },
+    {
+      "id": 87,
+      "columnengname": "minorSYear",
+      "columnname": "申請輔系學年",
+      "authName": []
+    },
+    {
+      "id": 88,
+      "columnengname": "minorSYearAbort",
+      "columnname": "放棄輔系學年",
+      "authName": []
+    },
+    {
+      "id": 89,
+      "columnengname": "minorCollege",
+      "columnname": "輔系學院",
+      "authName": []
+    },
+    {
+      "id": 90,
+      "columnengname": "minorCollegeID",
+      "columnname": "輔系學院代碼",
+      "authName": []
+    },
+    {
+      "id": 91,
+      "columnengname": "minorDept",
+      "columnname": "輔系學系",
+      "authName": []
+    },
+    {
+      "id": 92,
+      "columnengname": "minorDeptID",
+      "columnname": "輔系學系代碼",
+      "authName": []
+    },
+    {
+      "id": 93,
+      "columnengname": "minorDeptID2",
+      "columnname": "輔系學系代碼2",
+      "authName": []
+    },
+    {
+      "id": 94,
+      "columnengname": "minorSYear_B",
+      "columnname": "申請輔系學年_B",
+      "authName": []
+    },
+    {
+      "id": 95,
+      "columnengname": "minorSYearAbort_B",
+      "columnname": "放棄輔系學年_B",
+      "authName": []
+    },
+    {
+      "id": 96,
+      "columnengname": "minorCollege_B",
+      "columnname": "輔系學院_B",
+      "authName": []
+    },
+    {
+      "id": 97,
+      "columnengname": "minorCollegeID_B",
+      "columnname": "輔系學院代碼_B",
+      "authName": []
+    },
+    {
+      "id": 98,
+      "columnengname": "minorDept_B",
+      "columnname": "輔系學系_B",
+      "authName": []
+    },
+    {
+      "id": 99,
+      "columnengname": "minorDeptID_B",
+      "columnname": "輔系學系代碼_B",
+      "authName": []
+    },
+    {
+      "id": 100,
+      "columnengname": "minorDeptID2_B",
+      "columnname": "輔系學系代碼2_B",
+      "authName": []
+    },
+    {
+      "id": 101,
+      "columnengname": "proCourseGotList_TEXT",
+      "columnname": "取得學分學程清單",
+      "authName": []
+    },
+    {
+      "id": 102,
+      "columnengname": "proCourseAbortN",
+      "columnname": "放棄學分學程筆數",
+      "authName": []
+    },
+    {
+      "id": 103,
+      "columnengname": "proCourseAbortList_TEXT",
+      "columnname": "放棄學分學程清單",
+      "authName": []
+    }
+  ],
+  "畢業滿1年流向調查": [
+    {
+      "id": 104,
+      "columnengname": "gra1Q01",
+      "columnname": "一、您目前的工作狀況為何（不包括留職停薪、育嬰假，請依主要薪水來源作答）？（本題選答1、2、3項者，第6題無須填答；另畢業生如同時為「全職工作者與部分工時者」，請以最主要工作狀況填報以下問項）",
+      "authName": []
+    },
+    {
+      "id": 105,
+      "columnengname": "gra1Q02",
+      "columnname": "二、您現在工作職業類型為何？",
+      "authName": []
+    },
+    {
+      "id": 106,
+      "columnengname": "gra1Q03",
+      "columnname": "三、您畢業後花了多久時間找到第1份工作？（若為創業者，請填答畢業後之創業時間；自由工作者，則以第1份穩定工作時間為主）",
+      "authName": []
+    },
+    {
+      "id": 107,
+      "columnengname": "gra1Q04",
+      "columnname": "四、您現在工作平均每月收入為何？(請回答課稅前固定（經常）性收入，係指固定津貼、交通費、膳食費、水電費、按月發放之工作（生產、績效、業績）獎金及全勤獎金等)",
+      "authName": []
+    },
+    {
+      "id": 108,
+      "columnengname": "gra1Q05",
+      "columnname": "五、請問您現在主要的工作所在地點為何？",
+      "authName": []
+    },
+    {
+      "id": 109,
+      "columnengname": "gra1Q06",
+      "columnname": "六、您目前未就業的原因為何?",
+      "authName": []
+    },
+    {
+      "id": 110,
+      "columnengname": "gra1Q07",
+      "columnname": "七、您目前所具備的專業能力與工作所要求的相符程度為何？",
+      "authName": []
+    },
+    {
+      "id": 111,
+      "columnengname": "gra1Q08",
+      "columnname": "八、您目前的工作內容，是否需要具備專業證照？",
+      "authName": []
+    },
+    {
+      "id": 112,
+      "columnengname": "gra1Q09",
+      "columnname": "九、您對目前工作的整體滿意度為何?",
+      "authName": []
+    },
+    {
+      "id": 113,
+      "columnengname": "gra1Q10",
+      "columnname": "十、您目前的工作內容與原就讀系、所、學位學程之專業訓練課程，其符合程度為何？",
+      "authName": []
+    },
+    {
+      "id": 114,
+      "columnengname": "gra1Q11",
+      "columnname": "十一、您在學期間以下哪些「學習經驗」對於現在工作有所幫助？(可複選，至多3項)",
+      "authName": []
+    },
+    {
+      "id": 115,
+      "columnengname": "gra1Q12",
+      "columnname": "十二、您是否為了工作或自我生涯發展從事進修或考試，提升自我專業能力？",
+      "authName": []
+    },
+    {
+      "id": 116,
+      "columnengname": "gra1Q13",
+      "columnname": "十三、您最常參與過學校哪些職涯活動或就業服務的幫助？(可複選，至多3項)",
+      "authName": []
+    },
+    {
+      "id": 117,
+      "columnengname": "gra1Q14",
+      "columnname": "無法填答原因",
+      "authName": []
+    }
+  ],
+  "畢業資訊": [
+    {
+      "id": 64,
+      "columnengname": "graCredits",
+      "columnname": "畢業實得學分數",
+      "authName": []
+    },
+    {
+      "id": 65,
+      "columnengname": "graAvg",
+      "columnname": "畢業總平均",
+      "authName": []
+    },
+    {
+      "id": 66,
+      "columnengname": "graSee",
+      "columnname": "畢業系排名",
+      "authName": []
+    },
+    {
+      "id": 67,
+      "columnengname": "graSeeTotal",
+      "columnname": "畢業系人數",
+      "authName": []
+    },
+    {
+      "id": 68,
+      "columnengname": "graSYear",
+      "columnname": "畢業學年",
+      "authName": []
+    },
+    {
+      "id": 69,
+      "columnengname": "graSmt",
+      "columnname": "畢業學期",
+      "authName": []
+    },
+    {
+      "id": 70,
+      "columnengname": "graQualification",
+      "columnname": "授予學位",
+      "authName": []
+    },
+    {
+      "id": 71,
+      "columnengname": "graDegree",
+      "columnname": "畢業部別",
+      "authName": []
+    },
+    {
+      "id": 72,
+      "columnengname": "graCollege",
+      "columnname": "畢業學院",
+      "authName": []
+    },
+    {
+      "id": 73,
+      "columnengname": "graCollegeID",
+      "columnname": "畢業學院代碼",
+      "authName": []
+    },
+    {
+      "id": 74,
+      "columnengname": "graDept",
+      "columnname": "畢業系所",
+      "authName": []
+    },
+    {
+      "id": 75,
+      "columnengname": "graDeptID",
+      "columnname": "畢業系所代碼",
+      "authName": []
+    },
+    {
+      "id": 76,
+      "columnengname": "graClsId",
+      "columnname": "畢業班級代碼",
+      "authName": []
+    },
+    {
+      "id": 77,
+      "columnengname": "graDelay",
+      "columnname": "是否延畢",
+      "authName": []
+    }
+  ],
+  "個人資料": [
+    {
+      "id": 24,
+      "columnengname": "stuNation",
+      "columnname": "國別",
+      "authName": []
+    },
+    {
+      "id": 25,
+      "columnengname": "stuBirth_D",
+      "columnname": "出生日期",
+      "authName": []
+    },
+    {
+      "id": 27,
+      "columnengname": "stuPassportID",
+      "columnname": "護照號碼",
+      "authName": []
+    },
+    {
+      "id": 29,
+      "columnengname": "stuZip",
+      "columnname": "戶籍地郵遞區號",
+      "authName": []
+    },
+    {
+      "id": 30,
+      "columnengname": "stuSex",
+      "columnname": "性別",
+      "authName": []
+    },
+    {
+      "id": 31,
+      "columnengname": "indigenous",
+      "columnname": "是否為原住民",
+      "authName": []
+    },
+    {
+      "id": 32,
+      "columnengname": "disabled",
+      "columnname": "是否為身心障礙者",
+      "authName": []
+    },
+    {
+      "id": 33,
+      "columnengname": "indigenousType",
+      "columnname": "原住民族籍別",
+      "authName": []
+    },
+    {
+      "id": 34,
+      "columnengname": "stuReligion",
+      "columnname": "宗教",
+      "authName": []
+    },
+    {
+      "id": 35,
+      "columnengname": "stuBirthPlace",
+      "columnname": "出生地",
+      "authName": []
+    },
+    {
+      "id": 36,
+      "columnengname": "stuOverseasResiding",
+      "columnname": "僑生僑居地",
+      "authName": []
+    },
+    {
+      "id": 37,
+      "columnengname": "stuComZip",
+      "columnname": "通訊郵遞區號",
+      "authName": []
+    },
+    {
+      "id": 38,
+      "columnengname": "stuEcoSource",
+      "columnname": "經濟來源",
+      "authName": []
+    },
+    {
+      "id": 39,
+      "columnengname": "stuMilitary",
+      "columnname": "兵役狀態",
+      "authName": []
+    }
+  ],
+  "獎學金資料": [
+    {
+      "id": 265,
+      "columnengname": "inScholarshipNum",
+      "columnname": "獲頒校內獎學金次數",
+      "authName": []
+    },
+    {
+      "id": 266,
+      "columnengname": "inScholarshipDetail",
+      "columnname": "獲頒校內獎學金次數明細",
+      "authName": []
+    },
+    {
+      "id": 267,
+      "columnengname": "inScholarshipAmout",
+      "columnname": "獲頒校內獎學金金額",
+      "authName": []
+    },
+    {
+      "id": 268,
+      "columnengname": "outScholarshipNum",
+      "columnname": "獲頒校外獎學金次數",
+      "authName": []
+    },
+    {
+      "id": 269,
+      "columnengname": "outScholarshipDetail",
+      "columnname": "獲頒校外獎學金次數明細",
+      "authName": []
+    },
+    {
+      "id": 270,
+      "columnengname": "outScholarshipAmount",
+      "columnname": "獲頒校外獎學金金額",
+      "authName": []
+    }
+  ]
+}
