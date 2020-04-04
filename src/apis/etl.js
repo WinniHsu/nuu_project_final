@@ -11,6 +11,7 @@ export const apiQueryAuthGroup =(params) => req('post','/api/etlcontroller/Encry
 export const apiUpdateAuthGroup =(params) => req('post','/api/etlcontroller/updateEncryptiongroup',params);
 
 // 排程修改
-export const apiUpdateTime =(params) => req('post','/api/etlcontroller/updateTime',params);
+// export const apiUpdateTime =(params) => req('post','/api/etlcontroller/updateTime',params);
+export const apiUpdateTime =(params) => req('post','/api/etlcontroller/saveauth',params);
 //查找表單底下的group和欄位
 export const apiQueryTableColumn =(params,tableName) => req('post','/api/etlcontroller/queryTableColumn/'+tableName,params);

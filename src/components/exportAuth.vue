@@ -13,17 +13,25 @@
                                 <option v-if="authGroup.length>0 " v-for="(auth,index) in authGroup" :key="index" >{{auth}}</option>
                 
                             </select>
-                             <!-- <button style="flex:1" type="button" class="btn btn-success" @click="updateAuthGroup()">更新</button> -->
+                             <button :disabled="save" style="flex:1" type="button" class="btn btn-success" @click="updateAuthGroup()">更新</button>
                         </div>
                        <el-collapse v-model="activeNames" @change="handleChange" v-for="(groups,index) in this.filterUnit" :key="index">
                             <el-collapse-item :title="groups.group" :name="index">
                                 <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th :class="[AllStatusC(groups.group)!=='0'?'style-color':'']"><i class="fas fa-eye" @click="changeAuth('group',groups.group,'0')">全選</i></th>
+                                            <th :class="[AllStatusC(groups.group)!=='1'?'style-color':'']"><i class="fas fa-eye-slash"  @click="changeAuth('group',groups.group,'1')">全選</i></th>
+                                            <th :class="[AllStatusC(groups.group)!=='2'?'style-color':'']"><i class="fas fa-times"  @click="changeAuth('group',groups.group,'2')">全選</i></th>
+                                        </tr>
+                                    </thead>  
                                     <tbody>
                                         <tr v-for="column in groups.columns" :key='column.id'>
                                             <th scope="row">{{column.columnname}}</th>
-                                            <td :class="[column.status!=='0'?'style-color':'']"><i class="fas fa-eye" @click="changeAuth(column.id,'0')"></i></td>
-                                            <td :class="[column.status!=='1'?'style-color':'']"><i class="fas fa-eye-slash" @click="changeAuth(column.id,'1')"></i></td>
-                                            <td :class="[column.status!=='2'?'style-color':'']"><i class="fas fa-times" @click="changeAuth(column.id,'2')"></i></td>
+                                            <td :class="[column.status!=='0'?'style-color':'']"><i class="fas fa-eye" @click="changeAuth('columnId',column.id,'0')"></i></td>
+                                            <td :class="[column.status!=='1'?'style-color':'']"><i class="fas fa-eye-slash" @click="changeAuth('columnId',column.id,'1')"></i></td>
+                                            <td :class="[column.status!=='2'?'style-color':'']"><i class="fas fa-times" @click="changeAuth('columnId',column.id,'2')"></i></td>
                                         </tr>
                                     
                                     </tbody>
@@ -70,6 +78,7 @@ export default {
     },
     data() {
         return{
+            save:true,
             activeNames: ['1'],
             authGroup:[],
             authList:{},
@@ -93,7 +102,7 @@ export default {
         }
     },
     mounted: function () { 
-        this.getFindUnit();
+        // this.getFindUnit();
         // this.loadJSON('winni.json',(res)=>{
         //     this.temp=res;
         //     // console.log('AA',res)
@@ -115,7 +124,45 @@ export default {
                      authList=filtered[allowed].auth;
                 }
                 return authList;
+        },
+        AllStatusC(){
+            return function(group){
+                 let allStatus="3";
+                for(let item of this.filterUnit){
+                    if(item.group===group){
+                        let len=item.columns.length;
+                        let status0=0;
+                        let status1=0;
+                        let status2=0;
+                       
+                        for(let item1 of item.columns){
+                            if(item1.status==='0'){
+                                status0++
+                            }else if(item1.status==='1'){
+                                status1++
+                            }else if(item1.status==='2'){
+                                status2++
+                            }
+                        }
+                        if(status0===len){
+                            allStatus='0'
+                        }else if(status1===len){
+                             allStatus='1'
+                        }else if(status2===len){
+                             allStatus='2'
+                        }
+                    }
+                }
+       
+                return allStatus;
+            }    
         }
+    // filterUnit:[
+        // {
+    //      columns:Array[22]
+    //      group:"學籍資訊"
+        // }
+    // ],
     },
     methods:{
         handleChange(val) {
@@ -140,37 +187,107 @@ export default {
             // this.getQueryAuthGroup();
         },
         // 權限變動
-        changeAuth(id,type){
-            
-            var updateData = new Promise((resolve, reject)=>{
-                for(let item in this.rows){
-                    if(this.rows[item].id===id){   
-                        this.rows[item].etlauth=type;
-                    }
+        changeAuth(type,id,status){
+          
+            this.save=false;
+        
+                if(type==='group'){
+                    for(let groups in this.filterUnit){
+                        if(this.filterUnit[groups].group===id){
+                            for(let column of this.filterUnit[groups].columns){
+                                column.status=status;
+                            }
+                        }
+                    };
+                }else if(type==='columnId'){
+    
+                    for(let groups in this.filterUnit){
+                        for(let column of this.filterUnit[groups].columns){
+                            if(column.id===id){    
+                                column.status=status;
+                            }
+                        }
+                    };
                 };
-                 resolve();
-            })
-            updateData.then((res)=>{
-                //  this.getUpdateAuthGroup();
-            })
+           
+            // var updateData = new Promise((resolve, reject)=>{
+            //     for(let item in this.filterUnit){
+            //         if(this.filterUnit[item].id===id){   
+            //             this.filterUnit[item].status=type;
+            //         }
+            //     };
+            //      resolve();
+            // })
+            // updateData.then((res)=>{
+                
+            // })
            
 
         },
-        getUpdateAuthGroup(){
+        // 確定更新資料
+        updateAuthGroup(){
+            // {
+                // "id":2,
+                // "columnengname":"stuStatus",
+                // "columnname":"身分別",
+                // "authName":[
+                // "註冊組:0"
+                // ]
+            // }
+              // filterUnit:{
+                //     columns:[
+                //         {
+                //             columnengname:"StuStatus",
+                //             columnname:"身分別",
+                //             id:2,
+                //             status:"0"
+                //         }
+                //     ]
+                //     group:"學籍資訊"
+                // }
+            let paramArray=[];
+          
+            let updateAuthGroup=new Promise((resolve, reject)=>{
+                for(let item in this.filterUnit){
+                   
+
+                    for(let column of this.filterUnit[item].columns){
+                        //  console.log(this.filterUnit[item].group,column);
+                        let obj={
+                                id:null,
+                                columnengname:"",
+                                columnname:"",
+                                authName:[]
+                        }
+                        obj.id=column.id;
+                        obj.columnengname=column.columnengname;
+                        obj.columnname=column.columnname;
+                        obj.authName[0]=this.currentAuthGroup+':'+column.status;
+                        paramArray.push(obj);
+                    }
+                   
+                   resolve(paramArray);
+                }
+                 
+            });
+            updateAuthGroup.then((res)=>{
+                console.log(res);
+                this.getUpdateAuthGroup(res);
+            })
+        },
+        getUpdateAuthGroup(res){
             apiUpdateAuthGroup(
-                this.rows
+                {savemap:res}
             ).then((response)=>{
                 console.log(response);
                 if(response.status===200){
-                    this.getQueryAuthGroup();
+                    // this.getQueryAuthGroup();
+                    this.getFindUnit();
                 }
             });
             
         },
-        // 確定更新資料
-        updateAuthGroup(){
-            this.getUpdateAuthGroup();
-        },
+
         // 查找所有單位
         getFindUnit(){
             apiFindUnit({})
@@ -210,7 +327,8 @@ export default {
                     for(let item2 in this.authList){
                         let obj={
                             group:'',
-                            columns:[]
+                            columns:[],
+                            status:null
                         }
                         obj.group=item;
                         for(let item3 of response.data[item]){
@@ -242,11 +360,20 @@ export default {
 
                     updateData.then(({unit,matchColumns})=>{
                         // console.log('res',unit,matchColumns)
+                        // let countMainObj={}
+                        // let countSubObj={
+                        //     length:0,
+		                //     count:0
+                        // };
+                        
                         for(let groupOp of this.authList[unit].auth){
+                        //     this.$set(countMainObj,groupOp.group,countSubObj);
+                        //    countMainObj.length= groupOp.columns.length;
                             // groupOp=[
                             //     {
                             //         columns:Array[22]
-                            //         group:"學籍資訊"
+                            //         group:"學籍資訊",
+                            //         status:null
                             //     }
                             // ]
                             // matchColumns回傳匹配
