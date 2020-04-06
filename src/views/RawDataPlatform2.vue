@@ -258,7 +258,7 @@ export default {
                         this.note.push(note);
                     };
 
-                    if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'||response.data[item].note.indexOf('階層代入子項目')>=0){
+                    if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'||response.data[item].note==='指定下拉'||response.data[item].note.indexOf('階層代入子項目')>=0){
                          console.log('指定------>',response.data[item].columncname)
                         // response.data[item].note!=='下拉連動'||response.data[item].note.indexOf('自動代入')<0
                         // console.log(response.data[item].note)
@@ -553,10 +553,12 @@ export default {
 
         // 紀錄選擇【修改】的那筆資料
         traceEditedData:function(value){
+            console.log(value.valueuuid);
             let value_cpoy=Object.assign({}, value);
+
             for(let item in value_cpoy){
-                    if(item.toLowerCase().indexOf('namec')>0){
-                        let name=item+'_original'
+                if(item.toLowerCase().indexOf('namec')>0){
+                    let name=item+'_original'
                         value_cpoy[item]=value_cpoy[name];
                     }else if(item.toLowerCase().indexOf('stucode')>=0){
                         let name=item+'_original';
@@ -565,11 +567,13 @@ export default {
                         let name=item+'_original';
                         value_cpoy[item]=value_cpoy[name];
                     }
+                    console.log(item);
             }
-
+           value_cpoy.valueuuid= value.valueuuid; // bj j 20200406 0101
+            
             this.selectedDetailData={};
             this.selectedDetailData=value_cpoy;
-
+            console.log(value_cpoy);
         },
 
 

@@ -9,21 +9,36 @@
             <div class="modal-body">
                  <div class="container-fluid">
                     <div class="row outer-wrapper">
-                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全選</el-checkbox>
-                        <div style="margin: 15px 0;"></div>
-                      
-                        <el-checkbox-group  v-model="checkedOptions" @change="handleCheckedCitiesChange">
-                            <el-checkbox class="col-md-2 mb-3" v-for="city in options" :label="city" :key="city">{{city}}</el-checkbox>
-                        </el-checkbox-group>
-                      
+                        <div class="year-wrapper mb-3">
+                            <span class="mr-3">{{title}}:</span>
+                            <el-select v-model="value" multiple placeholder="請選擇">
+                                <el-option
+                                v-for="item in years"
+                                :key="item"
+                                :label="item"
+                                :value="item">
+                                </el-option>
+                            </el-select>
+                            <button type="button" class="btn btn-success ml-3" @click="downloadColumns()">下載</button>
+                        </div>
+                       <el-collapse v-model="activeNames" @change="handleChange" v-for="(groups,index) in optionsRaw" :key="index">
+                            <el-collapse-item :title="index" :name="index">
+                                <el-checkbox :disabled="index==='固定帶出'" :indeterminate="optionSetting[index].isIndeterminate" v-model="optionSetting[index].checkAll" @change="handleCheckAllChange=>handleCheckAll(handleCheckAllChange,index)">全選</el-checkbox>
+                                <div style="margin: 15px 0;"></div>
+                            
+                                <el-checkbox-group :disabled="index==='固定帶出'" v-model="optionSetting[index].checkedOptions" @change="handleCheckedCitiesChange=>handleCheckedChange(handleCheckedCitiesChange,index)">
+                                    <el-checkbox class="col-md-2 mb-3" v-for="column in groups" :label="column" :key="column.id">{{column.columnname}}</el-checkbox>
+                                </el-checkbox-group>
+                             </el-collapse-item>
+                        </el-collapse>
                        
                     </div>
-                     <button type="button" class="btn btn-success" @click="downloadColumns()">下載</button>
+                     
                 </div>
 
             </div>
             <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -32,8 +47,11 @@
 </template>
 
 <script>
+import { saveAs } from 'file-saver';
 import loading from '../components/loading';
+import store from '../store/modules/auth'
 import VueBootstrap4Table from 'vue-bootstrap4-table';
+import {apiQueryTableColumn} from '@/apis/etl';
 // import exportModal from '../components/exportModal';
 export default {
     name: "exportModal",
@@ -45,15 +63,25 @@ export default {
     props: {
         tableName:{
             type:String
+        },
+        tableengname:{
+            type:String
         }
     },
     data() {
         return{
+            yearOptions: ['98','99','100','101','102','103','104','105','106','107','108'],
+            value: [],
+            title:'入學年',
+            activeNames: ['1'],
+            staticOption:['StuCode','StuID','StuNameC','EnrollSYear'],
+            currentStaticOption:[],
             loadingShow:false,
             checkAll: false,
             checkedOptions: [],
             checkedOptionsid:[],
-            optionsRaw:[],
+            optionsRaw:{}, //原始group columns資料
+            optionSetting:{},
             options:[],
             optionsid:[],
             isIndeterminate: true,
@@ -143,30 +171,89 @@ export default {
         }
     },
     mounted: function () { 
-
+        
     },
     computed: {
-
+         years(){
+            let days = new Date();
+            let Year=days.getFullYear()-1911;
+            let Month=days.getMonth();
+            let yearList=[];
+            let end=null;
+            if( Month>=2 && Month<=7){
+                end=Year-1;
+            }else{
+                end=Year;
+            }
+            for(let i = 98; i <= end; i++){
+                yearList.push(i);
+            };
+            return yearList;
+        },
     },
     methods:{
-        handleCheckAllChange(val) {
-            this.checkedOptions = val ? this.options : [];
-            this.checkedOptionsid = val ? this.optionsid : [];
-            this.isIndeterminate = false;
+
+        handleChange(val) {
+            console.log(val);
         },
-        handleCheckedCitiesChange(value) {
-            // console.log(value);
-            let checkedCount = value.length;
-            this.checkAll = checkedCount === this.options.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.options.length;
-            this.checkedOptionsid.length=0;
-            for(let item1 in value){
-                for(let item2 in this.optionsRaw){
-                    if(value[item1]===this.optionsRaw[item2].columnengname){
-                        this.checkedOptionsid.push(this.optionsRaw[item2].columnname)
+        // 處理全選
+        handleCheckAll(val,index) {
+            console.log('handleCheckAllChange',val,index);
+            if(val==true){
+                this.optionSetting[index].checkedOptions.length=0;
+                this.optionSetting[index].checkedOptions=this.optionSetting[index].OptionsName;
+                 this.optionSetting[index].isIndeterminate = false;
+                
+            }else{
+                this.optionSetting[index].checkedOptions=[];
+                this.optionSetting[index].isIndeterminate = true;
+            }
+            // this.checkedOptions = val ? this.options : [];
+            // this.checkedOptionsid = val ? this.optionsid : [];
+
+          
+        },
+        // 處理單選
+        handleCheckedChange(value,index) {
+            console.log('handleCheckedChange',value,index);
+            let checkedCount = value.length;//目前勾選選項的長度
+            this.optionSetting[index].checkAll = checkedCount === this.optionSetting[index].OptionsName.length;//目前勾選的長度===總長度
+            this.optionSetting[index].isIndeterminate = checkedCount > 0 && checkedCount < this.optionSetting[index].OptionsName.length;
+        },
+        // 查找群組和欄位
+        getQueryTableColumn(tableName){
+             apiQueryTableColumn({},tableName)
+            .then((response)=>{
+                console.log('exportModal查找群組和欄位----->',response.data);
+                this.optionsRaw={};
+                this.optionsRaw=response.data;
+
+
+                for(let item in response.data){
+                    let obj={
+                        checkAll: false,
+                        isIndeterminate: true,
+                        checkedOptions: [],
+                        OptionsName:[],
+
+                    };
+                    this.$set(this.optionSetting,item,obj);
+                    for(let item2 of response.data[item]){
+                        this.optionSetting[item].OptionsName.push(item2);
+                        
+                    }
+                    if(item==='固定帶出'){
+                        this.optionSetting[item].checkedOptions=[];
+                        for(let item3 of response.data[item]){
+                            this.currentStaticOption.push(item3.columnengname);
+                             this.optionSetting[item].checkedOptions.push(item3);
+                        };
+                       
+                       
                     }
                 }
-            }
+
+            })
         },
         init_export_params:function(tableName){
         
@@ -176,7 +263,7 @@ export default {
 
             let _this=this;
             var p=this.$js.ajaxPromise200(init_export_params).then(function(data) {
-                console.log(data);
+                console.log("匯出表單資料",data);
                 // debugger;
                 _this.optionsRaw.length=0;
                 _this.optionsRaw=data;
@@ -193,33 +280,81 @@ export default {
         },
         downloadColumns(){
             this.loadingShow=true;
-            this. init_downloadColumns_params(this.tableName);
-        },
-        init_downloadColumns_params:function(tableName){
-            const fileName='資料匯出檔.xlsx'
-            // this.$js.baseURL+ "/api/etlcontroller/export"
-            this.$axios.post(this.$js.baseURL+ "/api/etlcontroller/export",
-                            {columns:this.checkedOptionsid,tablename:tableName},
-                            {responseType: 'blob'})
-            .then((response) => {
-                 this.loadingShow=false;
-                console.log('資料匯出檔',response)
+            let params= new Promise((resolve, reject)=>{
+                let obj={
+                    columns:[],
+                    tablename:'',
+                    year:''
+                };
+                obj.tablename=this.tableengname;
+                obj.year= (this.value && this.value.length > 0) ? this.value : null;
+                // for(let value of this.currentStaticOption){
+                //      obj.columns.push(value);
+                // }
+                // obj.columns=json.parse(json.stringify(this.currentStaticOption));
+                for(let item in this.optionSetting){
+                    if(this.optionSetting[item].checkedOptions.length>0){
+                        for(let item1 of this.optionSetting[item].checkedOptions){
+                                obj.columns.push(item1.columnengname);
+                        }
 
-                const url = URL.createObjectURL(new Blob([response.data], {
-                        type: 'application/vnd.ms-excel'
-                }));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', fileName);
-                document.body.appendChild(link);
-                link.click();
+                    }
+                     resolve(obj);
+                }
             });
+            params.then((res)=>{
+                console.log('匯出資料API參數--->',res)
+                  console.log('init_downloadColumns_params',this.$store.state.auth.token)
+                this. init_downloadColumns_params(res);
+            })
+            
+        },
+        init_downloadColumns_params: async function(res) {
+            console.log('res',res)
+            console.log('init_downloadColumns_params',this.$store.state.auth.token)
+            const fileName='Output.xlsx'
+            // this.$js.baseURL+ "/api/etlcontroller/export"
+            const token='eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOREV4ZEdWemRERXciLCJyb2xlcyI6IjVyaXM2S21tNWJpejZKbWYiLCJyb2xlbmFtZSI6IjU3Tzc1N1d4NTY2aDU1Q0c2SUNGIiwiZXhwIjoxNTg2MTQxODY1LCJjcmVhdGVkIjoxNTg2MTQwMDY1MDU3LCJhdXRocyI6Ik1URXNNU3d4TWl3eUxETXNOQ3cxTERZc055dzRMRGtzTVRBPSJ9.eqd73HeHCLoQY8YP4v4Xrphw4m0Nh4CxYH-YyrAWOpIdKu0Ff7fEdkkqNSlMI3ofdGYggz-4iO7-Z0LDZVXe0A'
+            // const token=this.$store.state.auth.token;
+          
+            const response = await this.$axios.post(
+                `${this.$js.baseURL}/api/etlcontroller/export`,
+                res,
+                {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'content-Type': 'application/json;charset=UTF-8',
+                        'cache-control': 'no-cache',
+                        'Authorization': `Bearer ${token}`,
+                    }
+                }
+            );
+
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            const objectUrl = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = objectUrl;
+            a.download = '資料匯出檔.xlsx';
+            a.click();
+            document.body.removeChild(a);
+            this.loadingShow=false;
         },
     },
     watch: {
         tableName:function(val){
-            // console.log("AA")
-            this.init_export_params(this.tableName)
+            
+            // this.init_export_params(this.tableName);
+            this.getQueryTableColumn(this.tableName);
+        },
+        tableengname:function(val){
+            console.log("tableengname",val);
+            if(val==='stuinfo'){
+                this.title='入學年'
+            }else{
+                this.title='學年度'
+            }
         }
     }
 };
@@ -234,5 +369,11 @@ export default {
 .load-wrapp{
     /* float: left; */
     position: fixed;
+}
+.year-wrapper{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    align-items: center;   
 }
 </style>

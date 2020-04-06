@@ -5,7 +5,7 @@
             <div class="title mb-3">
                 系統日誌
             </div>
-            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" >
+            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" @on-change-query="onChangeQuery" :total-rows="total_rows">
                 <!-- :actions="actions"  @add-data="addData" -->
                 <template slot="global-search-clear-icon" >
                     <i class="fas fa-times-circle"></i>
@@ -81,6 +81,7 @@ export default {
                 rows_selectable: false,
                 show_refresh_button: false,
                 show_reset_button:false,
+                server_mode: true,
                 global_search: {
                      visibility: false,
                 }
@@ -96,10 +97,24 @@ export default {
                     }
                 }
             ],
+            queryParams:{
+                sort: [
+                    {
+                        order:'asc',
+                        name:'exeTime'
+                    }
+                ],
+                // filters: [],
+                global_search: "",
+                per_page: 10,
+                page: 1
+            },
+            total_rows:0,
+            flag:true
         }
   },
   mounted: function () { 
-      this.getapiQueryLog();
+    //   this.getapiQueryLog();
   },
   computed: {
 
@@ -109,17 +124,37 @@ export default {
  
   },
   methods: {
-    getapiQueryLog(){
-      apiQueryLog({}).then((response)=>{
-        console.log(response);
-        this.rows=[];
-        for(let item in response.data){
-            response.data[item].exeTime= this.$moment(response.data[item].exeTime).format('YYYY-MM-DD')
+    onChangeQuery(queryParams) {
+        console.log('onChangeQuery>1',queryParams);
+        if(queryParams.sort.length===0){
+            let obj={
+                order:'asc',
+                name:'exeTime'
+            }
+            queryParams.sort.push(obj);
+            this.queryParams = queryParams;
+        }else{
+
+            this.queryParams = queryParams;
         }
-        this.rows=response.data;
+      
+        this.getapiQueryLog();
+        // this.getQueryAllTable();
+
+    },
+    getapiQueryLog(){
+      apiQueryLog({
+          queryParams:this.queryParams
+      }).then((response)=>{
+        console.log('getapiQueryLog---->',response);
+        this.rows=[];
+        for(let item in response.data.content){
+            response.data.content[item].exeTime= this.$moment(response.data.content[item].exeTime).format('YYYY-MM-DD')
+        }
+        this.rows=response.data.content;
+        this.total_rows=response.data.totalElements;
       })
     }
-
   },
 
 };

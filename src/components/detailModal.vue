@@ -19,7 +19,7 @@
                             <button type="button" class="btn btn-danger mr-3" @click="startEdit()" :disabled="Toggle.editBtn">編輯</button>
                             <button type="button" class="btn btn-success" @click="safeEdit()" :disabled="Toggle.safeBtn">儲存</button>
                         </div>
-                        <div class="col-md-6 syn_wrapper" v-if="this.$route.params.params==='Schoolsynonym'">
+                        <div class="col-md-6 syn_wrapper" v-if="$route.params.params==='Schoolsynonym'">
                             <span class="badge badge-primary mb-2">同義詞清單</span>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
@@ -510,6 +510,7 @@ export default {
         synonymList:function(){
             this.synonymList_copy= JSON.parse(JSON.stringify(this.synonymList));
         },
+
 
     }
 };

@@ -48,8 +48,8 @@
                                 @click="traceExport(props.row)"
                             >匯出資料</button>
                         </template>
-                        <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props"> -->
-                        <template  slot="export-auth" slot-scope="props">
+                        <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props">
+                        <!-- <template  slot="export-auth" slot-scope="props"> -->
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" -->
                             <button
                                 style="white-space:nowrap"
@@ -75,7 +75,7 @@
                         </template>
                     </vue-bootstrap4-table>
                 </div>
-                <export-modal :tableName="tableName"></export-modal>
+                <export-modal :tableName="tableName" :tableengname="tableengname"></export-modal>
                 <export-auth :tableName="tableName" :id="id"></export-auth>
                 <etl-schedule :selectedData="selectedData" :selectedData_original="selectedData_original" @getAllData="getAllData"></etl-schedule>
             </div>
@@ -111,6 +111,7 @@ export default {
         return {
             loadingShow:false,
             tableName:'',
+            tableengname:'',
             id:0,
             selectedData:{},
             selectedData_original:[],
@@ -231,6 +232,7 @@ export default {
             var dataList=response.data.map((item)=>{
                 var obj={
                     tableName:'',
+                    tableengname:'',
                     tabletype:'',
                     status:{
                         "status":"",
@@ -243,6 +245,7 @@ export default {
                     redaytype: "", //單位
                     reday: 0, //頻率
                     endsend: "" //結束提醒
+
                 }
                 // cleandatecal: null
                 // cleanyn: "1"
@@ -258,12 +261,13 @@ export default {
                 obj.status.status="清洗完成";
                 // obj.status.status=item.status;
                 // obj.status.lastdate=item.cleandatefirst;
-                obj.status.lastdate='最後更新日期:2020/3/30';
+                obj.status.lastdate='最後更新日期:'+item.modifyDate;
                 obj.cleanyn=item.cleanyn;
                 obj.cleandatefirst=item.cleandatefirst;
                 obj.redaytype=item.redaytype;
                 obj.reday=item.reday;
                 obj.endsend=item.endsend;
+                obj.tableengname=item.tableengname;
                 return obj
             })
             this.rows=dataList;
@@ -361,8 +365,9 @@ export default {
             });
     },
     traceExport(value){
-        // console.log(value.tableName);
+        console.log("AA",value.tableengname);
         this.tableName=value.tableName;
+        this.tableengname=value.tableengname;
         // this.init_export_params(value.tableName);
     },
     traceExportAuth(value){

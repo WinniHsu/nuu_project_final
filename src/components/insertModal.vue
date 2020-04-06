@@ -21,7 +21,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 syn_wrapper">
+                                    <div class="col-md-6 syn_wrapper" v-if="$route.params.params==='Schoolsynonym'">
                                         <span class="badge badge-primary mb-2">同義詞清單</span>
                                         <div class="input-group mb-2" v-for="(item,index) in synonymList" :key="item.graduateSchoolC">
                                             <div class="input-group-prepend">

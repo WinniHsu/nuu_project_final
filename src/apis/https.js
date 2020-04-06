@@ -47,7 +47,8 @@ var instance = axios.create({
     // http://203.64.173.63:9019
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
+        
     }
 })
 // request攔截器

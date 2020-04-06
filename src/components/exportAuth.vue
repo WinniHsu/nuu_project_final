@@ -277,7 +277,7 @@ export default {
         },
         getUpdateAuthGroup(res){
             apiUpdateAuthGroup(
-                {savemap:res}
+                res
             ).then((response)=>{
                 console.log(response);
                 if(response.status===200){

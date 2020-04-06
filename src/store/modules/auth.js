@@ -3,7 +3,8 @@ import {js} from "../../assets/lib/lt-common"
 export default {
     namespaced:true,
     state:{
-        token:"",//// 存放jwt token
+        // token:"",//// 存放jwt token
+        token:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOREV4ZEdWemRERXciLCJyb2xlcyI6IjVyaXM2S21tNWJpejZKbWYiLCJyb2xlbmFtZSI6IjU3Tzc1N1d4NTY2aDU1Q0c2SUNGIiwiZXhwIjoxNTg2MTQxODY1LCJjcmVhdGVkIjoxNTg2MTQwMDY1MDU3LCJhdXRocyI6Ik1URXNNU3d4TWl3eUxETXNOQ3cxTERZc055dzRMRGtzTVRBPSJ9.eqd73HeHCLoQY8YP4v4Xrphw4m0Nh4CxYH-YyrAWOpIdKu0Ff7fEdkkqNSlMI3ofdGYggz-4iO7-Z0LDZVXe0A",
         isLogin:false,// 是否登入
         tokenInfo:{
             str: "",
