@@ -11,7 +11,7 @@
                     <div class="row outer-wrapper">
                         <div class="year-wrapper mb-3">
                             <span class="mr-3">{{title}}:</span>
-                            <el-select v-model="value" multiple placeholder="請選擇">
+                            <el-select v-model="value" :multiple="tableengname!=='stuscore'" placeholder="請選擇">
                                 <el-option
                                 v-for="item in years"
                                 :key="item"
@@ -38,7 +38,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal()">Close</button>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@ export default {
     data() {
         return{
             yearOptions: ['98','99','100','101','102','103','104','105','106','107','108'],
-            value: [],
+            value:[],
             title:'入學年',
             activeNames: ['1'],
             staticOption:['StuCode','StuID','StuNameC','EnrollSYear'],
@@ -192,7 +192,11 @@ export default {
         },
     },
     methods:{
-
+        closeModal(){
+            this.getQueryTableColumn(this.tableName);
+            this.value=this.tableengname==='stuscore'?null:[];
+         
+        },
         handleChange(val) {
             console.log(val);
         },
@@ -279,27 +283,53 @@ export default {
             });
         },
         downloadColumns(){
-            this.loadingShow=true;
+            
+            let flag=true;
             let params= new Promise((resolve, reject)=>{
                 let obj={
                     columns:[],
                     tablename:'',
-                    year:''
+                    // year:''
                 };
+     
                 obj.tablename=this.tableengname;
-                obj.year= (this.value && this.value.length > 0) ? this.value : null;
+                if(this.tableengname==='stuscore'){
+                    if(this.value.length===0){
+                        flag=false;
+                        this.$swal({
+                                title: '請選擇學年度',
+                                text: "",
+                                type: 'warning',
+                                confirmButtonText: '確認'
+                        }) .then((result)=>{
+                            
+                        });
+                     }else{
+                         this.loadingShow=true;
+                        this.$set(obj,'alldatayear','')
+                        obj.alldatayear= this.value.toString();
+                     }
+                   
+                }else{
+                    this.loadingShow=true;
+                    this.$set(obj,'year','')
+                    obj.year= (this.value && this.value.length > 0) ? this.value : null;
+                }
+               
                 // for(let value of this.currentStaticOption){
                 //      obj.columns.push(value);
                 // }
                 // obj.columns=json.parse(json.stringify(this.currentStaticOption));
-                for(let item in this.optionSetting){
-                    if(this.optionSetting[item].checkedOptions.length>0){
-                        for(let item1 of this.optionSetting[item].checkedOptions){
-                                obj.columns.push(item1.columnengname);
-                        }
+                if(flag){
+                    for(let item in this.optionSetting){
+                        if(this.optionSetting[item].checkedOptions.length>0){
+                            for(let item1 of this.optionSetting[item].checkedOptions){
+                                    obj.columns.push(item1.columnengname);
+                            }
 
+                        }
+                        resolve(obj);
                     }
-                     resolve(obj);
                 }
             });
             params.then((res)=>{
@@ -349,6 +379,12 @@ export default {
             this.getQueryTableColumn(this.tableName);
         },
         tableengname:function(val){
+            if(val==='stuscore'){
+                this.value=null
+            }else{
+                this.value=[]
+            }
+           
             console.log("tableengname",val);
             if(val==='stuinfo'){
                 this.title='入學年'

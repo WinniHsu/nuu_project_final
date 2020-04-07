@@ -93,8 +93,8 @@ import exportAuth from '../components/exportAuth';
 import loading from '../components/loading';
 import ETLSchedule from '../components/ETLschedule';
 import {apiQueryAllTable} from '@/apis/etl';
-
-
+import {dataclean} from '@/apis/etl';
+import {apiDataclean} from '@/apis/etl';
 export default {
   name: "ETLPlatform",
   components: {
@@ -278,9 +278,23 @@ export default {
 
     },
     startClear(value){
-        this.connect().then((res)=>{
-            this.ajax(value.tableName);
-        }); 
+         this.$swal({
+                title: '執行資料清洗',
+                text: "執行資料清洗可能耗費大量時間，清洗過程畫面將被凍結，是否決定執行資料清洗程式?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '取消',
+                confirmButtonText: '確認'
+        }) .then((result)=>{
+            if(result.value){
+                this.connect().then((res)=>{
+                    this.ajax(value.tableName);
+                }); 
+            }
+        });
+       
     },
     connect() {
         return  new Promise((resolve, reject)=>{
@@ -357,15 +371,18 @@ export default {
         })
     },
     ajax(tableName) {
-            this.$axios.post('http://203.64.173.63:9019/api/etlcontroller/dataclean/'+tableName)
-            // http://203.64.173.63:9019/api/etlcontroller
-            // this.$js.baseURL+"/api/etlcontroller/dataclean/"
-                        .then((result)=>{
-                            console.log('post------->',result);
-            });
+            apiDataclean({},tableName).then((result)=>{
+                        console.log('post------->',result);
+            })
+            // this.$axios.post('http://203.64.173.63:9019/api/etlcontroller/dataclean/'+tableName)
+            // // http://203.64.173.63:9019/api/etlcontroller
+            // // this.$js.baseURL+"/api/etlcontroller/dataclean/"
+            //             .then((result)=>{
+            //                 console.log('post------->',result);
+            // });
     },
     traceExport(value){
-        console.log("AA",value.tableengname);
+        // console.log("AA",value.tableengname);
         this.tableName=value.tableName;
         this.tableengname=value.tableengname;
         // this.init_export_params(value.tableName);
