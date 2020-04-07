@@ -261,7 +261,7 @@ export default {
                 obj.status.status="清洗完成";
                 // obj.status.status=item.status;
                 // obj.status.lastdate=item.cleandatefirst;
-                obj.status.lastdate='最後更新日期:'+item.modifyDate;
+                obj.status.lastdate='最後更新日期:'+this.$moment(item.cleandatecal).format('YYYY-MM-DD');
                 obj.cleanyn=item.cleanyn;
                 obj.cleandatefirst=item.cleandatefirst;
                 obj.redaytype=item.redaytype;

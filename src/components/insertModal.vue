@@ -148,7 +148,7 @@ export default {
                this.$set(obj,item,obj2[item]);
             }
 
-            // console.log(obj);
+            console.log('insertData',obj);
             this.checkInsert().then(()=>{
                 this.init_insertSchoolSynoymMaster_params(obj,this.$route.params.params).then(data=>{
                         // console.log('success',data)
@@ -208,7 +208,7 @@ export default {
                                                 method:"POST"};
 
                 let _this=this;
-                var p=this.$js.ajaxPromise200(init_insertSchoolSynoymMaster_params).then(function(data) {
+                var p=this.$js.ajaxPromiseJwt(init_insertSchoolSynoymMaster_params,this.$store.state.auth.token).then(function(data) {
       
                 });
                 p.then(()=>{
@@ -249,7 +249,7 @@ export default {
                                                 method:"POST"};
 
                 let _this=this;
-                var p=this.$js.ajaxPromise200(init_insertSchoolSynoymDetail_params).then(function(data) {
+                var p=this.$js.ajaxPromiseJwt(init_insertSchoolSynoymDetail_params,this.$store.state.auth.token).then(function(data) {
                     if(data.status=='success'){
                         _this.successCount=_this.successCount+1;
                     }else{

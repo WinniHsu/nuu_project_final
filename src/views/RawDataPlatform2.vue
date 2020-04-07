@@ -553,30 +553,47 @@ export default {
 
         // 紀錄選擇【修改】的那筆資料
         traceEditedData:function(value){
-            console.log(value.valueuuid);
-            let value_cpoy=Object.assign({}, value);
-
+            console.log('value',value);
+            // let value_cpoy=Object.assign({}, value);
+             let value_cpoy=JSON.parse(JSON.stringify(value));
+             
+            //  debugger;
+// JSON.parse(JSON.stringify(this.currentStaticOption)),
             for(let item in value_cpoy){
-                if(item.toLowerCase().indexOf('namec')>0){
-                    let name=item+'_original'
+                if(item.toLowerCase().indexOf('original')<0){
+                    if(item.toLowerCase().indexOf('namec')>=0){
+                        let name=item+'_original'
                         value_cpoy[item]=value_cpoy[name];
+                       
+                     
                     }else if(item.toLowerCase().indexOf('stucode')>=0){
                         let name=item+'_original';
                         value_cpoy[item]=value_cpoy[name];
-                    }else if(item.toLowerCase().indexOf('id')>=0){
+                    }else if(item.toLowerCase().indexOf('id')>=0&&item!=='valueuuid'){
                         let name=item+'_original';
                         value_cpoy[item]=value_cpoy[name];
                     }
-                    console.log(item);
+                    // console.log(value_cpoy[item]);
+                    // console.log(value_cpoy[name]);
+                }
             }
-           value_cpoy.valueuuid= value.valueuuid; // bj j 20200406 0101
-            
+        //    value_cpoy.valueuuid= value.valueuuid; // bj j 20200406 0101
+            console.log('value_cpoy',value_cpoy);
             this.selectedDetailData={};
             this.selectedDetailData=value_cpoy;
-            console.log(value_cpoy);
+            
         },
 
-
+// StuNameC: "04439徐筠智"
+// StuApplyDate: "2019-11-27"
+// valueuuid: "B27C2CBF-A736-439B-852A-BB3681CDF9A2"
+// StuCode: ""
+// columnpkvalue: "2019-11-27_"
+// StuNameC_original: undefined
+// StuNameC_Encryp_name: undefined
+// StuCode_original: ""
+// StuCode_Encryp_stucode: null
+// vbt_id: 1
 
 
         //【新增資料】

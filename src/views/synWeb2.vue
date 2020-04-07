@@ -334,7 +334,7 @@ export default {
     //已選資料
     trace:function(value){
         console.log(value)
-        if(this.$route.params.params==="Dropstu"){
+        if(this.$route.params.params==="Dropstu"||this.$route.params.params==="Suspend"){
             $('#myModal1').modal('show')
             var obj={};
             for(let item in value){

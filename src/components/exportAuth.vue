@@ -119,10 +119,11 @@ export default {
                     obj[key] = raw[key];
                     return obj;
                 }, {});
-                // console.log('filtered',filtered);
+               
                 if(allowed!==''){
                      authList=filtered[allowed].auth;
                 }
+                 console.log('filtered',authList);
                 return authList;
         },
         AllStatusC(){
@@ -183,6 +184,7 @@ export default {
         },
         // 單位變動
         changeAuthGroup(e){
+          
             this.currentAuthGroup=e.target.value;
             // this.getQueryAuthGroup();
         },
@@ -282,7 +284,9 @@ export default {
                 console.log(response);
                 if(response.status===200){
                     // this.getQueryAuthGroup();
-                    this.getFindUnit();
+                    // this.getFindUnit();
+                     console.log('1',this.currentAuthGroup)
+                    this.getQueryTableColumn();
                 }
             });
             
@@ -308,6 +312,7 @@ export default {
             })
             .then(()=>{
                 this.getQueryTableColumn();
+            
                 this.currentAuthGroup=this.authGroup[0];
             })
             .then(()=>{
@@ -316,6 +321,7 @@ export default {
         },
         // 查找群組和欄位
         getQueryTableColumn(){
+            console.log('2',this.currentAuthGroup)
             apiQueryTableColumn({},this.tableName)
             .then((response)=>{
                
@@ -477,7 +483,13 @@ export default {
             // console.log("AA")
              this.getFindUnit();
             // this.init_export_params(this.tableName)
+        },
+        authList:{
+            handler(newName, oldName) {
+                
+            },
         }
+
     }
 };
 </script>
