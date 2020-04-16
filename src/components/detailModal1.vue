@@ -14,7 +14,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{item.label}}</span>
                                 </div>
-                                <input type="text" :disabled="Toggle.check_disabled||item.label=='退學代碼'" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-if="choosedData_copy!=null" v-model="choosedData_copy[item.name]">
+                                <input type="text" :disabled="Toggle.check_disabled||item.label=='退學代碼'||item.label=='休學代碼'" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-if="choosedData_copy!=null" v-model="choosedData_copy[item.name]">
                             </div>
                             <button type="button" class="btn btn-danger mr-3" @click="startEdit()" :disabled="Toggle.editBtn">編輯</button>
                             <button type="button" class="btn btn-success" @click="safeEdit()" :disabled="Toggle.safeBtn">儲存</button>
@@ -282,7 +282,7 @@ export default {
         },
         //新增一筆同義詞(並未送出)
         syn_add(){
-            if(this.$route.params.params==='Dropstu'){
+            if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'){
                 let obj={
                     id:'',
                     nuucode:'',
@@ -446,7 +446,7 @@ export default {
         choosedData:function(){
             if(Object.keys(this.choosedData).length>0){
                 // request 同義詞API
-                if(this.$route.params.params==='Dropstu'){
+                if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'||this.$route.params.params==='Enrolltype'){
                     this.synonymList=this.choosedData.codename;
                     // this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
                     // this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);

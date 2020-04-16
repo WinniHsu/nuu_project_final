@@ -180,14 +180,18 @@ export default {
             let Month=days.getMonth();
             let yearList=[];
             let end=null;
-            if( Month>=2 && Month<=7){
-                end=Year-1;
+            if(this.tableengname!=='stusportlist'){
+                if( Month>=2 && Month<=7){
+                    end=Year-1;
+                }else{
+                    end=Year;
+                }
+                for(let i = 98; i <= end; i++){
+                    yearList.push(i);
+                };
             }else{
-                end=Year;
+                yearList=['106','107']
             }
-            for(let i = 98; i <= end; i++){
-                yearList.push(i);
-            };
             return yearList;
         },
     },
@@ -230,9 +234,16 @@ export default {
             .then((response)=>{
                 console.log('exportModal查找群組和欄位----->',response.data);
                 this.optionsRaw={};
-                this.optionsRaw=response.data;
+                // this.optionsRaw=response.data;
+                this.$set(this.optionsRaw,'固定帶出',response.data['固定帶出']);
+                for(let item in response.data){
+                    if(item!=='固定帶出'){
+                         this.$set(this.optionsRaw,item,response.data[item]);
+                    }
+                }
+               
 
-
+               
                 for(let item in response.data){
                     let obj={
                         checkAll: false,
@@ -256,9 +267,11 @@ export default {
                        
                     }
                 }
+                
 
             })
         },
+        // 已廢
         init_export_params:function(tableName){
         
             let init_export_params={url: this.$js.baseURL+"/api/etlcontroller/queryTableColumn/"+tableName, 
@@ -344,8 +357,8 @@ export default {
             console.log('init_downloadColumns_params',this.$store.state.auth.token)
             const fileName='Output.xlsx'
             // this.$js.baseURL+ "/api/etlcontroller/export"
-            const token='eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOREV4ZEdWemRERXciLCJyb2xlcyI6IjVyaXM2S21tNWJpejZKbWYiLCJyb2xlbmFtZSI6IjU3Tzc1N1d4NTY2aDU1Q0c2SUNGIiwiZXhwIjoxNTg2MTQxODY1LCJjcmVhdGVkIjoxNTg2MTQwMDY1MDU3LCJhdXRocyI6Ik1URXNNU3d4TWl3eUxETXNOQ3cxTERZc055dzRMRGtzTVRBPSJ9.eqd73HeHCLoQY8YP4v4Xrphw4m0Nh4CxYH-YyrAWOpIdKu0Ff7fEdkkqNSlMI3ofdGYggz-4iO7-Z0LDZVXe0A'
-            // const token=this.$store.state.auth.token;
+            // const token='eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOREV4ZEdWemRERXciLCJyb2xlcyI6IjVyaXM2S21tNWJpejZKbWYiLCJyb2xlbmFtZSI6IjU3Tzc1N1d4NTY2aDU1Q0c2SUNGIiwiZXhwIjoxNTg2MTQxODY1LCJjcmVhdGVkIjoxNTg2MTQwMDY1MDU3LCJhdXRocyI6Ik1URXNNU3d4TWl3eUxETXNOQ3cxTERZc055dzRMRGtzTVRBPSJ9.eqd73HeHCLoQY8YP4v4Xrphw4m0Nh4CxYH-YyrAWOpIdKu0Ff7fEdkkqNSlMI3ofdGYggz-4iO7-Z0LDZVXe0A'
+            const token=this.$store.state.auth.token;
           
             const response = await this.$axios.post(
                 `${this.$js.baseURL}/api/etlcontroller/export`,

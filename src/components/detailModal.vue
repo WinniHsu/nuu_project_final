@@ -32,7 +32,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{index}}.</span>
                                 </div>
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button" :disabled="Toggle.check_syn_disabled.indexOf(index)>=0?false:true" v-model="item.graduateSchoolSynonymsNames">
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" :disabled="Toggle.check_syn_disabled.indexOf(index)>=0?false:true" v-model="item.graduateschoolsynonymsnames">
                                 <span class="modify_wrapper">
                                     <i  v-if="Toggle.check_syn_disabled.indexOf(index)<0" class="modify_btn fas fa-eraser  mr-2" @click="syn_startEdit(index)">
                                         <span  class="ml-2 text-des">編輯</span>
@@ -112,7 +112,8 @@ export default {
             choosedData_copy:null,//儲存變動但還未送到資料庫的值
             synonymList:[],
             synonymList_copy:null, //可以變動的
-            flag:true
+            flag:true,
+            sendAgain:false
         }
     },
     mounted: function () { 
@@ -123,7 +124,7 @@ export default {
         filteredList(){
             if(this.synonymList_copy!==null){
                 return this.synonymList_copy.filter(syn => {
-                    return syn.graduateSchoolSynonymsNames.toLowerCase().includes(this.search.toLowerCase())
+                    return syn.graduateschoolsynonymsnames.toLowerCase().includes(this.search.toLowerCase())
                 })
             }
            
@@ -162,10 +163,16 @@ export default {
                             // mergeflag=1修改；mergeflag=0新增
                             this.choosedData_copy.mergeflag=1;
                         };
+                        // 如果user沒有關掉頁面，每update一次version要自己加
+                        if(this.sendAgain){
+                            this.choosedData_copy.version=this.choosedData_copy.version+1;
+                        }
+                        this.sendAgain=true;
                         this.getInsertSchoolSynoymMaster(this.choosedData_copy,this.$route.params.params)
                         // this.init_insertSchoolSynoymMaster_params(this.choosedData_copy,this.$route.params.params);
                         //2.把choosedData_copy資料存到choosedData_up
                         this.choosedData_up=Object.assign({},this.choosedData_copy); 
+
                     }
                     break;
                 };
@@ -184,6 +191,7 @@ export default {
             // 2.最後要送到後端
             // 如果編輯完的這筆資料沒有id，代表【新增】
             if(this.synonymList_copy[index].id==null){
+                console.log('如果編輯完的這筆資料沒有id，代表【新增】')
                 // 如果沒有輸入資料.......
                 if(this.synonymList_copy[index].graduateSchoolSynonymsNames==''){
                     this.$swal({
@@ -194,7 +202,7 @@ export default {
                 }else{
                 // 有輸入資料..........
                     // request 新增同義詞API
-                    this.getInsertSchoolSynoymDetail(this.synonymList_copy[index].graduateSchoolSynonymsNames,this.choosedData.graduateSchoolCode,0,0,this.$route.params.params);
+                    this.getInsertSchoolSynoymDetail(this.synonymList_copy[index].graduateschoolsynonymsnames,this.choosedData.graduateschoolcode,0,0,this.$route.params.params);
                     // this.init_insertSchoolSynoymDetail_params(this.synonymList_copy[index].graduateSchoolSynonymsNames,this.choosedData.graduateSchoolCode,0,0,this.$route.params.params);
                     this.$swal({
                             title: '成功新增',
@@ -210,21 +218,21 @@ export default {
             }else{
             // 如果編輯完的這筆資料有id，代表【修改】
                     // request 新增同義詞API
-                    // console.log("修改");
-                    if(this.synonymList[index].graduateSchoolSynonymsNames===this.synonymList_copy[index].graduateSchoolSynonymsNames){
+                    console.log("如果編輯完的這筆資料有id，代表【修改】");
+                    if(this.synonymList[index].graduateschoolsynonymsnames===this.synonymList_copy[index].graduateschoolsynonymsnames){
                         // console.log(this.synonymList[index].graduateSchoolSynonymsNames,this.synonymList_copy[index].graduateSchoolSynonymsNames)
-                        // console.log('長一樣');
+                        console.log('長一樣');
 
                     }else{
                         // console.log(this.synonymList[index].graduateSchoolSynonymsNames,this.synonymList_copy[index].graduateSchoolSynonymsNames)
-                        // console.log('有長不一樣');
+                        console.log('有長不一樣');
                         this.$swal({
                             title: '修改成功',
                             text: "",
                             type: 'success',
                         });
                         //1.送資料到後端，傳到後端的API***************************
-                        this.getInsertSchoolSynoymDetail(this.synonymList_copy[index].graduateSchoolSynonymsNames,this.choosedData.graduateSchoolCode,this.synonymList_copy[index].id,this.synonymList_copy[index].version,this.$route.params.params);
+                        this.getInsertSchoolSynoymDetail(this.synonymList_copy[index].graduateschoolsynonymsnames,this.choosedData.graduateschoolcode,this.synonymList_copy[index].id,this.synonymList_copy[index].version,this.$route.params.params);
                         // this.init_insertSchoolSynoymDetail_params(this.synonymList_copy[index].graduateSchoolSynonymsNames,this.choosedData.graduateSchoolCode,this.synonymList_copy[index].id,this.synonymList_copy[index].version,this.$route.params.params);
                     };
                     
@@ -245,7 +253,7 @@ export default {
                     confirmButtonText: '確認'
                 })
                 .then((result)=>{
-                    // console.log(result);
+                    console.log("刪除同義詞",itemID,this.$route.params.params);
                     // 如果要刪除的是【已存在資料庫】的資料
                     if(result.value&&itemID!==null){
                         this.getDeleteDetail(itemID,this.$route.params.params);
@@ -280,7 +288,7 @@ export default {
             
             let obj={
                 id:null,
-                graduateSchoolSynonymsNames:"",
+                graduateschoolsynonymsnames:"",
             };
             if(this.flag){
                 this.synonymList_copy.push(obj);
@@ -310,12 +318,15 @@ export default {
         },
         checkadd(){
             if(this.$route.params.params==='Schoolsynonym'){
-                this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);
+                // 馬的!每次大小寫都改來改去
+                // this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);
+                this.getQuerySchoolDetail(this.choosedData.graduateschoolcode,this.$route.params.params);
                 this.flag=true;
             }
         },
         // 回傳詳細資料(左邊)
         getInsertSchoolSynoymMaster:function(obj,SynonymType){
+            console.log(obj,SynonymType)
             apiInsertSchoolSynoymMaster(SynonymType,
                obj
             ).then((response)=>{
@@ -341,6 +352,104 @@ export default {
                      });
                     
             });
+        },
+
+        // 請求同義詞資料
+        getQuerySchoolDetail(code,SynonymType){
+            apiQuerySchoolDetail({
+                "graduateSchoolCode":code,
+                "SynonymType":SynonymType
+            }).then((response)=>{
+                console.log('apiQuerySchoolDetail--->',response)
+                this.synonymList.length=0;
+                this.synonymList=response.data;
+            })
+        },
+
+        // 新增/修改同義詞API
+        getInsertSchoolSynoymDetail(synonymData,graduateSchoolCode,id,version,SynonymType){
+            console.log(synonymData,graduateSchoolCode,id,version,SynonymType)
+            apiInsertSchoolSynoymDetail(SynonymType,{
+                creationDate: "",
+                creationUser: "",
+                graduateschoolcode: graduateSchoolCode,
+                graduateschoolsynonymsnames:synonymData,
+                id: id,
+                modifyDate: "",
+                modifyUser: "",
+                version:version
+            }).then((response)=>{
+                this.getQuerySchoolDetail(this.choosedData.graduateschoolcode,this.$route.params.params);
+            })
+        },
+
+        // 刪除同義詞API
+        getDeleteDetail(syn_id,SynonymType){
+            console.log('apiDeleteDetail---->',syn_id,SynonymType)
+            apiDeleteDetail({
+                schoolCode:syn_id,
+                SynonymType:SynonymType
+            }).then((response)=>{
+                console.log('apiDeleteDetail--->',response);
+                this.getQuerySchoolDetail(this.choosedData.graduateschoolcode,this.$route.params.params);
+            })
+        },
+        // 刪除同義詞API(OLD)
+        init_deleteSchoolSynoymDetail_params:function(syn_id,SynonymType){
+           
+            let init_deleteSchoolSynoymDetail_params={url: this.$js.baseURL+"/api/schoolSynony/deleteSchoolSynoymDetail/"+SynonymType, 
+                                            params:{schoolCode:syn_id},
+                                            method:"POST"};
+            let _this=this;
+            var p=this.$js.ajaxPromise200(init_deleteSchoolSynoymDetail_params).then(function(data) {
+                // console.log(data)
+            });
+            p.then(()=>{
+
+            })
+        },
+        // 新增/修改同義詞API(OLD)
+        init_insertSchoolSynoymDetail_params:function(synonymData,graduateSchoolCode,id,version,SynonymType){
+        
+            let init_insertSchoolSynoymDetail_params={url: this.$js.baseURL+"/api/schoolSynony/insertSchoolSynoymDetail/"+SynonymType, 
+                                            params:JSON.stringify({
+                                                    creationDate: "",
+                                                    creationUser: "",
+                                                    graduateSchoolCode: graduateSchoolCode,
+                                                    graduateSchoolSynonymsNames:synonymData,
+                                                    id: id,
+                                                    modifyDate: "",
+                                                    modifyUser: "",
+                                                    version:version
+                                            }),
+                                            method:"POST"};
+
+            let _this=this;
+            var p=this.$js.ajaxPromise200(init_insertSchoolSynoymDetail_params).then(function(data) {
+                // console.log(data)
+            });
+            p.then(()=>{
+                _this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
+                // _this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);
+            })
+        },
+        // 請求同義詞資料(OLD)
+        init_querySchoolDetailBySchoolCode_params:function(code,SynonymType){
+            
+            let init_querySchoolDetailBySchoolCode_params={url: this.$js.baseURL+"/api/schoolSynony/querySchoolDetailBySchoolCode", 
+                                            params:{graduateSchoolCode:code,SynonymType:SynonymType},
+                                            method:"POST"};
+
+            let _this=this;
+            var p=this.$js.ajaxPromise200(init_querySchoolDetailBySchoolCode_params).then(function(data) {
+                _this.synonymList.length=0;
+                _this.synonymList=data;
+                // console.log(data)
+            });
+            p.then(()=>{
+                // 原來送進來，但可修改的資料
+                this.synonymList_copy= JSON.parse(JSON.stringify(this.synonymList));
+            })
         },
         // 回傳詳細資料(左邊)(OLD)
         init_insertSchoolSynoymMaster_params:function(obj,SynonymType){
@@ -397,98 +506,6 @@ export default {
                     
             });
         },
-        // 請求同義詞資料
-        getQuerySchoolDetail(code,SynonymType){
-            apiQuerySchoolDetail({
-                "graduateSchoolCode":code,
-                "SynonymType":SynonymType
-            }).then((response)=>{
-                this.synonymList.length=0;
-                this.synonymList=response.data;
-            })
-        },
-        // 請求同義詞資料(OLD)
-        init_querySchoolDetailBySchoolCode_params:function(code,SynonymType){
-            
-            let init_querySchoolDetailBySchoolCode_params={url: this.$js.baseURL+"/api/schoolSynony/querySchoolDetailBySchoolCode", 
-                                            params:{graduateSchoolCode:code,SynonymType:SynonymType},
-                                            method:"POST"};
-
-            let _this=this;
-            var p=this.$js.ajaxPromise200(init_querySchoolDetailBySchoolCode_params).then(function(data) {
-                _this.synonymList.length=0;
-                _this.synonymList=data;
-                // console.log(data)
-            });
-            p.then(()=>{
-                // 原來送進來，但可修改的資料
-                this.synonymList_copy= JSON.parse(JSON.stringify(this.synonymList));
-            })
-        },
-        // 新增/修改同義詞API
-        getInsertSchoolSynoymDetail(synonymData,graduateSchoolCode,id,version,SynonymType){
-            apiInsertSchoolSynoymDetail(SynonymType,{
-                creationDate: "",
-                creationUser: "",
-                graduateSchoolCode: graduateSchoolCode,
-                graduateSchoolSynonymsNames:synonymData,
-                id: id,
-                modifyDate: "",
-                modifyUser: "",
-                version:version
-            }).then((response)=>{
-                this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
-            })
-        },
-        // 新增/修改同義詞API(OLD)
-        init_insertSchoolSynoymDetail_params:function(synonymData,graduateSchoolCode,id,version,SynonymType){
-        
-            let init_insertSchoolSynoymDetail_params={url: this.$js.baseURL+"/api/schoolSynony/insertSchoolSynoymDetail/"+SynonymType, 
-                                            params:JSON.stringify({
-                                                    creationDate: "",
-                                                    creationUser: "",
-                                                    graduateSchoolCode: graduateSchoolCode,
-                                                    graduateSchoolSynonymsNames:synonymData,
-                                                    id: id,
-                                                    modifyDate: "",
-                                                    modifyUser: "",
-                                                    version:version
-                                            }),
-                                            method:"POST"};
-
-            let _this=this;
-            var p=this.$js.ajaxPromise200(init_insertSchoolSynoymDetail_params).then(function(data) {
-                // console.log(data)
-            });
-            p.then(()=>{
-                _this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
-                // _this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);
-            })
-        },
-        // 刪除同義詞API
-        getDeleteDetail(syn_id,SynonymType){
-            apiDeleteDetail({
-                schoolCode:syn_id,
-                SynonymType:SynonymType
-            }).then((response)=>{
-                console.log(response);
-                this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
-            })
-        },
-        // 刪除同義詞API(OLD)
-        init_deleteSchoolSynoymDetail_params:function(syn_id,SynonymType){
-           
-            let init_deleteSchoolSynoymDetail_params={url: this.$js.baseURL+"/api/schoolSynony/deleteSchoolSynoymDetail/"+SynonymType, 
-                                            params:{schoolCode:syn_id},
-                                            method:"POST"};
-            let _this=this;
-            var p=this.$js.ajaxPromise200(init_deleteSchoolSynoymDetail_params).then(function(data) {
-                // console.log(data)
-            });
-            p.then(()=>{
-
-            })
-        },
 
 
     },
@@ -498,7 +515,7 @@ export default {
             if(Object.keys(this.choosedData).length>0){
                 // request 同義詞API
                 if(this.$route.params.params==='Schoolsynonym'){
-                    this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
+                    this.getQuerySchoolDetail(this.choosedData.graduateschoolcode,this.$route.params.params);
                     // this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);
                 }
             };
@@ -508,6 +525,7 @@ export default {
         },
         // 複製同義詞資料
         synonymList:function(){
+            console.log('this.synonymList異動')
             this.synonymList_copy= JSON.parse(JSON.stringify(this.synonymList));
         },
 

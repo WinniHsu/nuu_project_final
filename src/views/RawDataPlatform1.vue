@@ -194,8 +194,8 @@ export default {
                 global_search: {
                      visibility: false,
                 },
-                // server_mode:  true,
-                server_mode:  false
+                server_mode:  true,
+                // server_mode:  false
             },
             selecteduuid:'',
             //紀錄需要修改的單筆資料
@@ -209,13 +209,12 @@ export default {
                 page: 1
             },
             total_rows:0
-            
+
             
         }
   },
   mounted: function () { 
-    this.getQueryAllTable();
-    // this.onChangeQuery();
+
     setInterval(() => {
         this.now=new Date().getTime() 
                     //  回傳目前時間的日期物件
@@ -247,20 +246,26 @@ export default {
   methods: {
     onChangeQuery(queryParams) {
         console.log('onChangeQuery>1',queryParams);
+        if(queryParams){
         this.queryParams = queryParams;
-
+        let obj={
+            name:"tablecode",
+            order:"asc"
+        }
+        this.queryParams.sort.push(obj);
         this.getQueryAllTable();
 
+        }
     },
     getQueryAllTable(){
         this.loadingShow=true;
-         console.log('getQueryAllTable>2');
         apiQueryAllTable({
-            // queryParams:this.queryParams
+            queryParams:this.queryParams
         }).then((response)=>{
             this.loadingShow=false;
             console.log('apiQueryAllTable----->',response);
-            response.data.forEach((item)=>{
+            response.data.content.forEach((item)=>{
+            // response.data.forEach((item)=>{
                 if(item.lastchange!==null){
                     item.lastchange=this.$moment(item.lastchange).format('YYYY-MM-DD');
 
@@ -274,10 +279,8 @@ export default {
 
                 }
                 if(item.authName.length>0){
-                    // console.log(item)
                     let str=''
                     for(let value of item.authName){
-                        // console.log(value)
                         if( item.authName.indexOf(value)===item.authName.length-1){
                             str=str+value
                         }else{
@@ -285,7 +288,7 @@ export default {
                         }
                        
                     };
-                    console.log(str)
+                    // console.log(str)
                     item.authName=str;
                 }else{
                      item.authName='';
@@ -293,10 +296,13 @@ export default {
                 
               
                 
-            })
+            });
+
+            this.total_rows=response.data.totalElements;
             this.rows=[];
-            this.rows=response.data.sort(function(a,b) {
-            return a.tablecode > b.tablecode ? 1 : -1;
+             this.rows=response.data.content.sort(function(a,b) {
+            // this.rows=response.data.sort(function(a,b) {
+                return a.tablecode > b.tablecode ? 1 : -1;
             });
         })
     },
@@ -337,7 +343,7 @@ export default {
                 const url = URL.createObjectURL(new Blob([response.data], {
                         type: 'application/vnd.ms-excel'
                 }));
-                console.log(url);
+                // console.log(url);
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', fileName);
@@ -351,7 +357,7 @@ export default {
             tableuuid:tableuuid
         }).then((response)=>{
 
-            console.log('getQueryTableColumn----->',response.data.sort(this.sortnum()));
+            // console.log('getQueryTableColumn----->',response.data.sort(this.sortnum()));
             let arrayList=[];
             for(let item in response.data.sort(this.sortnum())){
                 if( response.data.sort(this.sortnum())[item].note!=='指定'&&response.data.sort(this.sortnum())[item].note!=='指定下拉'){
@@ -359,7 +365,7 @@ export default {
                 }
               
             };
-            console.log("arrayList>",arrayList);
+            // console.log("arrayList>",arrayList);
             
             this.onExportExcel(arrayList,tablename);
             
@@ -407,7 +413,7 @@ export default {
     },
     // 進入編輯頁面
     traceDetailColumns(value){
-        console.log(value)
+        // console.log(value)
         this.$router.push({name:'RawDataPlatform-2',params:{uuid:value.tableuuid,tablename:value.tablename}});
     },
     // 抓到改變單位的那筆資料
@@ -424,7 +430,8 @@ export default {
     },
     // 接收修改單位的資料
     getchangeUnit(){
-        this.getQueryAllTable();
+        console.log('2');
+        this.getQueryAllTable();    
         // console.log(unit,id);
         // 重新request API
         // for(let item in this.rows){

@@ -48,8 +48,8 @@
                                 @click="traceExport(props.row)"
                             >匯出資料</button>
                         </template>
-                        <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props">
-                        <!-- <template  slot="export-auth" slot-scope="props"> -->
+                        <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props"> -->
+                        <template  slot="export-auth" slot-scope="props">
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" -->
                             <button
                                 style="white-space:nowrap"

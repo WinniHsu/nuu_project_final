@@ -139,14 +139,28 @@ export default {
                 mergeflag:0,
                 version:0
             };
+            var obj3={
+                creationDate: "",
+                creationUser: "",
+                modifyDate: "",
+                modifyUser: "",
+                version:0
+            };
             for(let item in this.titleDetail){
                 if(this.titleDetail[item].title!==''){
                      this.$set(obj,this.titleDetail[item].id,this.titleDetail[item].value);
                 }
             };
-            for(let item in obj2){
-               this.$set(obj,item,obj2[item]);
+            if(this.$route.params.params==='Schoolsynonym'){
+                for(let item in obj2){
+                    this.$set(obj,item,obj2[item]);
+                }
+            }else{
+                for(let item in obj3){
+                    this.$set(obj,item,obj3[item]);
+                }
             }
+
 
             console.log('insertData',obj);
             this.checkInsert().then(()=>{
@@ -239,8 +253,8 @@ export default {
                                                 params:JSON.stringify({
                                                         creationDate: "",
                                                         creationUser: "",
-                                                        graduateSchoolCode: graduateSchoolCode,
-                                                        graduateSchoolSynonymsNames:synonymData,
+                                                        graduateschoolcode: graduateSchoolCode,
+                                                        graduateschoolsynonymsnames:synonymData,
                                                         id: 0,
                                                         modifyDate: "",
                                                         modifyUser: "",

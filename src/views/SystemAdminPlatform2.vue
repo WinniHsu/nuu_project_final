@@ -6,7 +6,7 @@
             單位管理
             <button type="button" class="btn btn-primary mx-2"  @click="addData()">新增</button>
             </div>
-            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" >
+            <vue-bootstrap4-table  :rows="rows.sort()" :columns="columns" :config="config" >
               <!-- :actions="actions"  @add-data="addData" -->
                 <template slot="global-search-clear-icon" >
                     <i class="fas fa-times-circle"></i>

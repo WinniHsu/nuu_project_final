@@ -103,14 +103,25 @@ export default {
     },
     mounted: function () { 
             for(let item in this.selectedColumns){
+                console.log("AA");
                 if(this.selectedColumns[item].label!==''){
                     this.$set(this.inputValue,this.selectedColumns[item].name,null);
-                }    
+                };
+          
             };
+       
     },
     computed: {
     },
     methods:{
+        sortArray(arr){
+            console.log('arr',arr)
+            if(arr && arr.length){
+                return arr.sort()
+            }
+            return []
+        },
+
         autoOPtion(level1,level1Option){
             let level1low=level1.toLowerCase();
             if(level1low==='licenseid'){
@@ -157,33 +168,33 @@ export default {
 
                 }
             };
-            console.log(errorList);
+            // console.log(errorList);
             if(!errorList.length){
                 let sendData={}
                 for(let item in this.inputValue){
+                    if(item==='LicenseID'){
+                        //  console.log('LicenseID',this.inputValue[item].value.substring(0,this.inputValue[item].value.indexOf('(')));
+                         this.inputValue[item].value=this.inputValue[item].value.substring(0,this.inputValue[item].value.indexOf('('))   
+                    }
                     if(this.inputValue[item].type==='DATE'){
-                         this.$set(sendData,item,this.inputValue[item].value.startDate!==null?this.$moment(this.inputValue[item].value.startDate).format('YYYY-MM-DD'):null);
+                        this.$set(sendData,item,this.inputValue[item].value.startDate!==null?this.$moment(this.inputValue[item].value.startDate).format('YYYY-MM-DD'):null);
                     }else{
                         this.$set(sendData,item,this.inputValue[item].value);
                     }
 
                     setTimeout(()=>{
-
-                   
                         if(item==='ExchangeSchool'){
-                    
-                        // ['exchangeSchool','exchangeCollege','exchangeDept'];
-                        let aa=JSON.parse(JSON.stringify(this.inputValue[item].value));
-                        this.$set(sendData,'ExchangeSchool', aa[0]);
-                        this.$set(sendData,'ExchangeCollege', aa[1]);
-                        this.$set(sendData,'ExchangeDept',  aa[2]);
-                        
+                            // ['exchangeSchool','exchangeCollege','exchangeDept'];
+                            let aa=JSON.parse(JSON.stringify(this.inputValue[item].value));
+                            this.$set(sendData,'ExchangeSchool', aa[0]);
+                            this.$set(sendData,'ExchangeCollege', aa[1]);
+                            this.$set(sendData,'ExchangeDept',  aa[2]);
                         }
-                },300)
-                   
-                   
-                }
-                console.log('新增資料---->',sendData)
+                    },300);
+
+
+                };
+                // console.log('新增資料---->',sendData)
                 setTimeout(()=>{
                      this.getInsertTableColumns(sendData);
                 },500)
@@ -203,7 +214,7 @@ export default {
                 columnvalue: encodeURIComponent(JSON.stringify(sendData)),
                 tableuuid: this.$route.params.uuid,
             }).then((response)=>{
-                console.log(response);
+                // console.log(response);
                  this.$swal({
                     title: '成功新增',
                     text: "",
@@ -252,6 +263,11 @@ export default {
     },
     watch: {
         selectedColumns:function(){
+            for(let item in this.selectedColumns){
+                if(this.selectedColumns[item].name==='LicenseID'){
+                    this.sortArray(this.selectedColumns[item].option)
+                }
+            }
             this.copyColumns();
         }
     }

@@ -167,10 +167,23 @@ export default {
     },
     getQueryColumn(tableName){
         apiQueryColumn({tableengname:tableName}).then((response)=>{
-            console.log(response);
+            console.log('apiQueryColumn----->',response);
             let _this=this;
              _this.columns=[];
             let arrayList=[];
+            var obj2= {
+                  label: "",
+                  name: "open",
+                  slot_name: "open"
+            };
+            var obj3= {
+                label: "",
+                name: "delete",
+                slot_name: "delete"
+            };
+            _this.columns.push(obj2);
+            _this.columns.push(obj3);
+
             for(let item in response.data){
                 if(response.data[item].type==='title'){
                     var obj= {
@@ -215,18 +228,7 @@ export default {
                 }
             }
             //  console.log(arrayList)
-            var obj2= {
-                  label: "",
-                  name: "open",
-                  slot_name: "open"
-            };
-            var obj3= {
-                label: "",
-                name: "delete",
-                slot_name: "delete"
-            };
-            _this.columns.push(obj2);
-            _this.columns.push(obj3);
+
 
         })
         .then(()=>{
@@ -235,6 +237,7 @@ export default {
     },
     getQueryAllData(SynonymType){
         apiQueryAllData({SynonymType:SynonymType}).then((response)=>{
+           console.log('getQueryAllData----->',response);
             let _this=this;
             _this.rows.length=0;
             for(let item in response.data){
@@ -244,6 +247,7 @@ export default {
         
     },
     getDeleteMaster(schoolCode,SynonymType){
+        console.log('getDeleteMaster',schoolCode,SynonymType)
         apiDeleteMaster({SynonymType:SynonymType,schoolCode:schoolCode}).then((response)=>{
             this.getQueryAllData(this.$route.params.params);
         }).then(()=>{
@@ -334,7 +338,7 @@ export default {
     //已選資料
     trace:function(value){
         console.log(value)
-        if(this.$route.params.params==="Dropstu"||this.$route.params.params==="Suspend"){
+        if(this.$route.params.params==="Dropstu"||this.$route.params.params==="Suspend"||this.$route.params.params==="Enrolltype"){
             $('#myModal1').modal('show')
             var obj={};
             for(let item in value){
@@ -358,8 +362,10 @@ export default {
     },
     // trace刪除哪一筆
     traceDelete(value){
+        // this.$js.lowerJSONKey(value);
+        
         console.log('traceDelete---->',value)
-         this.$swal({
+        this.$swal({
             title: '刪除該筆資料',
             text: "是否確認刪除該筆資料",
             type: 'warning',
@@ -375,9 +381,12 @@ export default {
                     this.getDeleteMaster(value.dropremarkid,this.$route.params.params);
                 }else if(this.$route.params.params==='Suspend'){
                     this.getDeleteMaster(value.suspendremarkid,this.$route.params.params);
+                }else if(this.$route.params.params==='Enrolltype'){
+                    this.getDeleteMaster(value.enrolltypeid,this.$route.params.params);
                 }
                 else{
-                      this.getDeleteMaster(value.graduateSchoolCode,this.$route.params.params);
+                    // 馬的!每次大小寫都改來改去
+                    this.getDeleteMaster(value.graduateschoolcode,this.$route.params.params);
                 }
               
             }else if(result.dismiss==='cancel'){

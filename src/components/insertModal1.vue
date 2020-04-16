@@ -44,7 +44,7 @@
 		                </div>
 		                <div class="modal-footer">
 		                    <button type="button" class="btn btn-success"  @click="insertData()">新增資料</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal()">關閉</button>
                             <!-- <alert-modal :safeBtn="Toggle.safeBtn" :check_syn_disabled="Toggle.check_syn_disabled" @updatedata='getupdatedata' ></alert-modal> -->
                             <!-- data-dismiss="modal" -->
 		         
@@ -123,6 +123,15 @@ export default {
  
     },
     methods:{
+        closeModal(){
+                //  把輸入的資料洗掉
+                this.synonymList.length=0;
+                let obj={ id:0,nuucode:"",nuuname:""}
+                this.synonymList.push(obj);
+                for(let item in this.titleDetail){
+                    this.titleDetail[item].value='';
+                };
+        },
         syn_add(){
          
             let obj={
@@ -197,23 +206,36 @@ export default {
                        // console.log('success',data)
                         let success = this.successCount;
                         let failure = this.failureCount;
-                        this.$swal({
-                            title: '新增報告',
-                            text: '同義詞成功新增'+success+"筆，失敗"+failure+"筆",
-                            type: 'success',
-                            confirmButtonText: '確認'
-                        }).then((result)=>{
-                            this.$emit('sendeditdata');
-                            this.synonymList.length=0;
-                            let obj={ id:0,nuucode:"",nuuname:""}
-                            this.synonymList.push(obj);
-                            for(let item in this.titleDetail){
-                                this.titleDetail[item].value='';
-                            };
-                            this.successCount=0;
-                            this.failureCount=0;
-                            $('#insertModal1').modal('hide');               
-                        });
+                        if(response.data.res==='存檔失敗，因資料庫已有相同的值'){
+                            this.$swal({
+                                title: '存檔失敗，因資料庫已有相同的值',
+                                type: 'error',
+                                confirmButtonText: '確認'
+                                }).then((result)=>{
+                                
+                                });
+                        }else{
+                            this.$swal({
+                                title: '新增報告',
+                                text: '同義詞成功新增'+success+"筆，失敗"+failure+"筆",
+                                type: 'success',
+                                confirmButtonText: '確認'
+                            }).then((result)=>{
+                                this.$emit('sendeditdata');
+                                this.synonymList.length=0;
+                                let obj={ id:0,nuucode:"",nuuname:""}
+                                this.synonymList.push(obj);
+                                for(let item in this.titleDetail){
+                                    this.titleDetail[item].value='';
+                                };
+                                this.successCount=0;
+                                this.failureCount=0;
+                                $('#insertModal1').modal('hide');               
+                            });
+                        };
+
+
+
            
             });
         },

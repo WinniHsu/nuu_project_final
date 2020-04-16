@@ -41,6 +41,13 @@ var js = {
     changeMonth: false,
     changeYear: false
   },
+  lowerJSONKey:function(jsonObj){
+    for(let key in jsonObj){
+      jsonObj["\""+key.toLowerCase()+"\""]=jsonObj[key];
+      delete(jsonObj[key]);
+    };
+    return jsonObj;
+  },
   quotedStr: function (str) {
     return ("\'" + str + "\'");
   },

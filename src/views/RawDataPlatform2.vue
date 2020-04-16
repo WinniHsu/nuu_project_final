@@ -121,6 +121,7 @@ export default {
             },
             selectedRows:[],
             selectedColumns:[],
+            // selectedColumns2:[],
             secretColumns:[], //加密欄位清單
             secretNameList:[],
             secretIDList:[],
@@ -134,8 +135,8 @@ export default {
                 global_search: {
                      visibility: false,
                 },
-                // server_mode:  true,
-                server_mode:false,
+                server_mode:  true,
+                // server_mode:false,
                  pagination: true,
                     pagination_info: true,
             },
@@ -165,7 +166,7 @@ export default {
         onChangeQuery(queryParams) {
             this.queryParams = queryParams;
             this.getQueryTableValue();
-            console.log('onChangeQuery>',queryParams)
+            // console.log('onChangeQuery>',queryParams)
             // this.fetchData();
         },
         // 回到原始資料管理 
@@ -184,7 +185,7 @@ export default {
             apiQuerysinglemt({
                 tableuuid:this.$route.params.uuid
             }).then((response)=>{
-                console.log(response);
+                // console.log(response);
                 this.total_rows=response.data.totalrow;
             })
         },
@@ -240,6 +241,7 @@ export default {
                         option:null,
                         // slot_name:"nameEyes",
                     };
+                    // const newObj=Object.assign({},obj);//for 證照insert
                     let note={
                         columnuuid:'',
                         columnename:'',
@@ -259,7 +261,7 @@ export default {
                     };
 
                     if(response.data[item].note===""||response.data[item].note===null||response.data[item].note==='指定'||response.data[item].note==='指定下拉'||response.data[item].note.indexOf('階層代入子項目')>=0){
-                         console.log('指定------>',response.data[item].columncname)
+                        //  console.log('指定------>',response.data[item].columncname)
                         // response.data[item].note!=='下拉連動'||response.data[item].note.indexOf('自動代入')<0
                         // console.log(response.data[item].note)
                         obj.label=response.data[item].columncname;
@@ -277,8 +279,9 @@ export default {
                             this.$set(obj,'slot_name',response.data[item].columnename+'-IDEyes');
                         }
                         this.selectedColumns.push(obj);
+                        //  this.selectedColumns2.push(obj);
                     }else if(response.data[item].note.indexOf('下拉階層代入')>=0){
-                        console.log('下拉階層代入------>',response.data[item].columncname,response.data[item].note);
+                        // console.log('下拉階層代入------>',response.data[item].columncname,response.data[item].note);
                         let columnObj={};
                         let ArrayList=['exchangeSchool','exchangeCollege','exchangeDept'];
                         for(let value of response.data[item].option){
@@ -288,7 +291,7 @@ export default {
                                this.$set(columnObj,value2,value[value2]);
                            }
                         }
-                        console.log(columnObj)
+                        // console.log(columnObj)
                         let mainArray=[]    
                    
                         for(let item of columnObj[ArrayList[0]]){
@@ -340,7 +343,7 @@ export default {
                         obj.option=mainArray;
                         this.selectedColumns.push(obj);
                     }else if(response.data[item].note.indexOf('下拉自動代入')>=0){
-                        console.log('下拉or自動代入------>',response.data[item].columncname)
+                        // console.log('下拉or自動代入------>',response.data[item].columncname)
                         // if(response.data[item].note==='下拉連動'){
                         // 證照代碼LicenseID----->下拉
                         // 證照級別LicenseLevel----->自動帶入 6
@@ -351,29 +354,42 @@ export default {
                         obj.name=response.data[item].columnename;
                         obj.datatype=response.data[item].datatype;
                         obj.option=[];
+                        // newObj.label=response.data[item].columncname;
+                        // newObj.name=response.data[item].columnename;
+                        // newObj.datatype=response.data[item].datatype;
+                        // newObj.option=[];
 
                         let secondLevelColumn=this.findOption(response.data,response.data[item].columnename);
-                        console.log('secondLevelColumn----->',secondLevelColumn)
+                        // let newSecondLevelColumn=JSON.parse(JSON.stringify(secondLevelColumn)); //for 證照insert
+                        // console.log('secondLevelColumn----->',secondLevelColumn)
                             
                         for(let item1 in response.data[item].option){
                             for(let item2 in response.data[item].option[item1]){
                                 
-                                // console.log(item2)
-                               
                                 let arrayList=response.data[item].option[item1][item2].split(';');
                                 let column1=arrayList[0];
                                 let column2=arrayList[1];
                                 let column3=arrayList[2];
                                 let mainItem=item2+'('+column2+')';
+                                // let mainItem=item2;
                                 obj.option.push(mainItem);
+
+                               
+                                // newObj.option.push(mainItem2);
+                                
                                for(let item3 in secondLevelColumn){
                                    
                                    if(secondLevelColumn[item3].note.indexOf('1')>=0){
-                                       this.$set(secondLevelColumn[item3].option,mainItem,column1);
+                                        this.$set(secondLevelColumn[item3].option,mainItem,column1);
+                                        // this.$set(newSecondLevelColumn[item3].option,mainItem2,column1);
+                                       
                                    }else if(secondLevelColumn[item3].note.indexOf('2')>=0){
-                                       this.$set(secondLevelColumn[item3].option,mainItem,column2);
+                                        this.$set(secondLevelColumn[item3].option,mainItem,column2);
+                                        // this.$set(newSecondLevelColumn[item3].option,mainItem2,column2);
+
                                    }else if(secondLevelColumn[item3].note.indexOf('3')>=0){
-                                       this.$set(secondLevelColumn[item3].option,mainItem,column3);
+                                        this.$set(secondLevelColumn[item3].option,mainItem,column3);
+                                        // this.$set(newSecondLevelColumn[item3].option,mainItem2,column3);
                                    }
                                }
 
@@ -381,9 +397,13 @@ export default {
                         }
                         // console.log(secondLevelColumn);
                         this.selectedColumns.push(obj); 
+                        // this.selectedColumns2.push(newObj); 
                         for(let arrayList in secondLevelColumn){
                             this.selectedColumns.push(secondLevelColumn[arrayList]); 
-                        }   
+                        };
+                        // for(let arrayList in newSecondLevelColumn){
+                        //     this.selectedColumns2.push(newSecondLevelColumn[arrayList]); 
+                        // };
                     }
                 };
                                 
@@ -414,7 +434,7 @@ export default {
                  // 證照名稱LicenseName----->自動帶入8
                 // 舉辦單位LicenseHost----->自動帶入9
     
-                console.log('findOption>',data,columnename);
+                // console.log('findOption>',data,columnename);
                 let ColumneName=columnename.toLowerCase();
                 let filterList=data.filter((item)=>{
                     if(item.note!==null){
@@ -425,7 +445,7 @@ export default {
                 });
 
     
-            console.log('filterList---->',filterList)
+            // console.log('filterList---->',filterList)
             let formatFilterList=[];
             for(let item in filterList){
                 let obj={             
@@ -462,7 +482,6 @@ export default {
                 queryParams: this.queryParams,
             }).then((response)=>{
                 console.log('TableValue------>',response);
-                // debugger;
                 this.loadingShow=false;
               
                 // 處理日期資料
@@ -479,7 +498,7 @@ export default {
                 if(this.secretColumns.length>0){
                     for(let value of this.secretColumns){
                         // "StuNameC""StuCode""StuID""TeaNameC"
-                        response.data.forEach((item)=>{
+                        response.data.columnvalue.forEach((item)=>{
                             // 先把需要加密的欄位複製一份
                             this.$set(item,value+'_original',item[value]);
                             // 建立加解密開關變數
@@ -517,8 +536,9 @@ export default {
 
                     }
                 }
-
-                this.selectedRows=response.data;
+                
+                this.selectedRows=response.data.columnvalue;
+                this.total_rows=response.data.pagevalue.totalElements;
             })
         },
         // 刪除單筆資料
@@ -545,7 +565,7 @@ export default {
 
         // trace【刪除】資料
         traceDelete:function(deleteData){
-            // console.log(deleteData.valueuuid);
+            console.log('trace【刪除】',deleteData.valueuuid);
             // Call 刪除API
             this.getDeleteTableColumns(deleteData.valueuuid);
         },
@@ -558,7 +578,7 @@ export default {
              let value_cpoy=JSON.parse(JSON.stringify(value));
              
             //  debugger;
-// JSON.parse(JSON.stringify(this.currentStaticOption)),
+            // JSON.parse(JSON.stringify(this.currentStaticOption)),
             for(let item in value_cpoy){
                 if(item.toLowerCase().indexOf('original')<0){
                     if(item.toLowerCase().indexOf('namec')>=0){
@@ -569,7 +589,7 @@ export default {
                     }else if(item.toLowerCase().indexOf('stucode')>=0){
                         let name=item+'_original';
                         value_cpoy[item]=value_cpoy[name];
-                    }else if(item.toLowerCase().indexOf('id')>=0&&item!=='valueuuid'){
+                    }else if(item.toLowerCase().indexOf('id')>=0&&item!=='valueuuid'&&item!=='LicenseID'){
                         let name=item+'_original';
                         value_cpoy[item]=value_cpoy[name];
                     }
@@ -577,23 +597,23 @@ export default {
                     // console.log(value_cpoy[name]);
                 }
             }
-        //    value_cpoy.valueuuid= value.valueuuid; // bj j 20200406 0101
+            //value_cpoy.valueuuid= value.valueuuid; // bj j 20200406 0101
             console.log('value_cpoy',value_cpoy);
             this.selectedDetailData={};
             this.selectedDetailData=value_cpoy;
             
         },
 
-// StuNameC: "04439徐筠智"
-// StuApplyDate: "2019-11-27"
-// valueuuid: "B27C2CBF-A736-439B-852A-BB3681CDF9A2"
-// StuCode: ""
-// columnpkvalue: "2019-11-27_"
-// StuNameC_original: undefined
-// StuNameC_Encryp_name: undefined
-// StuCode_original: ""
-// StuCode_Encryp_stucode: null
-// vbt_id: 1
+        // StuNameC: "04439徐筠智"
+        // StuApplyDate: "2019-11-27"
+        // valueuuid: "B27C2CBF-A736-439B-852A-BB3681CDF9A2"
+        // StuCode: ""
+        // columnpkvalue: "2019-11-27_"
+        // StuNameC_original: undefined
+        // StuNameC_Encryp_name: undefined
+        // StuCode_original: ""
+        // StuCode_Encryp_stucode: null
+        // vbt_id: 1
 
 
         //【新增資料】

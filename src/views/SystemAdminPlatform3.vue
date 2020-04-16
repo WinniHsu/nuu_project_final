@@ -100,7 +100,7 @@ export default {
             queryParams:{
                 sort: [
                     {
-                        order:'asc',
+                        order:'desc"',
                         name:'exeTime'
                     }
                 ],
@@ -128,7 +128,7 @@ export default {
         console.log('onChangeQuery>1',queryParams);
         if(queryParams.sort.length===0){
             let obj={
-                order:'asc',
+                order:'desc',
                 name:'exeTime'
             }
             queryParams.sort.push(obj);

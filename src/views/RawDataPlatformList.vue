@@ -108,7 +108,7 @@ export default {
         }
   },
   mounted: function () { 
-    this.getQueryAllTable();
+   
   },
   computed: {
 
@@ -118,21 +118,7 @@ export default {
  
   },
   methods: {
-    getQueryAllTable(){
-        apiQueryAllTable({}).then((response)=>{
-            // console.log(response);
-            this.rows=[];
-            this.rows=response.data;
-            // creationDate: null
-            // creationUser: null
-            // modifyDate: null
-            // modifyUser: null
-            // version: 1
-            // tableuuid: "107D366D-02A7-4EC3-88C4-9A22234C0B56"
-            // tablecode: "RAW012F"
-            // tablename: "國內交換生"
-        })
-    },
+
     getchangepage(value){
 
     },
