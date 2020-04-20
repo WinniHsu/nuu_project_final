@@ -14,7 +14,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{item.label}}</span>
                                 </div>
-                                <input type="text" :disabled="Toggle.check_disabled||item.label=='退學代碼'||item.label=='休學代碼'" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-if="choosedData_copy!=null" v-model="choosedData_copy[item.name]">
+                                <input type="text" :disabled="Toggle.check_disabled||item.label=='退學代碼'||item.label=='休學代碼'||item.label=='入學管道代碼'" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-if="choosedData_copy!=null" v-model="choosedData_copy[item.name]">
                             </div>
                             <button type="button" class="btn btn-danger mr-3" @click="startEdit()" :disabled="Toggle.editBtn">編輯</button>
                             <button type="button" class="btn btn-success" @click="safeEdit()" :disabled="Toggle.safeBtn">儲存</button>
@@ -33,7 +33,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{index}}.</span>
                                 </div>
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button" :disabled="Toggle.check_syn_disabled.indexOf(index)>=0?false:true" v-model="item.nuucode">
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button" v-if="$route.params.params!=='Language'&&$route.params.params!=='Oversea'" :disabled="Toggle.check_syn_disabled.indexOf(index)>=0?false:true" v-model="item.nuucode">
                                 <input type="text" class="form-control" aria-label="Text input with dropdown button" :disabled="Toggle.check_syn_disabled.indexOf(index)>=0?false:true" v-model="item.nuuname">
                                 <span class="modify_wrapper">
                                     <i  v-if="Toggle.check_syn_disabled.indexOf(index)<0" class="modify_btn fas fa-eraser  mr-2" @click="syn_startEdit(index)">
@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <!-- <button type="button" class="btn btn-secondary"  @click="closeModal()">關閉</button> -->
+                <button type="button" class="btn btn-secondary"  @click="closeModal()">放棄變更</button>
                 <alert-modal :safeBtn="Toggle.safeBtn" :check_syn_disabled="Toggle.check_syn_disabled" @updatedata='getupdatedata' @checkadd='checkadd'></alert-modal>
                 <!-- data-dismiss="modal" -->
         
@@ -132,6 +132,16 @@ export default {
         }
     },
     methods:{
+        closeModal(){
+            $('#myModal1').modal('hide');
+            this.choosedData_copy=this.choosedData_up;
+            this.Toggle.check_disabled=true;
+            this.Toggle.editBtn=false;
+            this.Toggle.safeBtn=true;
+            this.synonymList_copy=this.synonymList;
+            this.Toggle.check_syn_disabled=[];
+
+        },
         //開始編輯【詳細資料】 
         startEdit(){
             this.Toggle.check_disabled=false;
@@ -282,10 +292,19 @@ export default {
         },
         //新增一筆同義詞(並未送出)
         syn_add(){
-            if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'){
+            if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'||this.$route.params.params==='Enrolltype'){
                 let obj={
                     id:'',
                     nuucode:'',
+                    nuuname:''
+                };
+                if(this.flag){
+                    this.synonymList_copy.push(obj);
+                    this.flag=false;
+                };
+            }else if(this.$route.params.params==='Language'||this.$route.params.params==='Oversea'){
+                let obj={
+                    id:'',
                     nuuname:''
                 };
                 if(this.flag){
@@ -446,7 +465,7 @@ export default {
         choosedData:function(){
             if(Object.keys(this.choosedData).length>0){
                 // request 同義詞API
-                if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'||this.$route.params.params==='Enrolltype'){
+                if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'||this.$route.params.params==='Enrolltype'||this.$route.params.params==='Language'||this.$route.params.params==='Oversea'){
                     this.synonymList=this.choosedData.codename;
                     // this.getQuerySchoolDetail(this.choosedData.graduateSchoolCode,this.$route.params.params);
                     // this.init_querySchoolDetailBySchoolCode_params(this.choosedData.graduateSchoolCode,this.$route.params.params);

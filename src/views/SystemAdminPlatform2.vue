@@ -6,7 +6,7 @@
             單位管理
             <button type="button" class="btn btn-primary mx-2"  @click="addData()">新增</button>
             </div>
-            <vue-bootstrap4-table  :rows="rows.sort()" :columns="columns" :config="config" >
+            <vue-bootstrap4-table  :rows="rows" :columns="columns" :config="config" >
               <!-- :actions="actions"  @add-data="addData" -->
                 <template slot="global-search-clear-icon" >
                     <i class="fas fa-times-circle"></i>
@@ -52,7 +52,7 @@ import {apiFindUnit} from '@/apis/adminGroup.js';
 import {apiFindOneUnitAuth} from '@/apis/adminGroup.js';
 import {apiDeleteRole} from '@/apis/adminGroup.js';
 export default {
-  name: "RawDataPlatform1",
+  name: "SystemAdminPlatform2",
   components: {
        VueBootstrap4Table,
        "insertModal-SystemAdmin2":insertModalSystemAdmin2
@@ -127,13 +127,12 @@ export default {
       apiFindUnit({}).then((response)=>{
         console.log('getFindUnit---->',response.data);
         this.rows=[];
-        for(let item of response.data){
+        for(let item of response.data) {
           if(item.authName==='系統管理者'||item.authName==='倉儲資料管理者'){
             this.rows.unshift(item)
           }else{
             this.rows.push(item)
           }
-
         }
         // this.rows=response.data;
         // this.rows.unshift(
@@ -197,7 +196,6 @@ export default {
       this.getFindUnit();
     },
     getFindOneUnitAuth(code){
-
       apiFindOneUnitAuth({
         code:code
       }).then((response)=>{

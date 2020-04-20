@@ -260,7 +260,7 @@ export default {
     },
     addData(payload) {
         // console.log(this.$route.params.params)
-        if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'){
+        if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'||this.$route.params.params==='Enrolltype'||this.$route.params.params==="Suspend"||this.$route.params.params==="Enrolltype"||this.$route.params.params==='Language'||this.$route.params.params==='Oversea'){
               $('#insertModal1').modal('show');     
         }else{
             $('#insertModal').modal('show');     
@@ -338,7 +338,7 @@ export default {
     //已選資料
     trace:function(value){
         console.log(value)
-        if(this.$route.params.params==="Dropstu"||this.$route.params.params==="Suspend"||this.$route.params.params==="Enrolltype"){
+        if(this.$route.params.params==="Dropstu"||this.$route.params.params==="Suspend"||this.$route.params.params==="Enrolltype"||this.$route.params.params==='Language'||this.$route.params.params==='Oversea'){
             $('#myModal1').modal('show')
             var obj={};
             for(let item in value){
@@ -377,14 +377,25 @@ export default {
         })         
         .then((result)=>{ 
             if(result.value===true){
+                // 退學資料表
                 if(this.$route.params.params==='Dropstu'){
                     this.getDeleteMaster(value.dropremarkid,this.$route.params.params);
+                // 休學資料表
                 }else if(this.$route.params.params==='Suspend'){
                     this.getDeleteMaster(value.suspendremarkid,this.$route.params.params);
+                // 入學管道資料表
                 }else if(this.$route.params.params==='Enrolltype'){
                     this.getDeleteMaster(value.enrolltypeid,this.$route.params.params);
-                }
-                else{
+                // 系所代碼資料表
+                }else if(this.$route.params.params==='Deptcode'){
+                    this.getDeleteMaster(value.untid,this.$route.params.params);
+                // 證照分級登錄表
+                }else if(this.$route.params.params==='licensetype'){
+                    this.getDeleteMaster(value.licenseid,this.$route.params.params);
+                // 語言能力畢業門檻、海外名單、交換校系
+                }else if(this.$route.params.params==='Language'||this.$route.params.params==='Oversea'||this.$route.params.params==='Transschool'){
+                    this.getDeleteMaster(value.id,this.$route.params.params);
+                }else{
                     // 馬的!每次大小寫都改來改去
                     this.getDeleteMaster(value.graduateschoolcode,this.$route.params.params);
                 }

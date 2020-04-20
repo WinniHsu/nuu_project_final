@@ -77,7 +77,6 @@ export default {
     },
     mounted: function () { 
         this.getRoleAuth(this.checkOption);
-        console.log(this.checkOption)
     },
     computed: {
         

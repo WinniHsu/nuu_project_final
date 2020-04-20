@@ -14,7 +14,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">{{item.label}}</span>
                                 </div>
-                                <input type="text" :disabled="Toggle.check_disabled||item.label=='學校代碼'" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-if="choosedData_copy!=null" v-model="choosedData_copy[item.name]">
+                                <input type="text" :disabled="Toggle.check_disabled||item.label=='學校代碼'||item.label=='系所代碼'||item.label=='問卷答題代號'||item.label=='證照代碼'" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1" v-if="choosedData_copy!=null" v-model="choosedData_copy[item.name]">
                             </div>
                             <button type="button" class="btn btn-danger mr-3" @click="startEdit()" :disabled="Toggle.editBtn">編輯</button>
                             <button type="button" class="btn btn-success" @click="safeEdit()" :disabled="Toggle.safeBtn">儲存</button>
@@ -56,6 +56,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary"  @click="closeModal()">放棄變更</button>
                 <!-- <button type="button" class="btn btn-secondary"  @click="closeModal()">關閉</button> -->
                 <alert-modal :safeBtn="Toggle.safeBtn" :check_syn_disabled="Toggle.check_syn_disabled" @updatedata='getupdatedata' @checkadd='checkadd'></alert-modal>
                 <!-- data-dismiss="modal" -->
@@ -131,6 +132,15 @@ export default {
         }
     },
     methods:{
+        closeModal(){
+            $('#myModal').modal('hide');
+            this.choosedData_copy=this.choosedData_up;
+            this.Toggle.check_disabled=true;
+            this.Toggle.editBtn=false;
+            this.Toggle.safeBtn=true;
+            this.synonymList_copy=this.synonymList;
+            this.Toggle.check_syn_disabled=[];
+        },
         //開始編輯【詳細資料】 
         startEdit(){
             this.Toggle.check_disabled=false;
@@ -302,7 +312,7 @@ export default {
             this.safeEdit();
             // 自動儲存右邊同義詞資料
             // console.log(this.Toggle.check_syn_disabled);
-            if(this.Toggle.check_syn_disabled){
+            if(this.Toggle.check_syn_disabled>0){
                 var len=this.Toggle.check_syn_disabled.length;
                 var deleteList=this.Toggle.check_syn_disabled.slice();
                 for(let a=0;a<len;a++){

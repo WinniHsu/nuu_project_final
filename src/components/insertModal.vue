@@ -164,27 +164,66 @@ export default {
 
             console.log('insertData',obj);
             this.checkInsert().then(()=>{
-                this.init_insertSchoolSynoymMaster_params(obj,this.$route.params.params).then(data=>{
-                        // console.log('success',data)
+                this.init_insertSchoolSynoymMaster_params(obj,this.$route.params.params).then((data,res)=>{
+                        console.log("存檔",data)
                         let success = this.successCount;
                         let failure = this.failureCount;
-                        this.$swal({
-                            title: '新增報告',
-                            text: '同義詞成功新增'+success+"筆，失敗"+failure+"筆",
-                            type: 'success',
-                            confirmButtonText: '確認'
-                        }).then((result)=>{
-                            this.$emit('sendeditdata');
-                            this.synonymList.length=0;
-                            let obj={id:null,graduateSchoolSynonymsNames:''}
-                            this.synonymList.push(obj);
-                            for(let item in this.titleDetail){
-                                this.titleDetail[item].value='';
-                            };
-                            this.successCount=0;
-                            this.failureCount=0;
-                            $('#insertModal').modal('hide');               
-                        });
+                        if(data.data!==undefined?data.data.res==='存檔失敗，因資料庫已有相同的值':data.res==='存檔失敗，因資料庫已有相同的值'){
+                            if(this.$route.params.params==='Schoolsynonym'){
+                                 this.$swal({
+                                    title: '該筆資料重複',
+                                    type: 'warning',
+                                    text: '同義詞成功新增'+success+"筆，失敗"+failure+"筆",
+                                    confirmButtonText: '確認'
+                                }).then((result)=>{
+                                    this.synonymList.length=0;
+                                    let obj={id:null,graduateSchoolSynonymsNames:''}
+                                    this.synonymList.push(obj);
+                                    for(let item in this.titleDetail){
+                                        this.titleDetail[item].value='';
+                                    };
+                                    this.successCount=0;
+                                    this.failureCount=0;
+                                    $('#insertModal').modal('hide');      
+                                })
+                            }else{
+                                this.$swal({
+                                    title: '存檔失敗，因資料庫已有相同的值',
+                                    type: 'error',
+                                    confirmButtonText: '確認'
+                                }).then((result)=>{
+                                    this.synonymList.length=0;
+                                    let obj={id:null,graduateSchoolSynonymsNames:''}
+                                    this.synonymList.push(obj);
+                                    for(let item in this.titleDetail){
+                                        this.titleDetail[item].value='';
+                                    };
+                                    this.successCount=0;
+                                    this.failureCount=0;
+                                    $('#insertModal').modal('hide');      
+                                })
+                            }
+
+                        }else{
+                            this.$swal({
+                                title: '新增報告',
+                                text: '同義詞成功新增'+success+"筆，失敗"+failure+"筆",
+                                type: 'success',
+                                confirmButtonText: '確認'
+                            }).then((result)=>{
+                                this.$emit('sendeditdata');
+                                this.synonymList.length=0;
+                                let obj={id:null,graduateSchoolSynonymsNames:''}
+                                this.synonymList.push(obj);
+                                for(let item in this.titleDetail){
+                                    this.titleDetail[item].value='';
+                                };
+                                this.successCount=0;
+                                this.failureCount=0;
+                                $('#insertModal').modal('hide');               
+                            });
+                        }
+                       
                 });
             })
          
@@ -222,27 +261,34 @@ export default {
                                                 method:"POST"};
 
                 let _this=this;
-                var p=this.$js.ajaxPromiseJwt(init_insertSchoolSynoymMaster_params,this.$store.state.auth.token).then(function(data) {
-      
+                var p=this.$js.ajaxPromiseJwt(init_insertSchoolSynoymMaster_params,this.$store.state.auth.token).then((data)=> {
+                    //如果是Schoolsynonym才要用insertSchoolSynoymDetail新增同義詞    
+                    if(this.$route.params.params==='Schoolsynonym'){
+                         console.log('if',data);
+                         
+                        // 單筆新增同義詞
+                        for(let item in this.synonymList){
+                            let a;
+                            if(this.synonymList[item].graduateSchoolSynonymsNames!==''){
+                                a=this.init_insertSchoolSynoymDetail_params(this.synonymList[item].graduateSchoolSynonymsNames,this.titleDetail[0].value,this.$route.params.params);
+                                promisList.push(a)
+                            
+                            }
+                        };
+                        Promise.all(promisList).then(values => { 
+                            resolve({len:values.length,data:data});
+                            // {success:this.successCount,failure:this.failureCount}
+                        }).catch(reason => { 
+                            // console.log(reason)
+                        });
+                    }else{
+                        console.log('else',data);
+                        Promise.all(promisList).then(values => { 
+                            resolve(data);
+                        })
+                    }
                 });
-                p.then(()=>{
-                    // 單筆新增同義詞
-                    for(let item in this.synonymList){
-                        let a;
-                        if(this.synonymList[item].graduateSchoolSynonymsNames!==''){
-                            a=this.init_insertSchoolSynoymDetail_params(this.synonymList[item].graduateSchoolSynonymsNames,this.titleDetail[0].value,this.$route.params.params);
-                            promisList.push(a)
-                          
-                        }
-                    };
-                    Promise.all(promisList).then(values => { 
-                        resolve(values.length);
-                        // {success:this.successCount,failure:this.failureCount}
-                    }).catch(reason => { 
-                        // console.log(reason)
-                    });
 
-                });
             });
         },
 

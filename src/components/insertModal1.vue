@@ -29,7 +29,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">{{index}}.</span>
                                             </div>
-                                            <input type="text" class="form-control" aria-label="Text input with dropdown button"  v-model="item.nuucode">
+                                            <input type="text" class="form-control" aria-label="Text input with dropdown button" v-if="$route.params.params!=='Language'&&$route.params.params!=='Oversea'" v-model="item.nuucode">
                                             <input type="text" class="form-control" aria-label="Text input with dropdown button"  v-model="item.nuuname">
                                             <i class="modify_btn fas fa-minus mr-2" @click="syn_delete(index)"><span class="ml-2 text-des"  >刪除</span></i>
                                         </div>
@@ -133,7 +133,7 @@ export default {
                 };
         },
         syn_add(){
-         
+          if(this.$route.params.params==='Dropstu'||this.$route.params.params==='Suspend'||this.$route.params.params==='Enrolltype'){
             let obj={
                 id:'',
                 nuuname:"",
@@ -142,6 +142,16 @@ export default {
             obj.id=this.syn_count.toString();
             this.syn_count++;
             this.synonymList.push(obj);
+          }else if(this.$route.params.params==='Language'||this.$route.params.params==='Oversea'){
+            let obj={
+                id:'',
+                nuuname:"",
+            };
+            obj.id=this.syn_count.toString();
+            this.syn_count++;
+            this.synonymList.push(obj);
+          }
+
 
             // dropremark:"因學業成績winnie333333"
             // dropremarkid:"B01"
