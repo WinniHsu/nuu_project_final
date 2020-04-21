@@ -233,15 +233,27 @@ export default {
              apiQueryTableColumn({},tableName)
             .then((response)=>{
                 console.log('exportModal查找群組和欄位----->',response.data);
+
+                let ObjectKey=Object.keys(response.data).sort(function(a,b){
+                    return a.localeCompare(b,"zh-Hant");
+                });
+                
                 this.optionsRaw={};
                 // this.optionsRaw=response.data;
                 this.$set(this.optionsRaw,'固定帶出',response.data['固定帶出']);
-                for(let item in response.data){
+
+                for(let item of ObjectKey){
                     if(item!=='固定帶出'){
-                         this.$set(this.optionsRaw,item,response.data[item]);
+                        this.$set(this.optionsRaw,item,response.data[item]);
                     }
                 }
-               
+                // for(let item in response.data){
+                //     if(item!=='固定帶出'){
+                //          this.$set(this.optionsRaw,item,response.data[item]);
+                //     }
+                // }
+
+               console.log('optionsRaw----->',this.optionsRaw);
 
                
                 for(let item in response.data){
@@ -424,5 +436,14 @@ export default {
     flex-direction: row;
     /* justify-content: center; */
     align-items: center;   
+}
+/deep/ .el-checkbox__label {
+  word-break: normal;
+  width: auto;
+  display: inline-grid;
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow: hidden;
+  line-height: 14px;
 }
 </style>

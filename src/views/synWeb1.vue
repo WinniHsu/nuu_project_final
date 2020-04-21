@@ -142,11 +142,12 @@ export default {
         apiQueryAllSyn({}).then((response)=>{
             console.log('apiQueryAllSyn---->',response.data)
             for(let item in response.data){
-                console.log(this.$moment(response.data[item].updatedate).format('YYYY-MM-DD'));
+                // console.log(this.$moment(response.data[item].updatedate).format('YYYY-MM-DD'));
                 response.data[item].updatedate=this.$moment(response.data[item].updatedate).format('YYYY-MM-DD');
-
-                
             }
+            // array.sort(function(a,b){
+            //     return a.localeCompare(b,"zh-Hant");
+            // });
             this.rows=[];
             // id: "Dropstu"
             // tablename: "退學代碼"
@@ -156,7 +157,9 @@ export default {
             //          this.rows.push(value)
             //     }
             // }
-            this.rows=response.data;
+            this.rows=response.data.sort(function(a,b){
+                return a.tablename.localeCompare(b.tablename,"zh-Hant");
+            });
         })
       },
       traceEdit(row){

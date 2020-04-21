@@ -48,8 +48,8 @@
                                 @click="traceExport(props.row)"
                             >匯出資料</button>
                         </template>
-                        <!-- <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props"> -->
-                        <template  slot="export-auth" slot-scope="props">
+                        <template v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" slot="export-auth" slot-scope="props">
+                        <!-- <template  slot="export-auth" slot-scope="props"> -->
                             <!-- v-if="$store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open!==undefined && $store.state.auth.web_auth['倉儲資料管理']['匯出權限編輯'].open" -->
                             <button
                                 style="white-space:nowrap"
@@ -226,7 +226,8 @@ export default {
     },
     getQueryAllTabl(){
         apiQueryAllTable({}).then((response)=>{
-            console.log(response);
+            console.log('apiQueryAllTable--->',response);
+
             this.rows.length=0;
             this.rows_original.length=0;
             var dataList=response.data.map((item)=>{
@@ -247,12 +248,7 @@ export default {
                     endsend: "" //結束提醒
 
                 }
-                // cleandatecal: null
-                // cleanyn: "1"
-                // cleandatefirst: null
-                // redaytype: "week"
-                // reday: 3
-                // endsend: "1"
+
 
                 obj.tableName=item.tablename;
                 obj.tabletype=item.tabletype;
@@ -269,8 +265,42 @@ export default {
                 obj.endsend=item.endsend;
                 obj.tableengname=item.tableengname;
                 return obj
+            });
+            // PM說要照這個順序
+            const sortBy=['學生學籍資料','學生學期資料','學生課程資料','課程列表與核心能力','學生運動競賽清單'];
+            const customSort = ({ data, sortBy, sortField }) => {
+                const sortByObject = sortBy.reduce(
+                    (obj, item, index) => ({
+                    ...obj,
+                    [item]: index
+                    }),
+                    {}
+                );
+                return data.sort(
+                    (a, b) => sortByObject[a[sortField]] - sortByObject[b[sortField]]
+                );
+            };
+
+            const tasksWithDefault = dataList.map(item => ({
+            ...item,
+            sortStatus: sortBy.includes(item.tableName) ? item.tableName : "other"
+            }));
+       
+           
+
+        
+            let dataList2=customSort({
+                data: tasksWithDefault,
+                sortBy: [...sortBy, "other"],
+                sortField: "tableName"
             })
-            this.rows=dataList;
+           
+
+
+
+
+
+            this.rows=dataList2;
             this.rows_original=response.data;
         })
     },

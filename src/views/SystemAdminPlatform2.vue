@@ -127,11 +127,22 @@ export default {
       apiFindUnit({}).then((response)=>{
         console.log('getFindUnit---->',response.data);
         this.rows=[];
+        response.data.sort(function(a,b){
+                return a.authName.localeCompare(b.authName,"zh-Hant");
+            });
         for(let item of response.data) {
-          if(item.authName==='系統管理者'||item.authName==='倉儲資料管理者'){
+          if(item.authName!=='倉儲資料管理者'&&item.authName!=='系統管理者'){
+             this.rows.push(item)
+          }
+        }
+        for(let item of response.data) {
+          if(item.authName==='倉儲資料管理者'){
             this.rows.unshift(item)
-          }else{
-            this.rows.push(item)
+          }
+        }
+        for(let item of response.data) {
+          if(item.authName==='系統管理者'){
+            this.rows.unshift(item)
           }
         }
         // this.rows=response.data;

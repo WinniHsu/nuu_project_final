@@ -94,7 +94,7 @@ export default {
             ],
             columns:[
                 {
-                    label: "角色名稱",
+                    label: "單位名稱",
                     name: "role",
                     filter: {
                         type: "simple",
@@ -168,9 +168,41 @@ export default {
     //查詢使用者列表
     getFindUser(){
         apiFindUser({}).then((response)=>{
-            // console.log(response);
+            console.log("apiFindUser",response);
             this.rows=[];
-            this.rows=response.data;
+
+         
+            // this.rows=response.data;
+            // 先把'系統管理者','倉儲資料管理者'排前面
+
+
+            response.data.sort(function(a,b){
+                var value1 = a.role,
+                    value2 = b.role;
+                    // account
+                if(value1 === value2){
+                    return b.account.localeCompare(a.account,"zh-Hant");
+                }
+                return a.role.localeCompare(b.role,"zh-Hant");
+            });
+            for(let item of response.data) {
+                if(item.role!=='倉儲資料管理者'&&item.role!=='系統管理者'){
+                    this.rows.push(item)
+                }
+            }
+            for(let item of response.data) {
+                if(item.role==='倉儲資料管理者'){
+                    this.rows.unshift(item)
+                }
+            }
+            for(let item of response.data) {
+                if(item.role==='系統管理者'){
+                    this.rows.unshift(item)
+                }
+            }
+
+            // this.rows=response.data;
+
         })
     },
     // 刪除使用者
