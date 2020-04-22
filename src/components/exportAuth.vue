@@ -113,6 +113,7 @@ export default {
                 const raw=this.authList;
                 const allowed = this.currentAuthGroup;
                 let authList=[];
+                let authList2=[];
                 const filtered = Object.keys(raw)
                 .filter(key => allowed.includes(key))
                 .reduce((obj, key) => {
@@ -121,10 +122,20 @@ export default {
                 }, {});
                
                 if(allowed!==''){
-                     authList=filtered[allowed].auth;
+                    authList=filtered[allowed].auth.sort(function(a,b){
+                        return a.group.localeCompare(b.group,"zh-Hant");
+                    });
                 }
-                 console.log('filtered',authList);
-                return authList;
+                for(let value of authList){
+                    if(value.group==='固定帶出'){
+                        authList2.unshift(value)
+                    }else{
+                        authList2.push(value)
+                    }
+                }
+                // console.log('filtered1',authList);
+                // console.log('filtered2',authList2);
+                return authList2;
         },
         AllStatusC(){
             return function(group){

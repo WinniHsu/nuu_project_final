@@ -197,6 +197,7 @@ export default {
                 //  console.log(JSON.stringify(response, null, 2));
                 console.log('取得該table的欄位>',response);
                 // debugger;
+                // debugger;
                 this.selectedColumns=[];
                 let obj1={label: "",
                     name: "edit",
