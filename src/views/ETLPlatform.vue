@@ -211,6 +211,7 @@ export default {
   },
   mounted: function () { 
     this.getQueryAllTabl();
+    
 
   },
   computed: {
@@ -252,12 +253,12 @@ export default {
 
                 obj.tableName=item.tablename;
                 obj.tabletype=item.tabletype;
-                obj.count=item.tablecount;
+                obj.count=this.toCurrency(item.tablecount);
                 obj.id=item.id;
                 obj.status.status="清洗完成";
                 // obj.status.status=item.status;
                 // obj.status.lastdate=item.cleandatefirst;
-                obj.status.lastdate='最後更新日期:'+this.$moment(item.cleandatecal).format('YYYY-MM-DD');
+                obj.status.lastdate='最後更新日期:'+this.$moment(item.cleandatecal).format('YYYY-MM-DD h:mm:ss a');
                 obj.cleanyn=item.cleanyn;
                 obj.cleandatefirst=item.cleandatefirst;
                 obj.redaytype=item.redaytype;
@@ -286,23 +287,19 @@ export default {
             sortStatus: sortBy.includes(item.tableName) ? item.tableName : "other"
             }));
        
-           
-
-        
             let dataList2=customSort({
                 data: tasksWithDefault,
                 sortBy: [...sortBy, "other"],
                 sortField: "tableName"
             })
-           
-
-
-
-
-
             this.rows=dataList2;
             this.rows_original=response.data;
         })
+    },
+    toCurrency(num){
+        var parts = num.toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
     },
     getchangepage(value){
 

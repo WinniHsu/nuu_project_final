@@ -73,7 +73,8 @@
                             </template>
                             <template slot="editUnit" slot-scope="props" >
                                 <button
-                                style="white-space:nowrap"
+                                    v-if="$store.state.auth.web_auth!==null&&$store.state.auth.web_auth['原始資料管理']['刪除'].open!==undefined && $store.state.auth.web_auth['原始資料管理']['刪除'].open"
+                                    style="white-space:nowrap"
                                     type="button"
                                     class="btn btn-info"
                                     @click="traceDelete(props.row)"
@@ -778,5 +779,8 @@ export default {
 .load-wrapp{
     /* float: left; */
     position: fixed;
+}
+.class1{
+    width:200px;
 }
 </style>

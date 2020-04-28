@@ -203,7 +203,7 @@ input, select {
 .class1{
     /* position: absolute; */
     /* display: inline; */
-    /* min-width:300px ; */
+    min-width:200px ;
 }
 .table thead th {
     /* vertical-align:none; */

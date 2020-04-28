@@ -93,7 +93,7 @@ export default {
             console.log(event)
             this.uploadFile = event.target.files[0];
             this.uploadFileName=event.target.files[0].name;
-            // this.uploadFileName=this.uploadFile.name;
+            event.target.value = ''
         },
         // 上傳
         readFile(){
@@ -132,6 +132,7 @@ export default {
                             this.uploadFile = undefined;//儲存檔案清空
                             this.uploadFileName='';//檔名刪除
                            
+                           
                             this.$swal({
                                 title: '成功上傳資料',
                                 text: "",
@@ -145,6 +146,7 @@ export default {
                                     this.$set(this.note_copy[item],'value','')
                                 };
                                 $('#UploadModal_RawData').modal('hide');
+
                             
                             });
                     }else if(response.data ==='欄位錯誤'){
@@ -183,7 +185,7 @@ export default {
                     });
             })
       
-
+             
             this.blockPage = false;  //loading畫面停止
             this.loading=false; //上傳按鈕隱藏 
             this.upload_loading=false; //可以瀏覽檔案

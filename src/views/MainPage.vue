@@ -1,7 +1,7 @@
 <template>
   <div class="mainPage">
   <!-- 20200329 -->
-    <nav class="navbar navbar-expand-lg  fixed-top">
+    <!-- <nav class="navbar navbar-expand-lg  fixed-top">
       <a class="navbar-brand" href="#">
         <img src="../assets/img/G.jpg" height="60" alt="">
       </a>
@@ -36,7 +36,7 @@
 
         </div>
       </div>
-    </div>
+    </div> -->
   <!-- 暫時關閉 -->
    <form name='redirect' action='https://sso.nuu.edu.tw/preLogin.php' method='POST'>
     <input type='hidden' name='system_name' value='NUUIR'>
@@ -94,7 +94,7 @@ export default {
   },
   mounted: function () { 
     // <!-- 暫時關閉 -->
-    //  document.redirect.submit(); 
+     document.redirect.submit(); 
   
   },
   computed: {
@@ -105,7 +105,7 @@ export default {
         console.log(e);
     },
     signin(){
-      this.$router.push({name:'RawDataPlatform-1'});
+      this.$router.push({name:'ETLPlatform'});
       // this.$router.push({path:'/synWeb/Schoolsynonym'});
 
     },
