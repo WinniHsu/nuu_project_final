@@ -31,7 +31,7 @@
                             <button 
                                 style="white-space:nowrap"
                                 type="button"
-                                class="btn btn-info"
+                                :class="['btn',props.row.button===true?' btn-secondary':'btn-info']"
                                 data-toggle="modal"
                                 data-target="#myModal"
                                 :disabled="props.row.button"
@@ -211,6 +211,7 @@ export default {
   },
   mounted: function () { 
     this.getQueryAllTabl();
+    this.connect();
     
 
   },

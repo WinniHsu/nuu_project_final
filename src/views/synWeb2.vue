@@ -272,11 +272,46 @@ export default {
     },
     downloadAllData(payload){
         // console.log(payload);
-        this.onExportExcel(this.rows);
+        if(this.$route.params.params==='Schoolsynonym'||this.$route.params.params==='GraSurveysynonym'||this.$route.params.params==='Enrolltype'||this.$route.params.params==='Suspend'||this.$route.params.params==='Oversea'||this.$route.params.params==='Dropstu'||this.$route.params.params==='Language'){
+           this.init_downloadColumns_params();
+        }else{
+            this.onExportExcel(this.rows);
+        }
+        
     },
     downloadForm(payload){
         var arrayList=[];
         this.onExportExcel(arrayList);
+    },
+    init_downloadColumns_params: async function(res) {
+            const fileName='Output.xlsx'
+            const token=this.$store.state.auth.token;
+          
+            const response = await this.$axios.post(
+                `${this.$js.baseURL}/api/schoolSynony/downloadSchoolSynoymMaster`,
+                {
+                    SynonymType:this.$route.params.params
+                },
+                {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        'content-Type': 'application/json;charset=UTF-8',
+                        'cache-control': 'no-cache',
+                        'Authorization': `Bearer ${token}`,
+                    }
+                }
+            );
+
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            const objectUrl = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = objectUrl;
+            a.download = '資料匯出檔.xlsx';
+            a.click();
+            document.body.removeChild(a);
+            // this.loadingShow=false;
     },
     onExportExcel: function(data) {
         console.log(data)

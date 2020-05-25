@@ -94,7 +94,7 @@ export default {
   },
   mounted: function () { 
     // <!-- 暫時關閉 -->
-     document.redirect.submit(); 
+      document.redirect.submit(); 
   
   },
   computed: {
@@ -105,7 +105,7 @@ export default {
         console.log(e);
     },
     signin(){
-      this.$router.push({name:'ETLPlatform'});
+      this.$router.push({name:'synWeb-1'});
       // this.$router.push({path:'/synWeb/Schoolsynonym'});
 
     },
