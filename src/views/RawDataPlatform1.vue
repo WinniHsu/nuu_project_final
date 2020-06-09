@@ -195,6 +195,7 @@ export default {
                      visibility: false,
                 },
                 server_mode:  true,
+                preservePageOnDataChange:true
                 // server_mode:  false
             },
             selecteduuid:'',
@@ -206,41 +207,48 @@ export default {
                 filters: [],
                 global_search: "",
                 per_page: 10,
-                page: 1
+                page:1
             },
-            total_rows:0
+            total_rows:0,
+            firstTimeFlag:true
 
             
         }
   },
   mounted: function () { 
 
-    setInterval(() => {
-        this.now=new Date().getTime() 
-                    //  回傳目前時間的日期物件
+     setInterval(() => {
+        this.now=new Date().getTime(); 
+         //  回傳目前時間的日期物件
     },1000);
   },
   computed: {
       timeRange(){
         return function (startdate,enddate) {
+            let startdate_t = Date.parse(startdate);
+            let enddate_t = Date.parse(enddate);
+            // console.log(startdate_t,enddate_t);
             if(this.$store.state.auth.tokenInfo.rolename==='倉儲資料管理者'||this.$store.state.auth.tokenInfo.rolename==='系統管理者'){
                 // 在區間內
+                // console.log(startdate,enddate,"有權限 && 在區間內",'打開')
+                return false
+            }else if(startdate_t===null&&enddate_t===null){
+                // console.log(startdate,enddate,"沒有設定null",'打開')
+                return false
+            }else if((startdate_t<this.now)&&(this.now<enddate_t)){
                 // console.log(startdate,enddate,"在區間內",'打開')
                 return false
-            }else if(startdate===null&&enddate===null){
-                // console.log(startdate,enddate,"null",'打開')
-                return false
-            }else if((startdate<this.now)&&(this.now<enddate)){
-                return false
             }else{
+                // console.log(startdate,enddate,"X",'關閉')
                  return true
             }
 
         }
       }
   },
+
   watch:{
-        
+
  
   },
   methods: {
@@ -253,6 +261,20 @@ export default {
             order:"asc"
         }
         this.queryParams.sort.push(obj);
+        // this.queryParams.page=3;
+        
+        
+        let page = this.$js.getCookie('current-page');
+
+        if(this.firstTimeFlag && page!=null){
+            console.log('firstTimeFlag')
+            this.queryParams.page=Number(page); 
+            // console.log(Number(page),$('.page-item')[Number(page)]);
+          
+            this.firstTimeFlag=false;
+
+        }
+        
         this.getQueryAllTable();
 
         }
@@ -265,7 +287,7 @@ export default {
             this.loadingShow=false;
             console.log('apiQueryAllTable----->',response);
             response.data.content.forEach((item)=>{
-            // response.data.forEach((item)=>{
+                // response.data.forEach((item)=>{
                 if(item.lastchange!==null){
                     item.lastchange=this.$moment(item.lastchange).format('YYYY-MM-DD');
 
@@ -293,9 +315,6 @@ export default {
                 }else{
                      item.authName='';
                 }
-                
-              
-                
             });
 
             this.total_rows=response.data.totalElements;
@@ -304,6 +323,10 @@ export default {
             // this.rows=response.data.sort(function(a,b) {
                 return a.tablecode > b.tablecode ? 1 : -1;
             });
+            setTimeout(()=>{
+                    $('.page-item')[this.queryParams.page].click();
+            },1000)
+           
         })
     },
     sortnum() {
@@ -442,6 +465,18 @@ export default {
     }
 
   },
+  beforeDestroy() {
+      console.log('beforeDestroy');
+        //  如果要登出
+      if(this.$store.state.auth.leave_status==='leave'){
+        console.log('eraseCookie current-page');
+        this.$js.eraseCookie('current-page');
+        
+      }else{
+          this.$js.setCookie('current-page',this.queryParams.page);
+      };
+      this.$store.commit('auth/SET_LEAVE_STATUS','init');
+  }
 
 };
 </script>

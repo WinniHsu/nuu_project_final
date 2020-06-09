@@ -17,9 +17,13 @@ export default {
             rolename:''
         },
         time:0,
-        web_auth:null
+        web_auth:null,
+        leave_status:'init'
     },
     mutations:{
+        SET_LEAVE_STATUS(state,options){
+            state.leave_status=options;
+        },
         SET_AUTH(state,options){
             state.token = options.token;
             state.isLogin = options.isLogin;

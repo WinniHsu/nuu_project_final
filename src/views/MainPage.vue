@@ -105,7 +105,7 @@ export default {
         console.log(e);
     },
     signin(){
-      this.$router.push({name:'synWeb-1'});
+      this.$router.push({name:'RawDataPlatform-1'});
       // this.$router.push({path:'/synWeb/Schoolsynonym'});
 
     },

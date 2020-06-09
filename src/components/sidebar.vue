@@ -161,14 +161,14 @@ export default {
                             if(response.data[item].submanage===response.data[item].mainmanage){
                                 obj.main=response.data[item].mainmanage;
                                 this.$set(objList,response.data[item].mainmanage,obj)
-                                console.log(objList)
+                                // console.log(objList)
                             }else {
                                 this.$set(objList[response.data[item].mainmanage],response.data[item].submanage,obj)
                                 objList[response.data[item].mainmanage][response.data[item].submanage].main=response.data[item].submanage;
-                                console.log(objList)
+                                // console.log(objList)
                             }
                     }
-                    console.log('objList---->',objList);
+                    // console.log('objList---->',objList);
 
 
                 let temp=this.$store.state.auth.tokenInfo.auth.split(',');
@@ -222,9 +222,13 @@ export default {
             }
         },
         signOut(){
+            this.$store.commit('auth/SET_LEAVE_STATUS','leave')
             this.getLogOutApi();
+  
+            
         },
         getLogOutApi(){
+            
             console.log('getLogOutApi');
             // debugger;
             auth.logout({
@@ -233,12 +237,14 @@ export default {
             .then((response)=>{
                 console.log('eraseCookie----->',response)
                 this.$js.eraseCookie('leadtektoken');
+               this.$js.eraseCookie('current-page');
                 this.$store.state.auth.time=0;
                 // debugger;
             })
             .then((response)=>{
                 console.log('router----->',response)
                 this.$router.push({name:'MainPage'});
+                 
                 // debugger;
             })
             .catch((error)=>{

@@ -212,6 +212,11 @@ export default {
   mounted: function () { 
     this.getQueryAllTabl();
     this.connect();
+        //   console.log(this.$route.fullPath);
+      let url = this.$route.fullPath;
+      if(url.indexOf('RawDataPlatform')<0){
+          this.$js.eraseCookie('current-page');
+      }
     
 
   },
@@ -228,7 +233,7 @@ export default {
     },
     getQueryAllTabl(){
         apiQueryAllTable({}).then((response)=>{
-            console.log('apiQueryAllTable--->',response);
+            // console.log('apiQueryAllTable--->',response);
 
             this.rows.length=0;
             this.rows_original.length=0;
@@ -333,11 +338,11 @@ export default {
             // http://bigdata02.leadtek.com.tw:9019/api/etlcontroller
             stompClient = Stomp.over(this.socket);
             stompClient.connect({}, function (frame) {
-                console.log('frame-------->',frame);
+                // console.log('frame-------->',frame);
                 //  stompClient.subscribe('/topic/ip', function (body) {
                 stompClient.subscribe('/topic/db', function (body) {
                     _this.loadingShow=false;
-                    console.log('subscribe-------->',JSON.parse(body.body));
+                    // console.log('subscribe-------->',JSON.parse(body.body));
                     let bodyJSON=JSON.parse(body.body);
                     //先去掃描回傳過來的訊息，確認哪個table在執行ETL
                     let clearingNowTableName='';
@@ -400,7 +405,7 @@ export default {
     },
     ajax(tableName) {
             apiDataclean({},tableName).then((result)=>{
-                        console.log('post------->',result);
+                        // console.log('post------->',result);
             })
             // this.$axios.post('http://203.64.173.63:9019/api/etlcontroller/dataclean/'+tableName)
             // // http://203.64.173.63:9019/api/etlcontroller
@@ -416,7 +421,7 @@ export default {
         // this.init_export_params(value.tableName);
     },
     traceExportAuth(value){
-        console.log(value);
+        // console.log(value);
         this.tableName=value.tableName;
         this.id=value.id;
     },

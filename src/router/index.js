@@ -62,6 +62,10 @@ const routes = [
     path: "/RawDataPlatformList",
     name: "RawDataPlatformList",
     component: RawDataPlatformList,
+    // beforeEnter: function (to, from, next) {
+    //   console.log('Hello beforeEnter.');
+    //   next();
+    // },
     children:[
       {
         path:'/',

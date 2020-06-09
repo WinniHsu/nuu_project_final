@@ -127,8 +127,11 @@ export default {
         }
   },
   mounted: function () { 
-      this.getQueryAllSyn();
-    
+    this.getQueryAllSyn();
+    let url = this.$route.fullPath;
+    if(url.indexOf('RawDataPlatform')<0){
+        this.$js.eraseCookie('current-page');
+    };
   },
   computed: {
 

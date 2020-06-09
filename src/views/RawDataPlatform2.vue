@@ -233,10 +233,10 @@ export default {
                     let obj={             
                         label: "",
                         name: "",
-                        filter: {
-                            type: "simple",
-                            placeholder: ""
-                        },
+                        // filter: {
+                        //     type: "simple",
+                        //     placeholder: ""
+                        // },
                         datatype:'',
                         sort: true,
                         column_classes: "class1",
