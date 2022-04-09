@@ -13,7 +13,7 @@
     "element-ui": "^2.13.1",
     "file-saver": "^2.0.2",
     "js-cookie": "^2.2.1",
-    "moment": "^2.25.1",
+    "moment": "^2.29.2",
     "save": "^2.4.0",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
